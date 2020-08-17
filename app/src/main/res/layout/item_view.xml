@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="11dp"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        app:cardElevation="@dimen/cardview_default_elevation"
+        app:cardCornerRadius="10dp"
+        tools:ignore="PrivateResource">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/yogaIconGrand"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/trikonasana"
+                />
+            <TextView
+                android:id="@+id/asanaRu"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="46dp"
+                android:fontFamily="sans-serif-light"
+                android:text="AsanaRu"
+                android:textColor="@color/colorTextTitle"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/asanaEn"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/asanaRu"
+                android:layout_marginLeft="100dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:text="AsanaEn" />
+
+            <ImageView
+                android:id="@+id/yogaIcon1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="59dp"
+                android:layout_marginRight="70dp"
+                android:layout_marginBottom="15dp"
+                android:src="@mipmap/radzhakapotasana" />
+
+            <ImageView
+                android:id="@+id/yogaIcon2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/asanaRu"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:src="@mipmap/gomukxasana" />
+
+
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTwo"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="50dp"
+                android:layout_marginRight="150dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_white"
+                android:padding="5dp">
+
+            </FrameLayout>
+
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="115dp"
+                android:autofillHints="@mipmap/radzhakapotasana"
+                android:scaleType="center"
+                android:transitionName="img"
+                tools:ignore="UnusedAttribute" />
+
+
+            <FrameLayout
+                android:id="@+id/layoutDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTwo"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/round_white"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/addedAsana"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Добавить"
+                    android:textColor="#606060"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/layoutDate1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTwo"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="135dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_white"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_favorite_border_black_24dp" />
+
+                <TextView
+                    android:id="@+id/publish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginRight="10dp"
+                    android:text="19"
+                    android:textColor="#606060" />
+            </FrameLayout>
+            <FrameLayout
+                android:id="@+id/social"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTwo"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="200dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_white"
+                android:padding="5dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_chat_bubble_outline_black_24dp" />
+
+                <TextView
+                    android:id="@+id/socialAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginRight="10dp"
+                    android:text="19"
+                    android:textColor="#606060" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/nameTwo"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/round_white"
+                android:padding="5dp">
+
+
+                <TextView
+                    android:id="@+id/counterFirst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="27dp"
+                    android:layout_marginRight="5dp"
+                    android:text="15"
+                    android:textColor="#606060" />
+
+                <TextView
+                    android:id="@+id/lane"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="21dp"
+                    android:text="/"
+                    android:textColor="@color/colorAccent" />
+
+                <TextView
+                    android:id="@+id/counterTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="5"
+                    android:textColor="#606060" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/DescFirst"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/image"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
+                android:text="titleBottom"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/colorTextTitle"
+                android:textSize="17sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/nameTwo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/DescFirst"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="5dp"
+                android:text="descTwo" />
+
+            <ImageView
+                android:id="@+id/buttonSettings"
+                android:src="@drawable/ic_more_horiz_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                />
+
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>
