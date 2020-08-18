@@ -1,10 +1,11 @@
-package com.example.yoga
+package com.example.yoga.activies
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.yoga.R
 import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
 import com.google.firebase.firestore.ktx.firestore

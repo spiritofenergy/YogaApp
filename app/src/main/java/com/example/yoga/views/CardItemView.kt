@@ -1,6 +1,7 @@
 package com.example.yoga.views
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,9 +9,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.yoga.R
+import com.example.yoga.activies.AsunaActivity
 import com.example.yoga.classes.Card
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,8 +28,10 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var socialAll: TextView = itemView.findViewById(R.id.socialAll)
     private var publish: TextView = itemView.findViewById(R.id.publish)
     private var layoutDate1: FrameLayout = itemView.findViewById(R.id.layoutDate1)
+    private var social: FrameLayout = itemView.findViewById(R.id.social)
     private var likeImg: ImageView = itemView.findViewById(R.id.likeImg)
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
+    private var image: ImageView = itemView.findViewById(R.id.image)
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -51,7 +57,11 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             .addOnSuccessListener {
                 Glide.with(parent.context)
                     .load(it)
-                    .into(yogaIconGrand);
+                    .into(yogaIconGrand)
+                Glide.with(parent.context)
+                    .load(it)
+                    .into(image)
+
             }.addOnFailureListener { exception ->
                 Log.d("log", "get failed with ", exception)
             }
@@ -97,5 +107,26 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 isLiked.text = "1"
             }
         }
+
+        titleCard.setOnClickListener {
+            openAsuna(card.id)
+        }
+
+        image.setOnClickListener {
+            openAsuna(card.id)
+        }
+
+        social.setOnClickListener {
+            openAsuna(card.id)
+        }
+    }
+
+    private fun openAsuna(id: String) {
+        val intent = Intent(
+            parent.context,
+            AsunaActivity::class.java
+        )
+        intent.putExtra("asunaID", id)
+        parent.context.startActivity(intent)
     }
 }

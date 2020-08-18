@@ -29,6 +29,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="10dp"
                 />
+
             <TextView
                 android:id="@+id/asanaTitle"
                 android:layout_width="match_parent"
@@ -36,6 +37,7 @@
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="46dp"
+                android:clickable="true"
                 android:fontFamily="sans-serif-light"
                 android:text="AsanaRu"
                 android:textColor="@color/colorTextTitle"
@@ -99,7 +101,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="115dp"
                 android:autofillHints="@mipmap/radzhakapotasana"
-                android:scaleType="center"
+                android:scaleType="fitCenter"
                 android:transitionName="img"
                 tools:ignore="UnusedAttribute" />
 
