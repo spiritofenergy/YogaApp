@@ -90,7 +90,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             if (isLiked.text == "1") {
                 card.likesCount -= 1
                 db.collection("likes").document(card.id)
-                    .set(hashMapOf(androidID to false))
+                    .update(androidID,false)
                 db.collection("asunaRU").document(card.id)
                     .update("likes", card.likesCount)
                 publish.text = (card.likesCount).toString()
@@ -99,7 +99,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             } else {
                 card.likesCount += 1
                 db.collection("likes").document(card.id)
-                    .set(hashMapOf(androidID to true))
+                    .update(androidID,true)
                 db.collection("asunaRU").document(card.id)
                     .update("likes", card.likesCount)
                 publish.text = (card.likesCount).toString()
