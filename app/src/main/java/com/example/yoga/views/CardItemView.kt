@@ -5,16 +5,17 @@ import android.content.Intent
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.yoga.R
 import com.example.yoga.activies.AsunaActivity
+import com.example.yoga.activies.MainActivity
 import com.example.yoga.classes.Card
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -32,6 +33,8 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var likeImg: ImageView = itemView.findViewById(R.id.likeImg)
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
     private var image: ImageView = itemView.findViewById(R.id.image)
+    private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
+    private var addAsuna: FrameLayout = itemView.findViewById(R.id.addAsuna)
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -118,6 +121,28 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
 
         social.setOnClickListener {
             openAsuna(card.id)
+        }
+
+        addAsuna.setOnClickListener {
+
+        }
+
+        buttonSettings.setOnClickListener {
+            val popupMenu = PopupMenu(parent.context, it)
+            popupMenu.inflate(R.menu.option_menu)
+
+            popupMenu.setOnMenuItemClickListener { item ->
+                return@setOnMenuItemClickListener when(item.itemId) {
+                    R.id.item1 -> {
+                        true
+                    }
+                    R.id.item2 -> {
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
         }
     }
 

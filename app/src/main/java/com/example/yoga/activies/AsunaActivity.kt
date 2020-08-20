@@ -1,24 +1,26 @@
 package com.example.yoga.activies
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.yoga.R
-import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.adapters.CommentAdapter
-import com.example.yoga.classes.Card
 import com.example.yoga.classes.Comment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.google.type.DateTime
 import java.time.LocalDateTime
-import java.util.*
+import java.time.LocalDateTime.now
+import java.time.format.DateTimeFormatter
 
 class AsunaActivity : AppCompatActivity() {
     private val db = Firebase.firestore
@@ -37,10 +39,13 @@ class AsunaActivity : AppCompatActivity() {
 
     private var countComment = 0
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_asuna)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val actionBar = supportActionBar
 
         title = findViewById(R.id.textTitle)
         textDescription = findViewById(R.id.textDescription)
@@ -51,13 +56,14 @@ class AsunaActivity : AppCompatActivity() {
         commentList = findViewById(R.id.commentList)
 
 
-        val intent = intent
-        val id = intent.getStringExtra("asunaID")
+        val receivedIntent = intent
+        val id = receivedIntent.getStringExtra("asunaID")
 
         db.collection("asunaRU").document(id.toString())
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+                    actionBar!!.title = document.data?.get("title").toString()
                     title.text = document.data?.get("title").toString()
                     textDescription.text = document.data?.get("description").toString()
                     countComment = (document.data?.get("comments") as Long).toInt()
@@ -86,8 +92,27 @@ class AsunaActivity : AppCompatActivity() {
                     comment.name = document.data["name"].toString()
                     comment.comment = document.data["comment"].toString()
 
+                    val list = document.data["time"] as Map<*, *>
+                    comment.datetime["day"] = (list["dayOfMonth"] as Long).toInt()
+                    comment.datetime["month"] = (list["monthValue"] as Long).toInt()
+                    comment.datetime["year"] = (list["year"] as Long).toInt()
+                    comment.datetime["hour"] = (list["hour"] as Long).toInt()
+                    comment.datetime["minute"] = (list["minute"] as Long).toInt()
+
+                    comment.time = "${comment.datetime["day"]}.${comment.datetime["month"]}.${comment.datetime["year"]} ${comment.datetime["hour"]}:${comment.datetime["minute"]}"
+
                     commentArr.add(comment)
                 }
+
+                commentArr.sortWith(
+                    compareBy<Comment> { it.datetime["year"] }
+                        .thenBy { it.datetime["month"] }
+                        .thenBy { it.datetime["day"] }
+                        .thenBy { it.datetime["hour"] }
+                        .thenBy { it.datetime["minute"] }
+                )
+
+                commentArr.reverse()
 
                 commentList.apply {
                     layoutManager = LinearLayoutManager(this.context)
@@ -103,7 +128,8 @@ class AsunaActivity : AppCompatActivity() {
                 val commentMap = hashMapOf(
                     "id" to id.toString(),
                     "name" to commentPersonName.text.toString(),
-                    "comment" to comment.text.toString()
+                    "comment" to comment.text.toString(),
+                    "time" to now()
                 )
 
                 commentPersonName.setText("")
@@ -112,9 +138,31 @@ class AsunaActivity : AppCompatActivity() {
 
                 db.collection("comments")
                     .add(commentMap)
-                countComment += 1
-                db.collection("asunaRU").document(id.toString())
-                    .update("comments", countComment)
+                    .addOnCompleteListener {
+                        countComment += 1
+                        db.collection("asunaRU").document(id.toString())
+                            .update("comments", countComment)
+
+                        val commentArrCur = mutableListOf<Comment>()
+
+                        val comment = Comment()
+                        comment.name = commentMap["name"].toString()
+                        comment.comment = commentMap["comment"].toString()
+
+                        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+                        val formatted = (commentMap["time"] as LocalDateTime).format(formatter)
+
+                        comment.time = formatted
+
+                        commentArrCur.add(comment)
+                        commentArrCur.addAll(commentArr)
+
+                        commentList.apply {
+                            layoutManager = LinearLayoutManager(this@AsunaActivity)
+                            adapter = CommentAdapter(commentArrCur)
+                        }
+                    }
+
             } else {
                 Toast.makeText(baseContext, "Заполните пустые поля",
                     Toast.LENGTH_SHORT).show()

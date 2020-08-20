@@ -34,6 +34,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/border_comment"
             android:orientation="vertical"
+            android:padding="10dp"
             android:paddingBottom="20dp">
 
             <TextView
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:text="Комментарии"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,13 +85,14 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true">
+            android:fillViewport="false">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/commentList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/comment_item" />
+                tools:listitem="@layout/comment_item"
+                android:nestedScrollingEnabled="false"/>
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

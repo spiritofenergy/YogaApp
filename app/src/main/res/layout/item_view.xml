@@ -107,7 +107,7 @@
 
 
             <FrameLayout
-                android:id="@+id/layoutDate"
+                android:id="@+id/addAsuna"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nameTwo"
@@ -115,6 +115,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
                 android:background="@drawable/round_white"
+                android:clickable="true"
                 android:padding="5dp">
 
                 <TextView
@@ -255,13 +256,13 @@
 
             <ImageView
                 android:id="@+id/buttonSettings"
-                android:src="@drawable/ic_more_horiz_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                />
+                android:layout_marginRight="20dp"
+                android:clickable="true"
+                android:src="@drawable/ic_more_horiz_black_24dp" />
 
 
         </RelativeLayout>

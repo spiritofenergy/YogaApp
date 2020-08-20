@@ -1,7 +1,10 @@
 package com.example.yoga.activies
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,9 +29,18 @@ class MainActivity : AppCompatActivity() {
 
         cardsRecyclerView = findViewById(R.id.cards)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getList()
+    }
+
+    private fun getList() {
         db.collection("asunaRU")
             .get()
             .addOnSuccessListener { result ->
+                cardsArr.clear()
                 for (document in result) {
                     val card = Card()
                     card.id = document.id
@@ -47,7 +59,26 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)
             }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.toolbar_menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favoriteBut -> {
+                val intent = Intent(
+                    this,
+                    FavoriteActivity::class.java
+                )
+                startActivity(intent)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
 
     }
 }
