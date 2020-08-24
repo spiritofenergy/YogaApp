@@ -13,7 +13,6 @@ import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.*
 
 class FavoriteActivity : AppCompatActivity() {
 

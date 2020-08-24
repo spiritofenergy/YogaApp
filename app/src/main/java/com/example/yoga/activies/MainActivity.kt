@@ -5,22 +5,29 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yoga.R
 import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
+import com.example.yoga.interfaces.OnRecyclerItemClickListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var cardsRecyclerView: RecyclerView
+    private lateinit var fab: FloatingActionButton
     private val db = Firebase.firestore
 
     private var cardsArr = mutableListOf<Card>()
+    private var addsAsuna = mutableListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,7 +35,11 @@ class MainActivity : AppCompatActivity() {
         Log.d("lang", Locale.getDefault().displayLanguage)
 
         cardsRecyclerView = findViewById(R.id.cards)
+        fab = findViewById(R.id.floatingActionButton3)
 
+        fab.setOnClickListener {
+
+        }
     }
 
     override fun onResume() {
@@ -51,9 +62,36 @@ class MainActivity : AppCompatActivity() {
                     cardsArr.add(card)
                 }
 
+                val cardAdapter = CardAdapter(cardsArr)
+                cardAdapter.setOnDeleteListener( object : OnRecyclerItemClickListener {
+                    override fun onItemClicked(asuna: String, position: Int) {
+                        if (asuna in addsAsuna) {
+                            addsAsuna.removeAt(addsAsuna.indexOf(asuna))
+                            Log.d("list", addsAsuna.toString())
+                            Toast.makeText(baseContext, "Асуна удалена из списка выполняемых асун",
+                                Toast.LENGTH_LONG).show()
+                        } else {
+                            addsAsuna.add(asuna)
+                            Log.d("list", addsAsuna.toString())
+                            Toast.makeText(baseContext, "Асуна добавлена в список выполняемых асун",
+                                Toast.LENGTH_LONG).show()
+                        }
+                        if (addsAsuna.size > 0) {
+                            fab.visibility = View.VISIBLE
+                        } else {
+                            fab.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onItemLongClicked(position: Int) {
+
+                    }
+
+                })
+
                 cardsRecyclerView.apply {
                     layoutManager = LinearLayoutManager(this@MainActivity)
-                    adapter = CardAdapter(cardsArr)
+                    adapter = cardAdapter
                 }
             }
             .addOnFailureListener { exception ->
