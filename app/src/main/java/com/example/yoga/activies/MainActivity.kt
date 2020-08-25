@@ -38,7 +38,14 @@ class MainActivity : AppCompatActivity() {
         fab = findViewById(R.id.floatingActionButton3)
 
         fab.setOnClickListener {
+            val intent = Intent(
+                this,
+                ActionActivity::class.java
+            )
 
+            intent.putExtra("listAsuna", ArrayList(addsAsuna))
+            addsAsuna.clear()
+            startActivity(intent)
         }
     }
 
@@ -72,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG).show()
                         } else {
                             addsAsuna.add(asuna)
+                            addsAsuna.sortBy { it }
                             Log.d("list", addsAsuna.toString())
                             Toast.makeText(baseContext, "Асуна добавлена в список выполняемых асун",
                                 Toast.LENGTH_LONG).show()
