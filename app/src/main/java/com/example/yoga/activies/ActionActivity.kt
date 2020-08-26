@@ -89,7 +89,6 @@ class ActionActivity : AppCompatActivity() {
                 time.visibility = View.GONE
                 findViewById<TextView>(R.id.textView3).visibility = View.GONE
                 cong.visibility = View.VISIBLE
-                setTheme(R.style.AppTheme)
             }
             mainHandler.postDelayed(this, 32000)
 

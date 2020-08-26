@@ -14,7 +14,16 @@ import com.example.yoga.R
 import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
 import com.example.yoga.interfaces.OnRecyclerItemClickListener
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -25,6 +34,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cardsRecyclerView: RecyclerView
     private lateinit var fab: FloatingActionButton
     private val db = Firebase.firestore
+    private lateinit var gso: GoogleSignInOptions
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+
+    private lateinit var auth: FirebaseAuth
 
     private var cardsArr = mutableListOf<Card>()
     private var addsAsuna = mutableListOf<String>()
@@ -37,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         cardsRecyclerView = findViewById(R.id.cards)
         fab = findViewById(R.id.floatingActionButton3)
 
+        auth = Firebase.auth
+
         fab.setOnClickListener {
             val intent = Intent(
                 this,
@@ -46,7 +61,16 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("listAsuna", ArrayList(addsAsuna))
             addsAsuna.clear()
             startActivity(intent)
+            fab.visibility = View.GONE
         }
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
     }
 
     override fun onResume() {
@@ -70,19 +94,23 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val cardAdapter = CardAdapter(cardsArr)
-                cardAdapter.setOnDeleteListener( object : OnRecyclerItemClickListener {
+                cardAdapter.setOnDeleteListener(object : OnRecyclerItemClickListener {
                     override fun onItemClicked(asuna: String, position: Int) {
                         if (asuna in addsAsuna) {
                             addsAsuna.removeAt(addsAsuna.indexOf(asuna))
                             Log.d("list", addsAsuna.toString())
-                            Toast.makeText(baseContext, "Асуна удалена из списка выполняемых асун",
-                                Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                baseContext, "Асуна удалена из списка выполняемых асун",
+                                Toast.LENGTH_LONG
+                            ).show()
                         } else {
                             addsAsuna.add(asuna)
                             addsAsuna.sortBy { it }
                             Log.d("list", addsAsuna.toString())
-                            Toast.makeText(baseContext, "Асуна добавлена в список выполняемых асун",
-                                Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                baseContext, "Асуна добавлена в список выполняемых асун",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                         if (addsAsuna.size > 0) {
                             fab.visibility = View.VISIBLE
@@ -110,6 +138,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar_menu_main, menu)
+
+        if (auth.currentUser != null) {
+            menu?.getItem(1)?.isVisible = false
+            menu?.getItem(2)?.isVisible = true
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -121,10 +155,80 @@ class MainActivity : AppCompatActivity() {
                     FavoriteActivity::class.java
                 )
                 startActivity(intent)
-                return true
+                true
+            }
+            R.id.google_signin -> {
+                val signInIntent: Intent = mGoogleSignInClient.signInIntent
+                startActivityForResult(signInIntent, 123)
+
+                true
+            }
+            R.id.signout -> {
+                Firebase.auth.signOut()
+                mGoogleSignInClient.revokeAccess()
+                val intent = intent
+                finish()
+                startActivity(intent)
+
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 123) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+
+            // Signed in successfully, show authenticated UI.
+            Log.d("login", "signInWithEmail:success")
+            firebaseAuthWithGoogle(account?.idToken.toString())
+        } catch (e: ApiException) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(
+                "err",
+                "signInResult:failed code=" + e.statusCode
+            )
+            Toast.makeText(
+                baseContext, "Authentication failed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("login", "signInWithCredential:success")
+
+                    val user = auth.currentUser
+
+                    val intent = intent
+                    finish()
+                    startActivity(intent)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w("login", "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
     }
 }

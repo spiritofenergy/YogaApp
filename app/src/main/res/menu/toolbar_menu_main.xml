@@ -7,4 +7,16 @@
         android:icon="@drawable/ic_baseline_star_border_24"
         android:title="Favorite"
         app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/google_signin"
+        android:contentDescription="Sign In"
+        android:icon="@drawable/common_google_signin_btn_icon_light"
+        android:title="Sign In"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/signout"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:title="Item"
+        android:visible="false"
+        app:showAsAction="ifRoom|withText" />
 </menu>
