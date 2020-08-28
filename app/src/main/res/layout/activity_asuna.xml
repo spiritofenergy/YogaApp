@@ -29,6 +29,7 @@
             android:layout_height="180dp" />
 
         <LinearLayout
+            android:id="@+id/commentAddArea"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
@@ -41,14 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/commentPersonName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Ваше имя"
-                    android:inputType="textPersonName" />
 
                 <EditText
                     android:id="@+id/comment"

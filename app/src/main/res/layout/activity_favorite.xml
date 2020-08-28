@@ -6,8 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".activies.FavoriteActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/asunaFavList"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Добавить все"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/asunaFavList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/top_layout">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton4"
+            style="@style/Widget.Design.FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_cur_col"
+            android:clickable="true"
+            android:fadeScrollbars="false"
+            android:padding="15dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_chevron_right_24"
+            android:visibility="gone"
+            app:fabSize="normal" />
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

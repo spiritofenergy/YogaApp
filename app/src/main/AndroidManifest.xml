@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activies.MainActivity"></activity>
+        <activity android:name=".activies.MainActivity" />
         <activity android:name=".activies.ActionActivity" />
         <activity android:name=".activies.FavoriteActivity" />
         <activity android:name=".activies.AsunaActivity" />
-        <activity android:name=".activies.SplashActivity" android:theme="@style/AsunaTheme">
+        <activity
+            android:name=".activies.SplashActivity"
+            android:theme="@style/AsunaTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

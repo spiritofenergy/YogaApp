@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.example.yoga.R
 import com.example.yoga.adapters.CommentAdapter
 import com.example.yoga.classes.Comment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -25,15 +28,18 @@ import java.time.format.DateTimeFormatter
 class AsunaActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
+    private lateinit var auth: FirebaseAuth
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
 
     private lateinit var title: TextView
     private lateinit var textDescription: TextView
     private lateinit var imageWorkout: ImageView
-    private lateinit var commentPersonName: EditText
     private lateinit var comment: EditText
     private lateinit var commentSend: Button
     private lateinit var commentList: RecyclerView
+    private lateinit var commentAddArea: LinearLayout
+
+    lateinit var name: String
 
     private var commentArr = mutableListOf<Comment>()
 
@@ -47,13 +53,15 @@ class AsunaActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar
 
+        auth = Firebase.auth
+
         title = findViewById(R.id.textTitle)
         textDescription = findViewById(R.id.textDescription)
         imageWorkout = findViewById(R.id.imageWorkout)
         commentSend = findViewById(R.id.commentSend)
-        commentPersonName = findViewById(R.id.commentPersonName)
         comment = findViewById(R.id.comment)
         commentList = findViewById(R.id.commentList)
+        commentAddArea = findViewById(R.id.commentAddArea)
 
 
         val receivedIntent = intent
@@ -80,6 +88,24 @@ class AsunaActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)
+            }
+
+        db.collection("users")
+            .whereEqualTo("id", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        name = document["name"].toString()
+                    }
+                }
+
+                if (::name.isInitialized) {
+                    name = "User"
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
             }
 
         db.collection("comments")
@@ -124,15 +150,14 @@ class AsunaActivity : AppCompatActivity() {
             }
 
         commentSend.setOnClickListener {
-            if(commentPersonName.text.isNotEmpty() && comment.text.isNotEmpty()) {
+            if(comment.text.isNotEmpty()) {
                 val commentMap = hashMapOf(
                     "id" to id.toString(),
-                    "name" to commentPersonName.text.toString(),
+                    "name" to name,
                     "comment" to comment.text.toString(),
                     "time" to now()
                 )
 
-                commentPersonName.setText("")
                 comment.setText("")
 
 
@@ -169,7 +194,9 @@ class AsunaActivity : AppCompatActivity() {
             }
         }
 
-
+        if (auth.currentUser == null) {
+            commentAddArea.visibility = View.GONE
+        }
 
     }
 

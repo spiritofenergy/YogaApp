@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.yoga.R
 import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
+import com.example.yoga.classes.User
 import com.example.yoga.interfaces.OnRecyclerItemClickListener
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,6 +23,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private lateinit var auth: FirebaseAuth
+    private var user = User()
 
     private var cardsArr = mutableListOf<Card>()
     private var addsAsuna = mutableListOf<String>()
@@ -51,6 +54,28 @@ class MainActivity : AppCompatActivity() {
         fab = findViewById(R.id.floatingActionButton3)
 
         auth = Firebase.auth
+
+        db.collection("users")
+            .whereEqualTo("uid", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        user.name = document["name"].toString()
+                        user.id = document["id"].toString()
+                        user.email = document["email"].toString()
+                        user.status = document["status"].toString()
+                        user.sec = (document["sec"] as Long).toInt()
+                        user.colorTheme = document["colorTheme"].toString()
+                        user.countAsuns = (document["countAsuns"] as Long).toInt()
+                        user.photo = document["photo"].toString()
+                    }
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
+            }
 
         fab.setOnClickListener {
             val intent = Intent(
@@ -101,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d("list", addsAsuna.toString())
                             Toast.makeText(
                                 baseContext, "Асуна удалена из списка выполняемых асун",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         } else {
                             addsAsuna.add(asuna)
@@ -109,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d("list", addsAsuna.toString())
                             Toast.makeText(
                                 baseContext, "Асуна добавлена в список выполняемых асун",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                         if (addsAsuna.size > 0) {
@@ -140,8 +165,11 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.toolbar_menu_main, menu)
 
         if (auth.currentUser != null) {
-            menu?.getItem(1)?.isVisible = false
+            menu?.getItem(3)?.isVisible = false
+            menu?.getItem(0)?.isVisible = true
+            menu?.getItem(1)?.isVisible = true
             menu?.getItem(2)?.isVisible = true
+            menu?.getItem(4)?.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -216,6 +244,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("login", "signInWithCredential:success")
 
                     val user = auth.currentUser
+                    addUserToDatabase(user)
 
                     val intent = intent
                     finish()
@@ -229,6 +258,32 @@ class MainActivity : AppCompatActivity() {
                     ).show()
                 }
 
+            }
+    }
+
+    private fun addUserToDatabase(currentUser: FirebaseUser?) {
+        val user = hashMapOf(
+            "id" to currentUser?.uid.toString().trim(),
+            "email" to currentUser?.email.toString().trim(),
+            "name" to "User",
+            "root" to "user",
+            "countAsuns" to 0,
+            "status" to "newer",
+            "sec" to 30,
+            "colorTheme" to "default",
+            "photo" to ""
+        )
+
+        db.collection("users")
+            .whereEqualTo("id", currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.isEmpty)
+                    db.collection("users")
+                        .add(user)
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
             }
     }
 }

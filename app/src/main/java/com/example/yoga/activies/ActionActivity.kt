@@ -2,6 +2,7 @@ package com.example.yoga.activies
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,21 +12,29 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.ktx.storage
 import com.example.yoga.R
+import com.example.yoga.classes.Counter
+import com.example.yoga.classes.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
-import org.w3c.dom.Text
 
 class ActionActivity : AppCompatActivity() {
     private lateinit var receivedIntent: Intent
-    lateinit var mainHandler: Handler
+    private var mainHandler = Handler(Looper.getMainLooper())
     lateinit var list: ArrayList<String>
+    private lateinit var simplePlayer: MediaPlayer
+    private lateinit var doublePlayer: MediaPlayer
 
-    var position = 0
-    var x = 30
+    private lateinit var auth: FirebaseAuth
+
+    var counter = Counter()
+    private var isReady = true
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -34,22 +43,51 @@ class ActionActivity : AppCompatActivity() {
     lateinit var imageMain: ImageView
     lateinit var time: TextView
     lateinit var cong: TextView
+    lateinit var allTime: TextView
+    var x: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_action)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        auth = Firebase.auth
+
         receivedIntent = intent
         list = receivedIntent.getIntegerArrayListExtra("listAsuna") as ArrayList<String>
+
+        simplePlayer = MediaPlayer.create(this, R.raw.simple_audio)
+        doublePlayer = MediaPlayer.create(this, R.raw.double_audio)
 
         nameAsuna = findViewById(R.id.nameAsuna)
         imageMain = findViewById(R.id.image2)
         time = findViewById(R.id.time)
         cong = findViewById(R.id.cong)
+        allTime = findViewById(R.id.allTime)
 
-        mainHandler = Handler(Looper.getMainLooper())
-        mainHandler.post(updateTextTask)
+        db.collection("users")
+            .whereEqualTo("id", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        x = (document["sec"] as Long).toInt()
+                    }
+                }
+
+                if (x == 0) {
+                    x = 30
+                }
+
+                Thread {
+                    mainHandler.post(updateTextTask)
+                }.start()
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
+            }
+
+
 
         Log.d("list", list.toString())
     }
@@ -57,63 +95,65 @@ class ActionActivity : AppCompatActivity() {
     private val updateTextTask = object : Runnable {
         @SuppressLint("SetTextI18n")
         override fun run() {
-            mainHandler.removeCallbacks(second)
-            if (position < list.size) {
-                db.collection("asunaRU").document(list[position])
-                    .get()
-                    .addOnSuccessListener { document ->
-                        if (document != null) {
-                            nameAsuna.text = document.data?.get("title").toString()
+            if (counter.position < list.size) {
+                counter.sec += 1
 
-                            thumbnails.child("${document.data?.get("thumbPath")}.jpeg")
-                                .downloadUrl
-                                .addOnSuccessListener {
-                                    Glide.with(this@ActionActivity)
-                                        .load(it)
-                                        .into(imageMain)
-                                }.addOnFailureListener { exception ->
-                                    Log.d("log", "get failed with ", exception)
-                                }
-                            x = 30
-                            mainHandler.post(second)
-                        }
+                if (isReady) {
+                    addAsuna(list[counter.position])
+                    nameAsuna.visibility = View.GONE
+                    imageMain.visibility = View.GONE
+                    findViewById<TextView>(R.id.textActAsuna).text = "Приготовьтесь"
+
+                    if (counter.sec == 1) {
+                        Thread.sleep(1500)
                     }
-                    .addOnFailureListener { exception ->
-                        Log.w("gets", "Error getting documents.", exception)
+
+                    if (counter.sec == 3 || counter.sec == 6) {
+                        simplePlayer.start()
                     }
-                position += 1
-                Log.d("pos", position.toString())
+                    if (counter.sec == 10) {
+                        doublePlayer.start()
+                    }
+
+                } else {
+                    nameAsuna.visibility = View.VISIBLE
+                    imageMain.visibility = View.VISIBLE
+
+                    findViewById<TextView>(R.id.textActAsuna).text = "Оставшееся время"
+                }
+
+                if (counter.sec >= 10) {
+                    time.text = "00:${counter.sec}"
+                } else {
+                    time.text = "00:0${counter.sec}"
+                }
+
+
+
+                if (counter.sec == 10 && isReady) {
+                    counter.sec = -1
+                    isReady = false
+                }
+                if (counter.sec == x && !isReady) {
+                    counter.position += 1
+                    counter.sec = -1
+                    isReady = true
+                }
+
+                mainHandler.postDelayed(this,1000)
             } else {
+                Thread.sleep(1500)
                 nameAsuna.visibility = View.GONE
                 imageMain.visibility = View.GONE
                 time.visibility = View.GONE
-                findViewById<TextView>(R.id.textView3).visibility = View.GONE
+                findViewById<TextView>(R.id.textActAsuna).visibility = View.GONE
                 cong.visibility = View.VISIBLE
-            }
-            mainHandler.postDelayed(this, 32000)
-
-
-        }
-    }
-
-    private val second = object : Runnable {
-        @SuppressLint("SetTextI18n")
-        override fun run() {
-
-            time.text = "00:${
-                if (x >= 10) {
-                    x
-                } else {
-                    "0${x}"
-                }
-            }"
-
-            x -= 1
-            if (x < 0) {
-                x = 0
+                allTime.visibility = View.VISIBLE
+                allTime.text = "Общее время тренировки: ${(30f * list.size) / 60f} мин."
+                mainHandler.removeCallbacks(this)
             }
 
-            mainHandler.postDelayed(this, 1000)
+
         }
     }
 
@@ -125,5 +165,33 @@ class ActionActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun addAsuna(asuna: String) {
+        db.collection("asunaRU").document(asuna)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    nameAsuna.text = document.data?.get("title").toString()
+
+                    thumbnails.child("${document.data?.get("thumbPath")}.jpeg")
+                        .downloadUrl
+                        .addOnSuccessListener {
+                            Glide.with(this@ActionActivity)
+                                .load(it)
+                                .into(imageMain)
+                        }.addOnFailureListener { exception ->
+                            Log.d("log", "get failed with ", exception)
+                        }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("gets", "Error getting documents.", exception)
+            }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainHandler.removeCallbacks(updateTextTask)
     }
 }

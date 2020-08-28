@@ -20,6 +20,8 @@ import com.example.yoga.activies.MainActivity
 import com.example.yoga.classes.Card
 import com.example.yoga.interfaces.OnRecyclerItemClickListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -41,6 +43,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
+    private lateinit var auth: FirebaseAuth
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
     private var isLiked: TextView = itemView.findViewById(R.id.isLiked)
 
@@ -57,6 +60,8 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         socialAll.text = card.commentsCount.toString()
         publish.text = card.likesCount.toString()
         isLiked.text = "0"
+
+        auth = Firebase.auth
 
         thumbnails.child("${card.thumbPath}.jpeg")
             .downloadUrl
@@ -82,8 +87,12 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         }
                     }
                 }
-                if (isLiked.text == "1") {
-                    likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                if (auth.currentUser != null) {
+                    if (isLiked.text == "1") {
+                        likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    } else {
+                        likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    }
                 } else {
                     likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
                 }
@@ -91,26 +100,27 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             .addOnFailureListener { exception ->
                 Log.d("log", "get failed with ", exception)
             }
-
-        layoutDate1.setOnClickListener {
-            if (isLiked.text == "1") {
-                card.likesCount -= 1
-                db.collection("likes").document(card.id)
-                    .update(androidID,false)
-                db.collection("asunaRU").document(card.id)
-                    .update("likes", card.likesCount)
-                publish.text = (card.likesCount).toString()
-                likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-                isLiked.text = "0"
-            } else {
-                card.likesCount += 1
-                db.collection("likes").document(card.id)
-                    .update(androidID,true)
-                db.collection("asunaRU").document(card.id)
-                    .update("likes", card.likesCount)
-                publish.text = (card.likesCount).toString()
-                likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
-                isLiked.text = "1"
+        if (auth.currentUser != null) {
+            layoutDate1.setOnClickListener {
+                if (isLiked.text == "1") {
+                    card.likesCount -= 1
+                    db.collection("likes").document(card.id)
+                        .update(androidID, false)
+                    db.collection("asunaRU").document(card.id)
+                        .update("likes", card.likesCount)
+                    publish.text = (card.likesCount).toString()
+                    likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    isLiked.text = "0"
+                } else {
+                    card.likesCount += 1
+                    db.collection("likes").document(card.id)
+                        .update(androidID, true)
+                    db.collection("asunaRU").document(card.id)
+                        .update("likes", card.likesCount)
+                    publish.text = (card.likesCount).toString()
+                    likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    isLiked.text = "1"
+                }
             }
         }
 

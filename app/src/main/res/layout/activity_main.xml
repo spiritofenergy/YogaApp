@@ -43,12 +43,6 @@
             android:visibility="gone"
             app:fabSize="normal" />
 
-        <TextView
-            android:id="@+id/addsAsuna"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
