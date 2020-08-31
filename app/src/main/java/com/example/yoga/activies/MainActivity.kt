@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
     }
 
@@ -104,11 +104,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getList() {
+        var i = 0
         db.collection("asunaRU")
             .get()
             .addOnSuccessListener { result ->
                 cardsArr.clear()
                 for (document in result) {
+                    i += 1
                     val card = Card()
                     card.id = document.id
                     card.title = document.data["title"].toString()
@@ -116,6 +118,12 @@ class MainActivity : AppCompatActivity() {
                     card.commentsCount = (document.data["comments"] as Long).toInt()
                     card.thumbPath = document.data["thumbPath"].toString()
                     cardsArr.add(card)
+                    if (i == 5) {
+                        i += 1
+                        val cardAdv = Card()
+                        cardAdv.id = "ADV"
+                        //cardsArr.add(cardAdv)
+                    }
                 }
 
                 val cardAdapter = CardAdapter(cardsArr)
@@ -181,6 +189,14 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(
                     this,
                     FavoriteActivity::class.java
+                )
+                startActivity(intent)
+                true
+            }
+            R.id.openProfile -> {
+                val intent = Intent(
+                    this,
+                    ProfileActivity::class.java
                 )
                 startActivity(intent)
                 true

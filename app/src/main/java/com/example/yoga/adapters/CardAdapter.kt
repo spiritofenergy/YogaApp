@@ -27,5 +27,4 @@ class CardAdapter(private val list: List<Card>) : RecyclerView.Adapter<CardItemV
         }
     }
     override fun getItemCount(): Int = list.size
-
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -16,7 +17,12 @@ import com.example.yoga.R
 import com.example.yoga.adapters.CardAdapter
 import com.example.yoga.classes.Card
 import com.example.yoga.interfaces.OnRecyclerItemClickListener
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.ArrayList
@@ -27,11 +33,15 @@ class FavoriteActivity : AppCompatActivity() {
     private lateinit var fab: FloatingActionButton
     private lateinit var addAll: Button
     private val db = Firebase.firestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var gso: GoogleSignInOptions
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private var cardsArr = mutableListOf<Card>()
     private var allAsuna = mutableListOf<String>()
     private var addsAsuna = mutableListOf<String>()
-    private lateinit var androidID: String
+
+    private var id: String? = null
 
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,14 +52,25 @@ class FavoriteActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Любимые Асуны"
 
+        auth = Firebase.auth
+
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        id = auth.currentUser?.uid
+
+        if (id.isNullOrEmpty()) {
+            id = "null"
+        }
+
         asunaFavList = findViewById(R.id.asunaFavList)
         fab = findViewById(R.id.floatingActionButton4)
         addAll = findViewById(R.id.addAll)
 
-        androidID = Settings.Secure.getString(
-            this.contentResolver,
-            Settings.Secure.ANDROID_ID
-        )
 
         addAll.setOnClickListener {
             addsAsuna.addAll(allAsuna)
@@ -92,8 +113,8 @@ class FavoriteActivity : AppCompatActivity() {
                         .get()
                         .addOnSuccessListener { asuna ->
                             if (asuna != null) {
-                                if (asuna.contains(androidID)) {
-                                    if (asuna.data?.get(androidID) as Boolean) {
+                                if (asuna.contains(id.toString())) {
+                                    if (asuna.data?.get(id) as Boolean) {
                                         card.title = document.data["title"].toString()
                                         card.likesCount = (document.data["likes"] as Long).toInt()
                                         card.commentsCount = (document.data["comments"] as Long).toInt()
@@ -149,13 +170,52 @@ class FavoriteActivity : AppCompatActivity() {
             }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.toolbar_menu_main, menu)
+
+        if (auth.currentUser != null) {
+            menu?.getItem(3)?.isVisible = false
+            menu?.getItem(0)?.isVisible = true
+            menu?.getItem(1)?.isVisible = false
+            menu?.getItem(2)?.isVisible = false
+            menu?.getItem(4)?.isVisible = true
+        }
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 true
             }
+            R.id.favoriteBut -> {
+                val intent = Intent(
+                    this,
+                    FavoriteActivity::class.java
+                )
+                startActivity(intent)
+                true
+            }
+            R.id.google_signin -> {
+                val signInIntent: Intent = mGoogleSignInClient.signInIntent
+                startActivityForResult(signInIntent, 123)
+
+                true
+            }
+            R.id.signout -> {
+                Firebase.auth.signOut()
+                mGoogleSignInClient.revokeAccess()
+                val intent = intent
+                finish()
+                startActivity(intent)
+
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+
     }
 }

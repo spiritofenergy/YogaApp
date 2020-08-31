@@ -8,10 +8,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.yoga.R
@@ -19,6 +16,8 @@ import com.example.yoga.activies.AsunaActivity
 import com.example.yoga.activies.MainActivity
 import com.example.yoga.classes.Card
 import com.example.yoga.interfaces.OnRecyclerItemClickListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -39,6 +38,13 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
     private var image: ImageView = itemView.findViewById(R.id.image)
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
+
+    private var asunaCard: RelativeLayout = itemView.findViewById(R.id.asunaCard)
+    private var ads: RelativeLayout = itemView.findViewById(R.id.ads)
+
+    private var mAdView: AdView = itemView.findViewById(R.id.adView)
+    private var adRequest: AdRequest = AdRequest.Builder().build()
+
     var addAsuna: FrameLayout = itemView.findViewById(R.id.addAsuna)
 
     private val db = Firebase.firestore
@@ -48,110 +54,119 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var isLiked: TextView = itemView.findViewById(R.id.isLiked)
 
     @SuppressLint("HardwareIds")
-    private val androidID = Settings.Secure.getString(
-        parent.context.contentResolver,
-        Settings.Secure.ANDROID_ID
-    )
 
     fun bind(card: Card) {
-        counterTwo.text = card.currentCardNum.toString()
-        counterFirst.text = card.allCardCount.toString()
-        titleCard.text = card.title
-        socialAll.text = card.commentsCount.toString()
-        publish.text = card.likesCount.toString()
-        isLiked.text = "0"
+        if (card.id != "ADV") {
+            counterTwo.text = card.currentCardNum.toString()
+            counterFirst.text = card.allCardCount.toString()
+            titleCard.text = card.title
+            socialAll.text = card.commentsCount.toString()
+            publish.text = card.likesCount.toString()
+            isLiked.text = "0"
 
-        auth = Firebase.auth
+            auth = Firebase.auth
 
-        thumbnails.child("${card.thumbPath}.jpeg")
-            .downloadUrl
-            .addOnSuccessListener {
-                Glide.with(parent.context)
-                    .load(it)
-                    .into(yogaIconGrand)
-                Glide.with(parent.context)
-                    .load(it)
-                    .into(image)
+            var id = auth.currentUser?.uid
 
-            }.addOnFailureListener { exception ->
-                Log.d("log", "get failed with ", exception)
+            if (id.isNullOrEmpty()) {
+                id = "null"
             }
 
-        db.collection("likes").document(card.id)
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    if (document.contains(androidID)) {
-                        if (document.data?.get(androidID) as Boolean) {
-                            isLiked.text = "1"
+            thumbnails.child("${card.thumbPath}.jpeg")
+                .downloadUrl
+                .addOnSuccessListener {
+                    Glide.with(parent.context)
+                        .load(it)
+                        .into(yogaIconGrand)
+                    Glide.with(parent.context)
+                        .load(it)
+                        .into(image)
+
+                }.addOnFailureListener { exception ->
+                    Log.d("log", "get failed with ", exception)
+                }
+
+            db.collection("likes").document(card.id)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        if (document.contains(id)) {
+                            if (document.data?.get(id) as Boolean) {
+                                isLiked.text = "1"
+                            }
                         }
                     }
-                }
-                if (auth.currentUser != null) {
-                    if (isLiked.text == "1") {
-                        likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    if (auth.currentUser != null) {
+                        if (isLiked.text == "1") {
+                            likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        } else {
+                            likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                        }
                     } else {
                         likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
                     }
-                } else {
-                    likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("log", "get failed with ", exception)
-            }
-        if (auth.currentUser != null) {
-            layoutDate1.setOnClickListener {
-                if (isLiked.text == "1") {
-                    card.likesCount -= 1
-                    db.collection("likes").document(card.id)
-                        .update(androidID, false)
-                    db.collection("asunaRU").document(card.id)
-                        .update("likes", card.likesCount)
-                    publish.text = (card.likesCount).toString()
-                    likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
-                    isLiked.text = "0"
-                } else {
-                    card.likesCount += 1
-                    db.collection("likes").document(card.id)
-                        .update(androidID, true)
-                    db.collection("asunaRU").document(card.id)
-                        .update("likes", card.likesCount)
-                    publish.text = (card.likesCount).toString()
-                    likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
-                    isLiked.text = "1"
+                .addOnFailureListener { exception ->
+                    Log.d("log", "get failed with ", exception)
                 }
-            }
-        }
-
-        titleCard.setOnClickListener {
-            openAsuna(card.id)
-        }
-
-        image.setOnClickListener {
-            openAsuna(card.id)
-        }
-
-        social.setOnClickListener {
-            openAsuna(card.id)
-        }
-
-        buttonSettings.setOnClickListener {
-            val popupMenu = PopupMenu(parent.context, it)
-            popupMenu.inflate(R.menu.option_menu)
-
-            popupMenu.setOnMenuItemClickListener { item ->
-                return@setOnMenuItemClickListener when(item.itemId) {
-                    R.id.item1 -> {
-                        true
+            if (auth.currentUser != null) {
+                layoutDate1.setOnClickListener {
+                    if (isLiked.text == "1") {
+                        card.likesCount -= 1
+                        db.collection("likes").document(card.id)
+                            .update(id, false)
+                        db.collection("asunaRU").document(card.id)
+                            .update("likes", card.likesCount)
+                        publish.text = (card.likesCount).toString()
+                        likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                        isLiked.text = "0"
+                    } else {
+                        card.likesCount += 1
+                        db.collection("likes").document(card.id)
+                            .update(id, true)
+                        db.collection("asunaRU").document(card.id)
+                            .update("likes", card.likesCount)
+                        publish.text = (card.likesCount).toString()
+                        likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        isLiked.text = "1"
                     }
-                    R.id.item2 -> {
-                        true
-                    }
-                    else -> false
                 }
             }
-            popupMenu.show()
+
+            titleCard.setOnClickListener {
+                openAsuna(card.id)
+            }
+
+            image.setOnClickListener {
+                openAsuna(card.id)
+            }
+
+            social.setOnClickListener {
+                openAsuna(card.id)
+            }
+
+            buttonSettings.setOnClickListener {
+                val popupMenu = PopupMenu(parent.context, it)
+                popupMenu.inflate(R.menu.option_menu)
+
+                popupMenu.setOnMenuItemClickListener { item ->
+                    return@setOnMenuItemClickListener when (item.itemId) {
+                        R.id.item1 -> {
+                            true
+                        }
+                        R.id.item2 -> {
+                            true
+                        }
+                        else -> false
+                    }
+                }
+                popupMenu.show()
+            }
+        } else {
+            asunaCard.visibility = View.GONE
+            ads.visibility = View.VISIBLE
+
+            mAdView.loadAd(adRequest)
         }
     }
 
