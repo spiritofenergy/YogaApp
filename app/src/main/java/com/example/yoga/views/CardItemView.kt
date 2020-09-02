@@ -58,6 +58,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
 
     fun bind(card: Card) {
 
+
         if (card.id != "ADV") {
             counterTwo.text = card.currentCardNum.toString()
             counterFirst.text = card.allCardCount.toString()
