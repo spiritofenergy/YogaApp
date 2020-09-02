@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
+    //private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
     private var counterTwo: TextView = itemView.findViewById(R.id.counterTwo)
     private var counterFirst: TextView = itemView.findViewById(R.id.counterFirst)
     private var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
@@ -178,4 +179,32 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         intent.putExtra("asunaID", id)
         parent.context.startActivity(intent)
     }
+
+
 }
+/*
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+
+    // Create progressBar dynamically...
+    val progressBar = ProgressBar(this)
+    progressBar.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+    val linearLayout = findViewById<LinearLayout>(R.id.rootContainer)
+    // Add ProgressBar to LinearLayout
+    linearLayout?.addView(progressBar)
+
+    val btn = findViewById<Button>(R.id.button)
+    btn?.setOnClickListener {
+        val visibility = if (progressBar.visibility == View.GONE) View.VISIBLE else View.GONE
+        progressBar.visibility = visibility
+
+        val btnText = if (progressBar.visibility == View.GONE) "SHOW PROGRESSBAR" else "HIDE PROGRESSBAR"
+        btn.text = btnText
+    }
+}
+}
+
+ */
+

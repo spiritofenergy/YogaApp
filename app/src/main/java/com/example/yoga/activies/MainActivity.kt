@@ -6,6 +6,10 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,8 +35,11 @@ import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
+
+
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var progressBar: ProgressBar
     private lateinit var cardsRecyclerView: RecyclerView
     private lateinit var fab: FloatingActionButton
     private val db = Firebase.firestore
@@ -49,8 +56,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         Log.d("lang", Locale.getDefault().displayLanguage)
-
         cardsRecyclerView = findViewById(R.id.cards)
+
         fab = findViewById(R.id.floatingActionButton3)
 
         auth = Firebase.auth
@@ -133,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                             addsAsuna.removeAt(addsAsuna.indexOf(asuna))
                             Log.d("list", addsAsuna.toString())
                             Toast.makeText(
-                                baseContext, "Асуна удалена из списка выполняемых асун",
+                                baseContext, "Асана удалена",
                                 Toast.LENGTH_SHORT
                             ).show()
                         } else {
@@ -141,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                             addsAsuna.sortBy { it }
                             Log.d("list", addsAsuna.toString())
                             Toast.makeText(
-                                baseContext, "Асуна добавлена в список выполняемых асун",
+                                baseContext, "Асана добавлена",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -166,7 +173,9 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)
             }
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -181,6 +190,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         return super.onCreateOptionsMenu(menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -303,3 +313,5 @@ class MainActivity : AppCompatActivity() {
             }
     }
 }
+
+
