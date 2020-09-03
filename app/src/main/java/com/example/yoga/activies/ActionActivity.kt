@@ -12,12 +12,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.ktx.storage
 import com.example.yoga.R
 import com.example.yoga.classes.Counter
-import com.example.yoga.classes.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -56,8 +54,8 @@ class ActionActivity : AppCompatActivity() {
         receivedIntent = intent
         list = receivedIntent.getIntegerArrayListExtra("listAsuna") as ArrayList<String>
 
-        simplePlayer = MediaPlayer.create(this, R.raw.simple_audio)
-        doublePlayer = MediaPlayer.create(this, R.raw.double_audio)
+        simplePlayer = MediaPlayer.create(this, R.raw.beeps_m)
+        doublePlayer = MediaPlayer.create(this, R.raw.beeps)
 
         nameAsuna = findViewById(R.id.nameAsuna)
         imageMain = findViewById(R.id.image2)
@@ -129,7 +127,6 @@ class ActionActivity : AppCompatActivity() {
                 }
 
 
-
                 if (counter.sec == 10 && isReady) {
                     counter.sec = -1
                     isReady = false
@@ -152,8 +149,6 @@ class ActionActivity : AppCompatActivity() {
                 allTime.text = "Общее время тренировки: ${(30f * list.size) / 60f} мин."
                 mainHandler.removeCallbacks(this)
             }
-
-
         }
     }
 

@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Yoga</string>
     <string name="add">Add to</string>
+    <string name="start" translatable="false">Start</string>
+    <string name="end" translatable="false">BRAVO!</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="yoga_workout">YOGA WORKOUT</string>
+    <string name="yoga_workout" translatable="false">YOGA WORKOUT</string>
+    <string name="time_workout">Время тренировки</string>
+    <string name="time_asana">Время асаны</string>
+    <string name="_0_00_00">0:00:00</string>
+    <string name="_00_00">00:00</string>
 </resources>

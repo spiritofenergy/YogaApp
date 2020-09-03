@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="activity_horizontal_margin" tools:ignore="MissingDefaultResource">16dp</dimen>
+    <dimen name="activity_vertical_margin" tools:ignore="MissingDefaultResource">16dp</dimen>
+    <dimen name="text_size" tools:ignore="MissingDefaultResource">16sp</dimen>
+
+    <dimen name="margin_0" tools:ignore="MissingDefaultResource">0dp</dimen>
+    <dimen name="margin_sx" tools:ignore="MissingDefaultResource">4dp</dimen>
+    <dimen name="margin_s" tools:ignore="MissingDefaultResource">8dp</dimen>
+    <dimen name="margin_m" tools:ignore="MissingDefaultResource">16dp</dimen>
+    <dimen name="margin_l" tools:ignore="MissingDefaultResource">24dp</dimen>
+
+    <dimen name="size_text_sx" tools:ignore="MissingDefaultResource">12sp</dimen>
+    <dimen name="size_text_s" tools:ignore="MissingDefaultResource">16sp</dimen>
+    <dimen name="size_text_m" tools:ignore="MissingDefaultResource">18sp</dimen>
+    <dimen name="size_text_l" tools:ignore="MissingDefaultResource">40sp</dimen>
+
+</resources>
