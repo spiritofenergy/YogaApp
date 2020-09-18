@@ -42,6 +42,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717760602350:android:48982c3a280caf540693ff",
+        "android_client_info": {
+          "package_name": "com.simon.yoga_statica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717760602350-epb34p29f6qlfrk3jmt9ti4aa367au64.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.simon.yoga_statica",
+            "certificate_hash": "3032f9fed10f1028b9719427681454ba546963b0"
+          }
+        },
+        {
+          "client_id": "717760602350-9mus7nc1tpdj6phf8vh0ag78lvogk3oi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0q9Ar_3ShiY9cIIbW8926nCBN1hmEDgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717760602350-9mus7nc1tpdj6phf8vh0ag78lvogk3oi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

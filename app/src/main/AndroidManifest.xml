@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yoga">
+    package="com.simon.yoga_statica">
 
     <application
         android:allowBackup="true"
@@ -9,13 +9,13 @@
         android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activies.ProfileActivity"></activity>
-        <activity android:name=".activies.MainActivity" />
-        <activity android:name=".activies.ActionActivity" />
-        <activity android:name=".activies.FavoriteActivity" />
-        <activity android:name=".activies.AsunaActivity" />
+        <activity android:name="com.simon.yoga_statica.activies.ProfileActivity" />
+        <activity android:name="com.simon.yoga_statica.activies.MainActivity" />
+        <activity android:name="com.simon.yoga_statica.activies.ActionActivity" />
+        <activity android:name="com.simon.yoga_statica.activies.FavoriteActivity" />
+        <activity android:name="com.simon.yoga_statica.activies.AsunaActivity" />
         <activity
-            android:name=".activies.SplashActivity"
+            android:name="com.simon.yoga_statica.activies.SplashActivity"
             android:theme="@style/AsunaTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
