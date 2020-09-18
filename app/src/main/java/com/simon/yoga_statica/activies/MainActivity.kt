@@ -30,6 +30,7 @@ import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.classes.User
 import com.simon.yoga_statica.fragments.AsunaListFragment
+import com.simon.yoga_statica.fragments.FavoriteListFragment
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import java.util.*
 
@@ -64,11 +65,6 @@ class MainActivity : AppCompatActivity() {
             transaction.replace(R.id.fragmentContainer, listFragment)
             transaction.commit()
         }
-
-
-//        cardsRecyclerView = findViewById(R.id.cards)
-
-        //fab = findViewById(R.id.floatingActionButton3)
 
         auth = Firebase.auth
 
@@ -115,78 +111,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        //getList()
-    }
-
-    private fun getList() {
-        var i = 0
-        db.collection("asunaRU")
-            .get()
-            .addOnSuccessListener { result ->
-                cardsArr.clear()
-                for (document in result) {
-                    i += 1
-                    val card = Card()
-                    card.id = document.id
-                    card.title = document.data["title"].toString()
-                    card.likesCount = (document.data["likes"] as Long).toInt()
-                    card.commentsCount = (document.data["comments"] as Long).toInt()
-                    card.thumbPath = document.data["thumbPath"].toString()
-                    cardsArr.add(card)
-                    if (i == 5) {
-                        i += 1
-                        val cardAdv = Card()
-                        cardAdv.id = "ADV"
-                        //cardsArr.add(cardAdv)
-                    }
-                }
-
-                val cardAdapter = CardAdapter(cardsArr)
-                cardAdapter.setOnDeleteListener(object : OnRecyclerItemClickListener {
-                    override fun onItemClicked(asuna: String, position: Int) {
-                        if (asuna in addsAsuna) {
-                            addsAsuna.removeAt(addsAsuna.indexOf(asuna))
-                            Log.d("list", addsAsuna.toString())
-                            Toast.makeText(
-                                baseContext, "Асана удалена",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            addsAsuna.add(asuna)
-                            addsAsuna.sortBy { it }
-                            Log.d("list", addsAsuna.toString())
-                            Toast.makeText(
-                                baseContext, "Асана добавлена",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                        if (addsAsuna.size > 0) {
-                            fab.visibility = View.VISIBLE
-                        } else {
-                            fab.visibility = View.GONE
-                        }
-                    }
-
-                    override fun onItemLongClicked(position: Int) {
-
-                    }
-
-                })
-
-                cardsRecyclerView.apply {
-                    layoutManager = LinearLayoutManager(this@MainActivity)
-                    adapter = cardAdapter
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("gets", "Error getting documents.", exception)
-            }
-
-    }
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar_menu_main, menu)
@@ -206,11 +130,13 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.favoriteBut -> {
-                val intent = Intent(
-                    this,
-                    FavoriteActivity::class.java
-                )
-                startActivity(intent)
+                if (container.tag == "usual_display") {
+                    val listFragment = FavoriteListFragment()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                    transaction.replace(R.id.fragmentContainer, listFragment)
+                    transaction.commit()
+                }
+
                 true
             }
             R.id.openProfile -> {

@@ -31,14 +31,16 @@ class AsunaListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_list, container, false)
-        //initWorkoutList(rootView)
 
         fab = rootView.findViewById(R.id.floatingActionButton3)
         cardsRecyclerView = rootView.findViewById(R.id.cards)
 
-        getList()
-
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getList()
     }
 
     private fun getList() {

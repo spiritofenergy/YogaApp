@@ -236,11 +236,7 @@ class AsunaActivity : AppCompatActivity() {
                 true
             }
             R.id.favoriteBut -> {
-                val intent = Intent(
-                    this,
-                    FavoriteActivity::class.java
-                )
-                startActivity(intent)
+
                 true
             }
             R.id.google_signin -> {

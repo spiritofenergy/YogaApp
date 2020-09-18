@@ -58,11 +58,7 @@ class ProfileActivity : AppCompatActivity() {
                 true
             }
             R.id.favoriteBut -> {
-                val intent = Intent(
-                    this,
-                    FavoriteActivity::class.java
-                )
-                startActivity(intent)
+
                 true
             }
             R.id.openProfile -> {
