@@ -7,9 +7,9 @@
     <color name="colorPrimaryDark">#1887b3</color>
     <color name="colorAccent">#089ed9</color>
 
-    <color name="colorPrimaryCoffee">#089ed9</color>
-    <color name="colorPrimaryDarkCoffee">#1887b3</color>
-    <color name="colorAccentCoffee">#089ed9</color>
+    <color name="colorPrimaryCoffee">#8A6552</color>
+    <color name="colorPrimaryDarkCoffee">#462521</color>
+    <color name="colorAccentCoffee">#8A6552</color>
 
     <color name="colorBackground">#FFFFFF</color>
 </resources>

@@ -8,11 +8,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Default">
         <activity android:name="com.simon.yoga_statica.activies.MainActivity" />
         <activity
-            android:name="com.simon.yoga_statica.activies.SplashActivity"
-            android:theme="@style/AsunaTheme">
+            android:name="com.simon.yoga_statica.activies.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

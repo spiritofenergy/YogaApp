@@ -16,6 +16,9 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var bottonanimation: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        setTheme(R.style.AsunaTheme)
+
         super.onCreate(savedInstanceState)
         window.setFlags(WindowManager.LayoutParams.FLAGS_CHANGED, WindowManager.LayoutParams.FLAGS_CHANGED)
         setContentView(R.layout.activity_splash)

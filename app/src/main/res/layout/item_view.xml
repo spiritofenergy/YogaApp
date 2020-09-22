@@ -250,7 +250,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="21dp"
                     android:text="/"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorPrimary"
+                    android:textColorLink="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/counterTwo"
