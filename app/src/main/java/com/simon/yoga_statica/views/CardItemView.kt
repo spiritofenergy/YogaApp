@@ -1,6 +1,7 @@
 package com.simon.yoga_statica.views
 
 import android.annotation.SuppressLint
+import android.app.Fragment
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -25,6 +28,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.simon.yoga_statica.fragments.AsunaFragment
+import com.simon.yoga_statica.fragments.FavoriteListFragment
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
@@ -53,11 +58,13 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private lateinit var auth: FirebaseAuth
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
     private var isLiked: TextView = itemView.findViewById(R.id.isLiked)
+    private lateinit var fragmentManager: FragmentManager
 
     @SuppressLint("HardwareIds")
 
-    fun bind(card: Card) {
+    fun bind(card: Card, fragmentManager: FragmentManager) {
 
+        this.fragmentManager = fragmentManager
 
         if (card.id != "ADV") {
             counterTwo.text = card.currentCardNum.toString()
@@ -195,12 +202,13 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     }
 
     private fun openAsuna(id: String) {
-        val intent = Intent(
-            parent.context,
-            AsunaActivity::class.java
-        )
-        intent.putExtra("asunaID", id)
-        parent.context.startActivity(intent)
+        val listFragment = AsunaFragment()
+        listFragment.setAsuna(id)
+        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.fragmentContainer, listFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+
     }
 
 

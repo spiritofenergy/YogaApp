@@ -4,9 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/list_frag"
-        class="com.simon.yoga_statica.fragments.AsunaListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2"/>

@@ -5,20 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -26,27 +22,20 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
-import com.simon.yoga_statica.adapters.CardAdapter
-import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.classes.User
+import com.simon.yoga_statica.fragments.AsunaFragment
 import com.simon.yoga_statica.fragments.AsunaListFragment
 import com.simon.yoga_statica.fragments.FavoriteListFragment
-import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var cardsRecyclerView: RecyclerView
-    private lateinit var fab: FloatingActionButton
     private val db = Firebase.firestore
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private lateinit var auth: FirebaseAuth
     private var user = User()
-
-    private var cardsArr = mutableListOf<Card>()
-    private var addsAsuna = mutableListOf<String>()
 
     private lateinit var container: FrameLayout
 
@@ -58,13 +47,24 @@ class MainActivity : AppCompatActivity() {
 
         container = findViewById(R.id.fragmentContainer)
 
+        val listFragment = AsunaListFragment()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
         if (container.tag == "usual_display") {
-            val listFragment = AsunaListFragment()
-            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragmentContainer, listFragment)
             transaction.commit()
+        } else {
+            transaction.replace(R.id.list_frag, listFragment)
+            transaction.commit()
+
+            val asuna = AsunaFragment()
+            asuna.setAsuna("asuna01")
+            val transactionA: FragmentTransaction = supportFragmentManager.beginTransaction()
+            transactionA.replace(R.id.fragmentContainer, asuna)
+            transactionA.commit()
+
         }
+
 
         auth = Firebase.auth
 
@@ -89,18 +89,6 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
             }
-//
-//        fab.setOnClickListener {
-//            val intent = Intent(
-//                this,
-//                ActionActivity::class.java
-//            )
-//
-//            intent.putExtra("listAsuna", ArrayList(addsAsuna))
-//            addsAsuna.clear()
-//            startActivity(intent)
-//            fab.visibility = View.GONE
-//        }
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -130,10 +118,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.favoriteBut -> {
+                val listFragment = FavoriteListFragment()
+                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                 if (container.tag == "usual_display") {
-                    val listFragment = FavoriteListFragment()
-                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                     transaction.replace(R.id.fragmentContainer, listFragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                } else {
+                    transaction.replace(R.id.list_frag, listFragment)
+                    transaction.addToBackStack(null)
                     transaction.commit()
                 }
 

@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -34,6 +36,18 @@ class AsunaListFragment : Fragment() {
 
         fab = rootView.findViewById(R.id.floatingActionButton3)
         cardsRecyclerView = rootView.findViewById(R.id.cards)
+
+        fab.setOnClickListener {
+            val actionFragment = ActionFragment()
+            actionFragment.setListAsuns(ArrayList(addsAsuna))
+            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.fragmentContainer, actionFragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
+
+            addsAsuna.clear()
+            fab.visibility = View.GONE
+        }
 
         return rootView
     }
@@ -66,8 +80,8 @@ class AsunaListFragment : Fragment() {
                     }
                 }
 
-                val cardAdapter = CardAdapter(cardsArr)
-                cardAdapter.setOnDeleteListener(object : OnRecyclerItemClickListener {
+                val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
+                cardAdapter?.setOnDeleteListener(object : OnRecyclerItemClickListener {
                     override fun onItemClicked(asuna: String, position: Int) {
                         if (asuna in addsAsuna) {
                             addsAsuna.removeAt(addsAsuna.indexOf(asuna))
