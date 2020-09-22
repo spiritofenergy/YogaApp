@@ -1,6 +1,8 @@
 package com.simon.yoga_statica.activies
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -39,11 +41,22 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var container: FrameLayout
 
+    private lateinit var prefs: SharedPreferences
+    private val APP_PREFERENCES_THEME = "theme"
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
+
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        if (!prefs.contains(APP_PREFERENCES_THEME)) {
+            setTheme(R.style.AsunaTheme)
+        } else {
+            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
+                "coffee" -> setTheme(R.style.CoffeeAppTheme)
+                "default" -> setTheme(R.style.AsunaTheme)
+            }
+        }
         setContentView(R.layout.activity_main)
 
         Log.d("lang", Locale.getDefault().displayLanguage)

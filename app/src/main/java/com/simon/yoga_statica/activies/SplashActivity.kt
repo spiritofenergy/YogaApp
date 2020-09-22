@@ -1,8 +1,11 @@
 package com.simon.yoga_statica.activies
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils.loadAnimation
@@ -15,11 +18,25 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var bottonanimation: TextView
 
+    private lateinit var prefs: SharedPreferences
+    private val APP_PREFERENCES_THEME = "theme"
+
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        setTheme(R.style.AsunaTheme)
-
         super.onCreate(savedInstanceState)
+
+        prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
+//        val editor = prefs.edit()
+//        editor.putString(APP_PREFERENCES_THEME, "coffee").apply()
+
+        if (!prefs.contains(APP_PREFERENCES_THEME)) {
+            setTheme(R.style.AsunaTheme)
+        } else {
+            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
+                "coffee" -> setTheme(R.style.CoffeeAppThemeMin)
+                "default" -> setTheme(R.style.AsunaTheme)
+            }
+        }
+
         window.setFlags(WindowManager.LayoutParams.FLAGS_CHANGED, WindowManager.LayoutParams.FLAGS_CHANGED)
         setContentView(R.layout.activity_splash)
 
