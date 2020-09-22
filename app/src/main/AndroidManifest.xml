@@ -9,10 +9,7 @@
         android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.simon.yoga_statica.activies.ProfileActivity" />
         <activity android:name="com.simon.yoga_statica.activies.MainActivity" />
-        <activity android:name="com.simon.yoga_statica.activies.ActionActivity" />
-        <activity android:name="com.simon.yoga_statica.activies.AsunaActivity" />
         <activity
             android:name="com.simon.yoga_statica.activies.SplashActivity"
             android:theme="@style/AsunaTheme">

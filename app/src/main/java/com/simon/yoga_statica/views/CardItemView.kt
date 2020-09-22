@@ -1,8 +1,6 @@
 package com.simon.yoga_statica.views
 
 import android.annotation.SuppressLint
-import android.app.Fragment
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +16,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simon.yoga_statica.R
-import com.simon.yoga_statica.activies.AsunaActivity
 import com.simon.yoga_statica.classes.Card
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -29,7 +26,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.fragments.AsunaFragment
-import com.simon.yoga_statica.fragments.FavoriteListFragment
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)

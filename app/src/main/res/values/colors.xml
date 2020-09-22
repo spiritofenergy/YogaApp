@@ -6,5 +6,10 @@
     <color name="colorPrimary">#089ed9</color>
     <color name="colorPrimaryDark">#1887b3</color>
     <color name="colorAccent">#089ed9</color>
+
+    <color name="colorPrimaryCoffee">#089ed9</color>
+    <color name="colorPrimaryDarkCoffee">#1887b3</color>
+    <color name="colorAccentCoffee">#089ed9</color>
+
     <color name="colorBackground">#FFFFFF</color>
 </resources>

@@ -133,11 +133,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.openProfile -> {
-                val intent = Intent(
-                    this,
-                    ProfileActivity::class.java
-                )
-                startActivity(intent)
+
                 true
             }
             R.id.google_signin -> {

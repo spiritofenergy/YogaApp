@@ -53,7 +53,9 @@ class SplashActivity : AppCompatActivity() {
         super.onPause()
         finish()
     }
+
+    private fun Animation.startAnimation(image: Animation?) {
+    }
 }
-private fun Animation.startAnimation(image: Animation?) {
-}
+
 

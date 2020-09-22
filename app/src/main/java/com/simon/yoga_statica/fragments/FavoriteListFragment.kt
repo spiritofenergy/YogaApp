@@ -1,6 +1,5 @@
 package com.simon.yoga_statica.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,15 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
-import com.simon.yoga_statica.activies.ActionActivity
 import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
