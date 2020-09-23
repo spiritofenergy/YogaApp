@@ -28,6 +28,7 @@ import com.simon.yoga_statica.classes.User
 import com.simon.yoga_statica.fragments.AsunaFragment
 import com.simon.yoga_statica.fragments.AsunaListFragment
 import com.simon.yoga_statica.fragments.FavoriteListFragment
+import com.simon.yoga_statica.fragments.ProfileFragment
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -50,11 +51,11 @@ class MainActivity : AppCompatActivity() {
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
         if (!prefs.contains(APP_PREFERENCES_THEME)) {
-            setTheme(R.style.AsunaTheme)
+            setTheme(R.style.AppTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
                 "coffee" -> setTheme(R.style.CoffeeAppTheme)
-                "default" -> setTheme(R.style.AsunaTheme)
+                "default" -> setTheme(R.style.AppTheme)
             }
         }
         setContentView(R.layout.activity_main)
@@ -149,6 +150,17 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.openProfile -> {
+                val fragment = ProfileFragment()
+                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                if (container.tag == "usual_display") {
+                    transaction.replace(R.id.fragmentContainer, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                } else {
+                    transaction.replace(R.id.list_frag, fragment)
+                    transaction.addToBackStack(null)
+                    transaction.commit()
+                }
 
                 true
             }
