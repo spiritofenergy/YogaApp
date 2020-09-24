@@ -9,18 +9,18 @@
         android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/Default">
-        <activity android:name="com.simon.yoga_statica.activies.MainActivity" />
-        <activity
-            android:name="com.simon.yoga_statica.activies.SplashActivity">
+        <activity android:name=".activies.MainActivity" />
+        <activity android:name=".activies.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9961574054170414~1283994688"/>
+            android:value="ca-app-pub-9961574054170414~1283994688" />
     </application>
 
 </manifest>

@@ -25,7 +25,6 @@
             android:layout_below="@id/imageAvatar"
             android:layout_marginTop="30dp"
             android:gravity="center_horizontal"
-            android:text="Name"
             android:textSize="24sp" />
 
         <LinearLayout
@@ -46,8 +45,7 @@
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -73,11 +71,12 @@
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/radioButton2"
+                    android:id="@+id/radio30"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -85,20 +84,23 @@
                     android:text="30 сек" />
 
                 <RadioButton
-                    android:id="@+id/radioButton3"
+                    android:id="@+id/radio60"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="60 сек" />
+                    android:text="60 сек"
+                    android:visibility="gone" />
 
                 <RadioButton
-                    android:id="@+id/radioButton4"
+                    android:id="@+id/radio90"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="90  сек" />
+                    android:checked="false"
+                    android:text="90  сек"
+                    android:visibility="gone" />
             </RadioGroup>
         </LinearLayout>
 
@@ -122,11 +124,32 @@
                 android:textSize="18sp" />
 
             <RadioGroup
+                android:id="@+id/setThemeGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
+
+                <RadioButton
+                    android:id="@+id/radioDefault"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="80dp"
+                    android:drawableLeft="@drawable/default_theme"
+                    android:text="Default" />
+
+                <RadioButton
+                    android:id="@+id/radioCoffee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="80dp"
+                    android:drawableLeft="@drawable/coffee_theme"
+                    android:text="Coffee" />
 
             </RadioGroup>
         </LinearLayout>

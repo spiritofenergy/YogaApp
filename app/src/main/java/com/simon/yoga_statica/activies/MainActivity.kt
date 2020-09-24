@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private lateinit var auth: FirebaseAuth
-    private var user = User()
 
     private lateinit var container: FrameLayout
 
@@ -60,52 +59,9 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
 
-        Log.d("lang", Locale.getDefault().displayLanguage)
-
-        container = findViewById(R.id.fragmentContainer)
-
-        val listFragment = AsunaListFragment()
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-
-        if (container.tag == "usual_display") {
-            transaction.replace(R.id.fragmentContainer, listFragment)
-            transaction.commit()
-        } else {
-            transaction.replace(R.id.list_frag, listFragment)
-            transaction.commit()
-
-            val asuna = AsunaFragment()
-            asuna.setAsuna("asuna01")
-            val transactionA: FragmentTransaction = supportFragmentManager.beginTransaction()
-            transactionA.replace(R.id.fragmentContainer, asuna)
-            transactionA.commit()
-
-        }
-
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         auth = Firebase.auth
-
-        db.collection("users")
-            .whereEqualTo("uid", auth.currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (document in documents) {
-                        user.name = document["name"].toString()
-                        user.id = document["id"].toString()
-                        user.email = document["email"].toString()
-                        user.status = document["status"].toString()
-                        user.sec = (document["sec"] as Long).toInt()
-                        user.colorTheme = document["colorTheme"].toString()
-                        user.countAsuns = (document["countAsuns"] as Long).toInt()
-                        user.photo = document["photo"].toString()
-                    }
-                }
-
-            }
-            .addOnFailureListener { exception ->
-                Log.w("home", "Error getting documents: ", exception)
-            }
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -114,6 +70,18 @@ class MainActivity : AppCompatActivity() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
+        val profile = intent.getBooleanExtra("profile", false)
+
+        Log.d("lang", Locale.getDefault().displayLanguage)
+
+        container = findViewById(R.id.fragmentContainer)
+
+        openMain()
+
+        if (profile) {
+            Log.d("prof", "true")
+            openProfile()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -134,7 +102,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+
+                val count = supportFragmentManager.backStackEntryCount
+
+                if (count == 0) supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+                true
+            }
             R.id.favoriteBut -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 val listFragment = FavoriteListFragment()
                 val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                 if (container.tag == "usual_display") {
@@ -150,17 +128,18 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.openProfile -> {
-                val fragment = ProfileFragment()
-                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                if (container.tag == "usual_display") {
-                    transaction.replace(R.id.fragmentContainer, fragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
-                } else {
-                    transaction.replace(R.id.list_frag, fragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
-                }
+                openProfile()
+
+//                finish()
+//                if (auth.currentUser != null) {
+//                    startActivity(
+//                        Intent(
+//                            this,
+//                            ProfileActivity::class.java
+//                        )
+//                    )
+//
+//                }
 
                 true
             }
@@ -182,6 +161,43 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
+
+    private fun openProfile() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if (auth.currentUser != null) {
+            val listFragment = ProfileFragment()
+            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+            if (container.tag == "usual_display") {
+                transaction.replace(R.id.fragmentContainer, listFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            } else {
+                transaction.replace(R.id.list_frag, listFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
+        }
+    }
+
+    private fun openMain() {
+        val listFragment = AsunaListFragment()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+
+        if (container.tag == "usual_display") {
+            transaction.replace(R.id.fragmentContainer, listFragment)
+            transaction.commit()
+        } else {
+            transaction.replace(R.id.list_frag, listFragment)
+            transaction.commit()
+
+            val asuna = AsunaFragment()
+            asuna.setAsuna("asuna01")
+            val transactionA: FragmentTransaction = supportFragmentManager.beginTransaction()
+            transactionA.replace(R.id.fragmentContainer, asuna)
+            transactionA.commit()
+
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
