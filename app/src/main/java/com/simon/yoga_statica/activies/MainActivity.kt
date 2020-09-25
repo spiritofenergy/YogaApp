@@ -130,17 +130,6 @@ class MainActivity : AppCompatActivity() {
             R.id.openProfile -> {
                 openProfile()
 
-//                finish()
-//                if (auth.currentUser != null) {
-//                    startActivity(
-//                        Intent(
-//                            this,
-//                            ProfileActivity::class.java
-//                        )
-//                    )
-//
-//                }
-
                 true
             }
             R.id.google_signin -> {

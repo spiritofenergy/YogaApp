@@ -45,6 +45,11 @@ class ActionFragment : Fragment() {
     lateinit var allTime: TextView
     var x: Int = 0
 
+    private val IS_READY = "isReady"
+    private val SECOND_ALL = "second"
+    private val CURRENT_SECOND = "currentSecond"
+    private val CURRENT_POSITION = "currentPosition"
+
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -65,29 +70,36 @@ class ActionFragment : Fragment() {
         cong = rootView.findViewById(R.id.cong)
         allTime = rootView.findViewById(R.id.allTime)
 
-        db.collection("users")
-            .whereEqualTo("id", auth.currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (document in documents) {
-                        x = (document["sec"] as Long).toInt()
+        with(savedInstanceState) {
+            x = this?.getInt(SECOND_ALL)!!
+            isReady = this.getBoolean(IS_READY)
+            counter.position = getInt(CURRENT_POSITION)
+            counter.sec = getInt(CURRENT_SECOND)
+        }
+
+        if (x == 0) {
+            db.collection("users")
+                .whereEqualTo("id", auth.currentUser?.uid)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        for (document in documents) {
+                            x = (document["sec"] as Long).toInt()
+                        }
                     }
+
+                    if (x == 0) {
+                        x = 30
+                    }
+
+                    Thread {
+                        mainHandler.post(updateTextTask)
+                    }.start()
                 }
-
-                if (x == 0) {
-                    x = 30
+                .addOnFailureListener { exception ->
+                    Log.w("home", "Error getting documents: ", exception)
                 }
-
-                Thread {
-                    mainHandler.post(updateTextTask)
-                }.start()
-            }
-            .addOnFailureListener { exception ->
-                Log.w("home", "Error getting documents: ", exception)
-            }
-
-
+        }
 
         Log.d("list", list.toString())
 
@@ -190,5 +202,15 @@ class ActionFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         mainHandler.removeCallbacks(updateTextTask)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.run {
+            putBoolean(IS_READY, isReady)
+            putInt(SECOND_ALL, x)
+            putInt(CURRENT_SECOND, counter.sec)
+            putInt(CURRENT_POSITION, counter.position)
+        }
     }
 }
