@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -58,8 +59,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         setContentView(R.layout.activity_main)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        val count = supportFragmentManager.backStackEntryCount
+        Log.d("c", count.toString())
+        if (count == 0)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        else
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         auth = Firebase.auth
 
@@ -71,12 +76,14 @@ class MainActivity : AppCompatActivity() {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
         val profile = intent.getBooleanExtra("profile", false)
+        intent.putExtra("profile", false)
 
         Log.d("lang", Locale.getDefault().displayLanguage)
 
         container = findViewById(R.id.fragmentContainer)
 
-        openMain()
+        if (count == 0)
+            openMain()
 
         if (profile) {
             Log.d("prof", "true")
@@ -101,14 +108,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val count = supportFragmentManager.backStackEntryCount
+        Log.d("c", count.toString())
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-
-                val count = supportFragmentManager.backStackEntryCount
-
-                if (count == 0) supportActionBar?.setDisplayHomeAsUpEnabled(false)
-
                 true
             }
             R.id.favoriteBut -> {
@@ -150,6 +154,15 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
 
+    }
+
+    override fun onBackPressed() {
+        val count = supportFragmentManager.backStackEntryCount
+        if (count == 1) supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
+        Log.d("c", count.toString())
+
+        super.onBackPressed()
     }
 
     private fun openProfile() {
@@ -252,7 +265,7 @@ class MainActivity : AppCompatActivity() {
             "name" to "User",
             "root" to "user",
             "countAsuns" to 0,
-            "status" to "newer",
+            "status" to 1,
             "sec" to 30,
             "colorTheme" to "default",
             "photo" to ""

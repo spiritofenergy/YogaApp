@@ -26,7 +26,7 @@ import com.simon.yoga_statica.classes.Counter
 class ActionFragment : Fragment() {
 
     private var mainHandler = Handler(Looper.getMainLooper())
-    lateinit var list: ArrayList<String>
+    var list: ArrayList<String> = arrayListOf()
     private lateinit var simplePlayer: MediaPlayer
     private lateinit var doublePlayer: MediaPlayer
 
@@ -46,9 +46,9 @@ class ActionFragment : Fragment() {
     var x: Int = 0
 
     private val IS_READY = "isReady"
-    private val SECOND_ALL = "second"
     private val CURRENT_SECOND = "currentSecond"
     private val CURRENT_POSITION = "currentPosition"
+    private val LIST = "list"
 
     private lateinit var rootView: View
 
@@ -58,6 +58,18 @@ class ActionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_action, container, false)
+
+        if (savedInstanceState != null) {
+            with (savedInstanceState) {
+                isReady = getBoolean(IS_READY)
+                counter.sec = getInt(CURRENT_SECOND)
+                counter.position = getInt(CURRENT_POSITION)
+
+                list = getStringArrayList(LIST) as ArrayList<String>
+
+                addAsuna(list[counter.position])
+            }
+        }
 
         auth = Firebase.auth
 
@@ -70,36 +82,27 @@ class ActionFragment : Fragment() {
         cong = rootView.findViewById(R.id.cong)
         allTime = rootView.findViewById(R.id.allTime)
 
-        with(savedInstanceState) {
-            x = this?.getInt(SECOND_ALL)!!
-            isReady = this.getBoolean(IS_READY)
-            counter.position = getInt(CURRENT_POSITION)
-            counter.sec = getInt(CURRENT_SECOND)
-        }
-
-        if (x == 0) {
-            db.collection("users")
-                .whereEqualTo("id", auth.currentUser?.uid)
-                .get()
-                .addOnSuccessListener { documents ->
-                    if (!documents.isEmpty) {
-                        for (document in documents) {
-                            x = (document["sec"] as Long).toInt()
-                        }
+        db.collection("users")
+            .whereEqualTo("id", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        x = (document["sec"] as Long).toInt()
                     }
-
-                    if (x == 0) {
-                        x = 30
-                    }
-
-                    Thread {
-                        mainHandler.post(updateTextTask)
-                    }.start()
                 }
-                .addOnFailureListener { exception ->
-                    Log.w("home", "Error getting documents: ", exception)
+
+                if (x == 0) {
+                    x = 30
                 }
-        }
+
+                Thread {
+                    mainHandler.post(updateTextTask)
+                }.start()
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
+            }
 
         Log.d("list", list.toString())
 
@@ -208,9 +211,9 @@ class ActionFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.run {
             putBoolean(IS_READY, isReady)
-            putInt(SECOND_ALL, x)
             putInt(CURRENT_SECOND, counter.sec)
             putInt(CURRENT_POSITION, counter.position)
+            putStringArrayList(LIST, list)
         }
     }
 }
