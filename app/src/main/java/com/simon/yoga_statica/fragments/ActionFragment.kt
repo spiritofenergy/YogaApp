@@ -26,7 +26,7 @@ import com.simon.yoga_statica.classes.Counter
 class ActionFragment : Fragment() {
 
     private var mainHandler = Handler(Looper.getMainLooper())
-    lateinit var list: ArrayList<String>
+    var list: ArrayList<String> = arrayListOf()
     private lateinit var simplePlayer: MediaPlayer
     private lateinit var doublePlayer: MediaPlayer
 
@@ -45,6 +45,11 @@ class ActionFragment : Fragment() {
     lateinit var allTime: TextView
     var x: Int = 0
 
+    private val IS_READY = "isReady"
+    private val CURRENT_SECOND = "currentSecond"
+    private val CURRENT_POSITION = "currentPosition"
+    private val LIST = "list"
+
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -53,6 +58,18 @@ class ActionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_action, container, false)
+
+        if (savedInstanceState != null) {
+            with (savedInstanceState) {
+                isReady = getBoolean(IS_READY)
+                counter.sec = getInt(CURRENT_SECOND)
+                counter.position = getInt(CURRENT_POSITION)
+
+                list = getStringArrayList(LIST) as ArrayList<String>
+
+                addAsuna(list[counter.position])
+            }
+        }
 
         auth = Firebase.auth
 
@@ -86,8 +103,6 @@ class ActionFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
             }
-
-
 
         Log.d("list", list.toString())
 
@@ -190,5 +205,15 @@ class ActionFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         mainHandler.removeCallbacks(updateTextTask)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.run {
+            putBoolean(IS_READY, isReady)
+            putInt(CURRENT_SECOND, counter.sec)
+            putInt(CURRENT_POSITION, counter.position)
+            putStringArrayList(LIST, list)
+        }
     }
 }

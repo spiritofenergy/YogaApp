@@ -52,6 +52,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "717760602350-a6p3fh8bda7sl1kkck0fc5g0i0npvg7t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.simon.yoga_statica",
+            "certificate_hash": "427d13e3ed2aaa9ccb8bb363219029b51e800ea0"
+          }
+        },
+        {
           "client_id": "717760602350-drl5h9g3rdeshi3ol3e6atglcs9r7ccq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
