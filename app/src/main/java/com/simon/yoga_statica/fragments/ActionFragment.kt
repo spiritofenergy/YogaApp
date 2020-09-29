@@ -1,7 +1,9 @@
 package com.simon.yoga_statica.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -50,6 +52,9 @@ class ActionFragment : Fragment() {
     private val CURRENT_POSITION = "currentPosition"
     private val LIST = "list"
 
+    private lateinit var prefs: SharedPreferences
+    private val APP_PREFERENCES_COUNT = "count"
+
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -58,6 +63,8 @@ class ActionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         rootView = inflater.inflate(R.layout.fragment_action, container, false)
+
+        prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         if (savedInstanceState != null) {
             with (savedInstanceState) {
@@ -71,8 +78,6 @@ class ActionFragment : Fragment() {
             }
         }
 
-        auth = Firebase.auth
-
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
 
@@ -82,27 +87,22 @@ class ActionFragment : Fragment() {
         cong = rootView.findViewById(R.id.cong)
         allTime = rootView.findViewById(R.id.allTime)
 
-        db.collection("users")
-            .whereEqualTo("id", auth.currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (document in documents) {
-                        x = (document["sec"] as Long).toInt()
-                    }
-                }
-
-                if (x == 0) {
-                    x = 30
-                }
-
-                Thread {
-                    mainHandler.post(updateTextTask)
-                }.start()
+        x = if (!prefs.contains(APP_PREFERENCES_COUNT)) {
+            30
+        } else {
+            when (prefs.getInt(APP_PREFERENCES_COUNT, 30)) {
+                30 -> 30
+                60 -> 60
+                90 -> 90
+                else -> 30
             }
-            .addOnFailureListener { exception ->
-                Log.w("home", "Error getting documents: ", exception)
-            }
+        }
+
+        Log.d("sec", x.toString())
+
+        Thread {
+            mainHandler.post(updateTextTask)
+        }.start()
 
         Log.d("list", list.toString())
 
@@ -166,7 +166,7 @@ class ActionFragment : Fragment() {
                 rootView.findViewById<TextView>(R.id.textActAsuna).visibility = View.GONE
                 cong.visibility = View.VISIBLE
                 allTime.visibility = View.VISIBLE
-                allTime.text = "Общее время тренировки: ${(30f * list.size) / 60f} мин."
+                allTime.text = "Общее время тренировки: ${(x.toFloat() * list.size) / 60f} мин."
                 mainHandler.removeCallbacks(this)
             }
         }

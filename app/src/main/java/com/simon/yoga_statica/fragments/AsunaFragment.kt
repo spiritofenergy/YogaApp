@@ -47,7 +47,7 @@ class AsunaFragment : Fragment() {
     private var commentArr = mutableListOf<Comment>()
 
     private var countComment = 0
-    private var idAsuna: String = ""
+    private var idAsuna: String = "asuna01"
 
 
     @RequiresApi(Build.VERSION_CODES.O)

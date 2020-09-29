@@ -206,6 +206,7 @@
                 android:padding="5dp">
 
                 <ImageView
+                    android:id="@+id/commentImg"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
@@ -250,8 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="21dp"
                     android:text="/"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorLink="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/counterTwo"

@@ -29,6 +29,7 @@ class ProfileFragment : Fragment() {
     private lateinit var status: TextView
 
     private lateinit var setTheme: RadioGroup
+    private lateinit var setSecond: RadioGroup
 
     private lateinit var radio30: RadioButton
     private lateinit var radio60: RadioButton
@@ -62,6 +63,7 @@ class ProfileFragment : Fragment() {
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
         setTheme = rootView.findViewById(R.id.setThemeGroup)
+        setSecond = rootView.findViewById(R.id.setSecond)
 
         setTheme.setOnCheckedChangeListener { _, id ->
             var theme = "default"
@@ -104,6 +106,22 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        setSecond.setOnCheckedChangeListener { _, id ->
+
+            val sec = when(id) {
+                R.id.radio30 -> 30
+                R.id.radio60 -> 60
+                R.id.radio90 -> 90
+                else -> 30
+            }
+
+
+            prefs
+                .edit()
+                .putInt(APP_PREFERENCES_COUNT, sec)
+                .apply()
+        }
+
         db.collection("users")
             .whereEqualTo("id", auth.currentUser?.uid)
             .get()
@@ -143,7 +161,7 @@ class ProfileFragment : Fragment() {
                     if (!prefs.contains(APP_PREFERENCES_COUNT)) {
                         radio30.isChecked = true
                     } else {
-                        when (prefs.getInt(APP_PREFERENCES_THEME, 30)) {
+                        when (prefs.getInt(APP_PREFERENCES_COUNT, 30)) {
                             30 -> radio30.isChecked = true
                             60 -> radio60.isChecked = true
                             90 -> radio90.isChecked = true

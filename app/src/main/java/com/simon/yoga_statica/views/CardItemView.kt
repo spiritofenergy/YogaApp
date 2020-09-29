@@ -1,12 +1,17 @@
 package com.simon.yoga_statica.views
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
+import android.media.Image
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +45,8 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
     private var image: ImageView = itemView.findViewById(R.id.image)
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
+    private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
+    private var lane: TextView = itemView.findViewById(R.id.lane)
 
     private var asunaCard: RelativeLayout = itemView.findViewById(R.id.asunaCard)
     private var ads: RelativeLayout = itemView.findViewById(R.id.ads)
@@ -56,11 +63,33 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var isLiked: TextView = itemView.findViewById(R.id.isLiked)
     private lateinit var fragmentManager: FragmentManager
 
-    @SuppressLint("HardwareIds")
+    private lateinit var prefs: SharedPreferences
+    private val APP_PREFERENCES_THEME = "theme"
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    @SuppressLint("HardwareIds", "UseCompatLoadingForDrawables")
 
     fun bind(card: Card, fragmentManager: FragmentManager) {
 
         this.fragmentManager = fragmentManager
+
+        prefs = parent.context.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+
+        val theme = if (!prefs.contains(APP_PREFERENCES_THEME)) {
+            "default"
+        } else {
+            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
+                "coffee" -> "coffee"
+                "default" -> "default"
+                else -> "default"
+            }
+        }
+
+        progressBar.indeterminateDrawable = when (theme) {
+            "default" -> parent.context.getDrawable(R.drawable.spinner_ring)
+            "coffee" -> parent.context.getDrawable(R.drawable.spinner_ring_coffee)
+            else ->  parent.context.getDrawable(R.drawable.spinner_ring)
+        }
 
         if (card.id != "ADV") {
             counterTwo.text = card.currentCardNum.toString()
@@ -77,6 +106,30 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             if (id.isNullOrEmpty()) {
                 id = "null"
             }
+
+            commentImg.setImageResource(
+                when (theme) {
+                    "default" -> R.drawable.ic_chat_bubble_outline_black_24dp
+                    "coffee" -> R.drawable.ic_chat_bubble_outline_black_24dp_coffee
+                    else ->  R.drawable.ic_chat_bubble_outline_black_24dp
+                }
+            )
+
+            lane.setTextColor(
+                when (theme) {
+                    "default" -> R.color.colorPrimary
+                    "coffee" -> R.color.colorPrimaryCoffee
+                    else ->  R.color.colorPrimary
+                }
+            )
+
+            buttonSettings.setImageResource(
+                when (theme) {
+                    "default" -> R.drawable.ic_more_horiz_black_24dp
+                    "coffee" -> R.drawable.ic_more_horiz_black_24dp_coffee
+                    else ->  R.drawable.ic_more_horiz_black_24dp
+                }
+            )
 
             thumbnails.child("${card.thumbPath}.jpeg")
                 .downloadUrl
@@ -125,12 +178,31 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     }
                     if (auth.currentUser != null) {
                         if (isLiked.text == "1") {
-                            likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                            likeImg.setImageResource(
+                                when (theme) {
+                                    "default" -> R.drawable.ic_baseline_favorite_24
+                                    "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
+                                    else ->  R.drawable.ic_baseline_favorite_24
+                                }
+                            )
+
                         } else {
-                            likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                            likeImg.setImageResource(
+                                when (theme) {
+                                    "default" -> R.drawable.ic_favorite_border_black_24dp
+                                    "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
+                                    else ->  R.drawable.ic_favorite_border_black_24dp
+                                }
+                            )
                         }
                     } else {
-                        likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                        likeImg.setImageResource(
+                            when (theme) {
+                                "default" -> R.drawable.ic_favorite_border_black_24dp
+                                "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
+                                else ->  R.drawable.ic_favorite_border_black_24dp
+                            }
+                        )
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -145,7 +217,13 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         db.collection("asunaRU").document(card.id)
                             .update("likes", card.likesCount)
                         publish.text = (card.likesCount).toString()
-                        likeImg.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                        likeImg.setImageResource(
+                            when (theme) {
+                                "default" -> R.drawable.ic_favorite_border_black_24dp
+                                "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
+                                else ->  R.drawable.ic_favorite_border_black_24dp
+                            }
+                        )
                         isLiked.text = "0"
                     } else {
                         card.likesCount += 1
@@ -154,7 +232,13 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         db.collection("asunaRU").document(card.id)
                             .update("likes", card.likesCount)
                         publish.text = (card.likesCount).toString()
-                        likeImg.setImageResource(R.drawable.ic_baseline_favorite_24)
+                        likeImg.setImageResource(
+                            when (theme) {
+                                "default" -> R.drawable.ic_baseline_favorite_24
+                                "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
+                                else ->  R.drawable.ic_baseline_favorite_24
+                            }
+                        )
                         isLiked.text = "1"
                     }
                 }
