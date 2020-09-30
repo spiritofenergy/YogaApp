@@ -1,6 +1,6 @@
 package com.simon.yoga_statica.classes
 
 class Counter {
-    var sec = -1
+    var sec = 11
     var position = 0
 }

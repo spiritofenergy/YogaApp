@@ -114,7 +114,7 @@ class ActionFragment : Fragment() {
         @SuppressLint("SetTextI18n")
         override fun run() {
             if (counter.position < list.size) {
-                counter.sec += 1
+                counter.sec -= 1
 
                 if (isReady) {
                     addAsuna(list[counter.position])
@@ -122,14 +122,14 @@ class ActionFragment : Fragment() {
                     imageMain.visibility = View.GONE
                     rootView.findViewById<TextView>(R.id.textActAsuna).text = "Приготовьтесь"
 
-                    if (counter.sec == 1) {
+                    if (counter.sec == 9) {
                         Thread.sleep(1500)
                     }
 
                     if (counter.sec == 3 || counter.sec == 6) {
                         simplePlayer.start()
                     }
-                    if (counter.sec == 10) {
+                    if (counter.sec == 0) {
                         doublePlayer.start()
                     }
 
@@ -147,13 +147,13 @@ class ActionFragment : Fragment() {
                 }
 
 
-                if (counter.sec == 10 && isReady) {
-                    counter.sec = -1
+                if (counter.sec == 0 && isReady) {
+                    counter.sec = x
                     isReady = false
                 }
-                if (counter.sec == x && !isReady) {
+                if (counter.sec == 0 && !isReady) {
                     counter.position += 1
-                    counter.sec = -1
+                    counter.sec = 11
                     isReady = true
                 }
 
