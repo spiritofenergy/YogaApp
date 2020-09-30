@@ -120,13 +120,17 @@ class MainActivity : AppCompatActivity() {
                 val listFragment = FavoriteListFragment()
                 val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
                 if (container.tag == "usual_display") {
-                    transaction.replace(R.id.fragmentContainer, listFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+                    with (transaction) {
+                        replace(R.id.fragmentContainer, listFragment)
+                        addToBackStack(null)
+                        commit()
+                    }
                 } else {
-                    transaction.replace(R.id.list_frag, listFragment)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+                    with (transaction) {
+                        replace(R.id.list_frag, listFragment)
+                        addToBackStack(null)
+                        commit()
+                    }
                 }
 
                 true
@@ -171,13 +175,17 @@ class MainActivity : AppCompatActivity() {
             val listFragment = ProfileFragment()
             val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
             if (container.tag == "usual_display") {
-                transaction.replace(R.id.fragmentContainer, listFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                with (transaction) {
+                    replace(R.id.fragmentContainer, listFragment)
+                    addToBackStack(null)
+                    commit()
+                }
             } else {
-                transaction.replace(R.id.list_frag, listFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                with (transaction) {
+                    replace(R.id.list_frag, listFragment)
+                    addToBackStack(null)
+                    commit()
+                }
             }
         }
     }
@@ -187,17 +195,21 @@ class MainActivity : AppCompatActivity() {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
 
         if (container.tag == "usual_display") {
-            transaction.replace(R.id.fragmentContainer, listFragment)
-            transaction.commit()
+            with (transaction) {
+                replace(R.id.fragmentContainer, listFragment)
+                commit()
+            }
         } else {
-            transaction.replace(R.id.list_frag, listFragment)
-            transaction.commit()
+            with (transaction) {
+                replace(R.id.list_frag, listFragment)
+                commit()
+            }
 
             val asuna = AsunaFragment()
             asuna.setAsuna("asuna01")
-            val transactionA: FragmentTransaction = supportFragmentManager.beginTransaction()
-            transactionA.replace(R.id.fragmentContainer, asuna)
-            transactionA.commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, asuna)
+                .commit()
 
         }
     }
@@ -282,6 +294,10 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
             }
+    }
+
+    fun setDisplayBack(show: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(show)
     }
 }
 

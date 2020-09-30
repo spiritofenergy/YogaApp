@@ -15,8 +15,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.activies.MainActivity
 import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.Card
+import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
 class AsunaListFragment : Fragment() {
@@ -40,10 +42,13 @@ class AsunaListFragment : Fragment() {
         fab.setOnClickListener {
             val actionFragment = ActionFragment()
             actionFragment.setListAsuns(ArrayList(addsAsuna))
-            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentContainer, actionFragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+
+            (activity as MainActivity).setDisplayBack(true)
+
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContainer, actionFragment)
+                ?.addToBackStack(null)
+                ?.commit()
 
             addsAsuna.clear()
             fab.visibility = View.GONE
@@ -81,7 +86,7 @@ class AsunaListFragment : Fragment() {
                 }
 
                 val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
-                cardAdapter?.setOnDeleteListener(object : OnRecyclerItemClickListener {
+                cardAdapter?.setOnClickItemAddListener(object : OnRecyclerItemClickListener {
                     override fun onItemClicked(asuna: String, position: Int) {
                         if (asuna in addsAsuna) {
                             addsAsuna.removeAt(addsAsuna.indexOf(asuna))
@@ -108,6 +113,21 @@ class AsunaListFragment : Fragment() {
 
                     override fun onItemLongClicked(position: Int) {
 
+                    }
+
+                })
+
+                cardAdapter?.setOnClickOpen(object : OnClickOpenListener {
+                    override fun onClick(asuna: String, position: Int) {
+                        val listFragment = AsunaFragment()
+                        listFragment.setAsuna(asuna)
+
+                        (activity as MainActivity).setDisplayBack(true)
+
+                        fragmentManager?.beginTransaction()
+                            ?.replace(R.id.fragmentContainer, listFragment)
+                            ?.addToBackStack(null)
+                            ?.commit()
                     }
 
                 })

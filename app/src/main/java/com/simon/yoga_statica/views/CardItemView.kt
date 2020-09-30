@@ -36,14 +36,14 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
     private var counterTwo: TextView = itemView.findViewById(R.id.counterTwo)
     private var counterFirst: TextView = itemView.findViewById(R.id.counterFirst)
-    private var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
+    var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
     private var socialAll: TextView = itemView.findViewById(R.id.socialAll)
     private var publish: TextView = itemView.findViewById(R.id.publish)
     private var layoutDate1: FrameLayout = itemView.findViewById(R.id.layoutDate1)
-    private var social: FrameLayout = itemView.findViewById(R.id.social)
+    var social: FrameLayout = itemView.findViewById(R.id.social)
     private var likeImg: ImageView = itemView.findViewById(R.id.likeImg)
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
-    private var image: ImageView = itemView.findViewById(R.id.image)
+    var image: ImageView = itemView.findViewById(R.id.image)
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
     private var lane: TextView = itemView.findViewById(R.id.lane)
@@ -244,18 +244,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 }
             }
 
-            titleCard.setOnClickListener {
-                openAsuna(card.id)
-            }
-
-            image.setOnClickListener {
-                openAsuna(card.id)
-            }
-
-            social.setOnClickListener {
-                openAsuna(card.id)
-            }
-
             buttonSettings.setOnClickListener {
                 val popupMenu = PopupMenu(parent.context, it)
                 popupMenu.inflate(R.menu.option_menu)
@@ -280,17 +268,5 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             mAdView.loadAd(adRequest)
         }
     }
-
-    private fun openAsuna(id: String) {
-        val listFragment = AsunaFragment()
-        listFragment.setAsuna(id)
-        val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.fragmentContainer, listFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-
-    }
-
-
 }
 

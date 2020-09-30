@@ -17,7 +17,7 @@
             android:id="@+id/nameAsuna"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="TextView"
             android:textColor="@color/design_default_color_on_secondary"
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="150dp"
+            android:layout_marginBottom="100dp"
             android:gravity="center"
             android:textSize="18sp" />
 
@@ -62,7 +62,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginBottom="90dp"
+            android:layout_marginBottom="40dp"
             android:gravity="center"
             android:textColor="@color/design_default_color_on_secondary"
             android:textSize="45sp" />
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="150dp"
             android:layout_marginRight="40dp"
             android:gravity="center"
             android:text="Поздравляем!\nТренировка закончена"

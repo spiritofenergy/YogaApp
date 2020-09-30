@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.Card
+import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
 class FavoriteListFragment : Fragment() {
@@ -72,10 +73,10 @@ class FavoriteListFragment : Fragment() {
         fab.setOnClickListener {
             val actionFragment = ActionFragment()
             actionFragment.setListAsuns(ArrayList(addsAsuna))
-            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.fragmentContainer, actionFragment)
-            transaction?.addToBackStack(null)
-            transaction?.commit()
+            fragmentManager?.beginTransaction()
+                ?.replace(R.id.fragmentContainer, actionFragment)
+                ?.addToBackStack(null)
+                ?.commit()
 
             addsAsuna.clear()
             fab.visibility = View.GONE
@@ -113,7 +114,7 @@ class FavoriteListFragment : Fragment() {
                                 }
                             }
                             val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
-                            cardAdapter?.setOnDeleteListener(object : OnRecyclerItemClickListener {
+                            cardAdapter?.setOnClickItemAddListener(object : OnRecyclerItemClickListener {
                                 override fun onItemClicked(asuna: String, position: Int) {
                                     if (asuna in addsAsuna) {
                                         addsAsuna.removeAt(addsAsuna.indexOf(asuna))
@@ -143,6 +144,19 @@ class FavoriteListFragment : Fragment() {
                                 }
 
                             })
+
+                            cardAdapter?.setOnClickOpen(object : OnClickOpenListener {
+                                override fun onClick(asuna: String, position: Int) {
+                                    val listFragment = AsunaFragment()
+                                    listFragment.setAsuna(asuna)
+                                    fragmentManager?.beginTransaction()
+                                        ?.replace(R.id.fragmentContainer, listFragment)
+                                        ?.addToBackStack(null)
+                                        ?.commit()
+                                }
+
+                            })
+
                             asunaFavList.apply {
                                 layoutManager = LinearLayoutManager(activity)
                                 adapter = cardAdapter
