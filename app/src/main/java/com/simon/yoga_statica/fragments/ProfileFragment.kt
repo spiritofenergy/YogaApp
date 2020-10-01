@@ -1,33 +1,49 @@
 package com.simon.yoga_statica.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
 
 class ProfileFragment : Fragment() {
     private val db = Firebase.firestore
+    private val storage = Firebase.storage
+    private val avatars: StorageReference = storage.reference
 
     private lateinit var auth: FirebaseAuth
     private var user = User()
 
     private lateinit var nameUser: TextView
     private lateinit var status: TextView
+    private lateinit var countAsuns: TextView
+    private lateinit var addAvatar: ImageButton
+
+    private lateinit var imageAvatar: ImageView
 
     private lateinit var setTheme: RadioGroup
     private lateinit var setSecond: RadioGroup
@@ -41,6 +57,7 @@ class ProfileFragment : Fragment() {
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
     private val APP_PREFERENCES_COUNT = "count"
+    private val RESULT_IMAGE = 3214
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +72,8 @@ class ProfileFragment : Fragment() {
 
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
+        addAvatar = rootView.findViewById(R.id.addAvatar)
+        imageAvatar = rootView.findViewById(R.id.imageAvatar)
 
         radio30 = rootView.findViewById(R.id.radio30)
         radio60 = rootView.findViewById(R.id.radio60)
@@ -65,6 +84,7 @@ class ProfileFragment : Fragment() {
 
         setTheme = rootView.findViewById(R.id.setThemeGroup)
         setSecond = rootView.findViewById(R.id.setSecond)
+        countAsuns = rootView.findViewById(R.id.countAsuns)
 
         setTheme.setOnCheckedChangeListener { _, id ->
             var theme = "default"
@@ -123,6 +143,10 @@ class ProfileFragment : Fragment() {
                 .apply()
         }
 
+        addAvatar.setOnClickListener {
+            getImage()
+        }
+
         db.collection("users")
             .whereEqualTo("id", auth.currentUser?.uid)
             .get()
@@ -140,6 +164,18 @@ class ProfileFragment : Fragment() {
                     }
 
                     nameUser.text = user.name
+                    countAsuns.text = user.countAsuns.toString()
+
+                    if (user.photo == "") {
+                        imageAvatar.setImageResource(R.mipmap.ic_launcher)
+                        addAvatar.visibility = View.VISIBLE
+                    } else {
+                        val downloadUri: Uri = Uri.parse(user.photo)
+                        openAvatar(downloadUri)
+                        imageAvatar.setOnClickListener {
+                            getImage()
+                        }
+                    }
 
                     Log.d("email", user.email)
                     Log.d("st", user.status.toString())
@@ -185,5 +221,99 @@ class ProfileFragment : Fragment() {
             }
 
         return rootView
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                RESULT_IMAGE -> {
+                    val selectedImageUri: Uri? = data?.data
+                    if (selectedImageUri != null) {
+                        Log.d("uri", selectedImageUri.lastPathSegment.toString())
+                        val upload: UploadTask = avatars
+                            .child("avatars/${auth.currentUser?.uid}")
+                            .putFile(selectedImageUri)
+
+                        val urlTask = upload.continueWithTask { task ->
+                            if (!task.isSuccessful) {
+                                task.exception?.let {
+                                    throw it
+                                }
+                            }
+                            avatars.child("avatars/${auth.currentUser?.uid}").downloadUrl
+                        }.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                val downloadUri = task.result
+
+                                openAvatar(downloadUri)
+
+                                db.collection("users")
+                                    .whereEqualTo("id", auth.currentUser?.uid)
+                                    .get()
+                                    .addOnSuccessListener { documents ->
+                                        if (!documents.isEmpty) {
+                                            for (document in documents) {
+                                                db.collection("users")
+                                                    .document(document.id)
+                                                    .update("photo", downloadUri.toString())
+                                            }
+
+
+                                        }
+
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        Log.w("home", "Error getting documents: ", exception)
+                                    }
+
+                            } else {
+                                Toast.makeText(
+                                    activity, "Upload image failed.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.setType("image/*")
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
+    }
+
+    private fun openAvatar(downloadUri: Uri) {
+        Glide.with(activity!!)
+            .load(downloadUri)
+            .listener( object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    addAvatar.visibility = View.GONE
+
+                    return false
+                }
+
+            })
+            .into(imageAvatar)
     }
 }

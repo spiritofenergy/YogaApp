@@ -54,6 +54,7 @@ class ActionFragment : Fragment() {
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_COUNT = "count"
+    private val APP_PREFERENCES_FRAGMENT = "fragment"
 
     private lateinit var rootView: View
 
@@ -77,6 +78,8 @@ class ActionFragment : Fragment() {
                 addAsuna(list[counter.position])
             }
         }
+
+        auth = Firebase.auth
 
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
@@ -155,6 +158,30 @@ class ActionFragment : Fragment() {
                     counter.position += 1
                     counter.sec = 11
                     isReady = true
+
+                    db.collection("users")
+                        .whereEqualTo("id", auth.currentUser?.uid)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (!documents.isEmpty) {
+                                for (document in documents) {
+
+                                    val countAsuns = (document["countAsuns"] as Long).toInt()
+
+                                    db.collection("users")
+                                        .document(document.id)
+                                        .update("countAsuns", countAsuns + 1)
+
+                                }
+
+
+                            }
+
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.w("home", "Error getting documents: ", exception)
+                        }
+
                 }
 
                 mainHandler.postDelayed(this,1000)
@@ -210,6 +237,7 @@ class ActionFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.run {
+            putString(APP_PREFERENCES_FRAGMENT, "action")
             putBoolean(IS_READY, isReady)
             putInt(CURRENT_SECOND, counter.sec)
             putInt(CURRENT_POSITION, counter.position)

@@ -99,10 +99,6 @@ class AsunaFragment : Fragment() {
                         name = document["name"].toString()
                     }
                 }
-
-                if (::name.isInitialized) {
-                    name = "User"
-                }
             }
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
