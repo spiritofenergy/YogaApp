@@ -11,12 +11,15 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils.loadAnimation
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import java.lang.Exception
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var image: ImageView
     private lateinit var bottonanimation: TextView
+    private val auth = Firebase.auth
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
@@ -25,10 +28,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
-//        val editor = prefs.edit()
-//        editor.putString(APP_PREFERENCES_THEME, "coffee").apply()
 
-        if (!prefs.contains(APP_PREFERENCES_THEME)) {
+
+        if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
             setTheme(R.style.AsunaTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {

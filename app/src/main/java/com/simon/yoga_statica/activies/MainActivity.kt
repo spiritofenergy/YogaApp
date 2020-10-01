@@ -48,9 +48,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        auth = Firebase.auth
+
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        if (!prefs.contains(APP_PREFERENCES_THEME)) {
+        if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
             setTheme(R.style.AppTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
@@ -65,8 +67,6 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
         else
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        auth = Firebase.auth
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
