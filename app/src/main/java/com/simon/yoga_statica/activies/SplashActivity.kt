@@ -11,9 +11,11 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils.loadAnimation
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.gms.ads.InterstitialAd
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.classes.AdvController
 import java.lang.Exception
 
 class SplashActivity : AppCompatActivity() {
@@ -78,6 +80,8 @@ class SplashActivity : AppCompatActivity() {
 
     private fun Animation.startAnimation(image: Animation?) {
     }
+
+
 }
 
 

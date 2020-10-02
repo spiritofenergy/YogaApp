@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,6 +27,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.User
 import com.simon.yoga_statica.fragments.AsunaFragment
 import com.simon.yoga_statica.fragments.AsunaListFragment
@@ -39,6 +42,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var advController: AdvController
+    private lateinit var inter: InterstitialAd
 
     private lateinit var container: FrameLayout
 
@@ -82,8 +88,19 @@ class MainActivity : AppCompatActivity() {
 
         container = findViewById(R.id.fragmentContainer)
 
-        if (count == 0)
+        advController = AdvController(this)
+        advController.init()
+
+        inter = advController.createInterstitialAds(R.string.ads_inter_uid)
+
+        if (count == 0) {
+            inter.adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    showAdv()
+                }
+            }
             openMain()
+        }
 
         if (profile) {
             Log.d("prof", "true")
@@ -298,6 +315,17 @@ class MainActivity : AppCompatActivity() {
 
     fun setDisplayBack(show: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
+    }
+
+    private fun showAdv() {
+        if (inter.isLoaded) {
+            inter.show()
+        } else {
+            Toast.makeText(
+                baseContext, "Failed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
 

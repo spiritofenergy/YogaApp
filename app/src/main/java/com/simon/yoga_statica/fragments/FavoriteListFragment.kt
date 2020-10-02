@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.activies.ActionActivity
 import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnClickOpenListener
@@ -28,6 +30,8 @@ class FavoriteListFragment : Fragment() {
     private lateinit var fab: FloatingActionButton
     private lateinit var addAll: Button
     private val db = Firebase.firestore
+
+    private var count = 0
 
     private var cardsArr = mutableListOf<Card>()
     private var allAsuna = mutableListOf<String>()
@@ -71,12 +75,14 @@ class FavoriteListFragment : Fragment() {
         }
 
         fab.setOnClickListener {
-            val actionFragment = ActionFragment()
-            actionFragment.setListAsuns(ArrayList(addsAsuna))
-            fragmentManager?.beginTransaction()
-                ?.replace(R.id.fragmentContainer, actionFragment)
-                ?.addToBackStack(null)
-                ?.commit()
+            val intent = Intent(
+                activity,
+                ActionActivity::class.java
+            )
+
+            intent.putExtra("list", ArrayList(addsAsuna))
+            addsAsuna.clear()
+            startActivity(intent)
 
             addsAsuna.clear()
             fab.visibility = View.GONE
@@ -156,6 +162,8 @@ class FavoriteListFragment : Fragment() {
                                 }
 
                             })
+
+                            cardAdapter?.cardCount = count
 
                             asunaFavList.apply {
                                 layoutManager = LinearLayoutManager(activity)

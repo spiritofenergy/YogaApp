@@ -17,6 +17,8 @@ import java.util.*
 class CardAdapter(private val list: List<Any>,private val fragmentManager: FragmentManager) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var listener: OnRecyclerItemClickListener? = null
     private var openListener: OnClickOpenListener? = null
+    var cardCount = 0
+    var indexAdv = 0
 
     private val TYPE_CARD = 1
     private val TYPE_AD = 0
@@ -51,8 +53,9 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
         }
         holder as CardItemView
         val card: Card = list[position] as Card
-        card.allCardCount = itemCount
+        card.allCardCount = cardCount
         card.currentCardNum = position + 1
+
         holder.bind(card, fragmentManager)
 
         holder.addAsuna.setOnClickListener {

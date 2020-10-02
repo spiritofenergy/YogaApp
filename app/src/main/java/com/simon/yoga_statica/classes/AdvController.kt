@@ -1,6 +1,9 @@
 package com.simon.yoga_statica.classes
 
 import android.content.Context
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 
 class AdvController(private val ctx: Context) {
@@ -10,7 +13,23 @@ class AdvController(private val ctx: Context) {
         }
     }
 
-    fun createUnifiedAds(count: Int, unitid: Int, listening: AdUnifiedListening) {
+    fun createInterstitialAds(unitid: Int) : InterstitialAd {
+        val adRequest = AdRequest.Builder().build()
+        val interstitialAd = InterstitialAd(ctx)
+        interstitialAd.adUnitId = ctx.getString(unitid)
+        interstitialAd.loadAd(adRequest)
 
+        return interstitialAd
+    }
+
+    fun createUnifiedAds(count: Int, unitid: Int, listening: AdUnifiedListening) {
+        val builder: AdLoader.Builder =  AdLoader.Builder(ctx, ctx.getString(unitid))
+        builder.forUnifiedNativeAd(listening)
+        builder.withAdListener(listening)
+
+        val adLoad: AdLoader = builder.build()
+        adLoad.loadAds(AdRequest.Builder().build(), count)
+
+        listening.Adloader = adLoad
     }
 }
