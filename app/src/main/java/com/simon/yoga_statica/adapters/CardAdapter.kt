@@ -19,6 +19,7 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
     private var openListener: OnClickOpenListener? = null
     var cardCount = 0
     var indexAdv = 0
+    var countAdv = 0
 
     private val TYPE_CARD = 1
     private val TYPE_AD = 0
@@ -54,8 +55,7 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
         holder as CardItemView
         val card: Card = list[position] as Card
         card.allCardCount = cardCount
-        card.currentCardNum = position + 1
-
+        card.currentCardNum = position + 1 - (position / (indexAdv + 1))
         holder.bind(card, fragmentManager)
 
         holder.addAsuna.setOnClickListener {

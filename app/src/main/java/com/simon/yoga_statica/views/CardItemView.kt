@@ -48,10 +48,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
     private var lane: TextView = itemView.findViewById(R.id.lane)
 
-    private var asunaCard: RelativeLayout = itemView.findViewById(R.id.asunaCard)
-
-    private var adRequest: AdRequest = AdRequest.Builder().build()
-
     var addAsuna: FrameLayout = itemView.findViewById(R.id.addAsuna)
 
     private val db = Firebase.firestore
@@ -71,9 +67,11 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
 
         this.fragmentManager = fragmentManager
 
+        auth = Firebase.auth
+
         prefs = parent.context.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
-        val theme = if (!prefs.contains(APP_PREFERENCES_THEME)) {
+        val theme = if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
             "default"
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
@@ -95,8 +93,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         socialAll.text = card.commentsCount.toString()
         publish.text = card.likesCount.toString()
         isLiked.text = "0"
-
-        auth = Firebase.auth
 
         var id = auth.currentUser?.uid
 

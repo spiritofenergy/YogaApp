@@ -54,9 +54,8 @@
             android:fadeScrollbars="false"
             android:padding="15dp"
             android:scaleType="center"
-            android:src="@drawable/ic_baseline_chevron_right_24"
+            app:srcCompat="@drawable/ic_baseline_chevron_right_24"
             android:visibility="gone"
-            app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal" />
 
     </RelativeLayout>

@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.ActionActivity
 import com.simon.yoga_statica.adapters.CardAdapter
+import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
@@ -39,6 +42,9 @@ class FavoriteListFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
+    private lateinit var advController: AdvController
+    private lateinit var inter: InterstitialAd
+
     private var id: String? = null
 
     override fun onCreateView(
@@ -55,6 +61,9 @@ class FavoriteListFragment : Fragment() {
         if (id.isNullOrEmpty()) {
             id = "null"
         }
+
+        advController = AdvController(container?.context!!)
+        advController.init()
 
         asunaFavList = rootView.findViewById(R.id.asunaFavList)
         fab = rootView.findViewById(R.id.floatingActionButton4)
@@ -75,17 +84,7 @@ class FavoriteListFragment : Fragment() {
         }
 
         fab.setOnClickListener {
-            val intent = Intent(
-                activity,
-                ActionActivity::class.java
-            )
-
-            intent.putExtra("list", ArrayList(addsAsuna))
-            addsAsuna.clear()
-            startActivity(intent)
-
-            addsAsuna.clear()
-            fab.visibility = View.GONE
+            showAds()
         }
 
         return rootView
@@ -94,6 +93,24 @@ class FavoriteListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getList()
+
+        inter = advController.createInterstitialAds(R.string.ads_inter_uid)
+
+        inter.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                val intent = Intent(
+                    activity,
+                    ActionActivity::class.java
+                )
+
+                intent.putExtra("list", ArrayList(addsAsuna))
+                addsAsuna.clear()
+                startActivity(intent)
+
+                addsAsuna.clear()
+                fab.visibility = View.GONE
+            }
+        }
     }
 
     private fun getList() {
@@ -178,5 +195,16 @@ class FavoriteListFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)
             }
+    }
+
+    private fun showAds() {
+        if (inter.isLoaded) {
+            inter.show()
+        } else {
+            Toast.makeText(
+                activity, "Failed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

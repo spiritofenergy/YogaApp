@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
@@ -33,8 +35,10 @@ class AsunaListFragment : Fragment() {
     private var cardsArr = mutableListOf<Any>()
     private var addsAsuna = mutableListOf<String>()
     private var count = 0
+    private var indexAdv = 0
 
     private lateinit var advController: AdvController
+    private lateinit var inter: InterstitialAd
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,17 +54,7 @@ class AsunaListFragment : Fragment() {
         cardsRecyclerView = rootView.findViewById(R.id.cards)
 
         fab.setOnClickListener {
-            val intent = Intent(
-                activity,
-                ActionActivity::class.java
-            )
-
-            intent.putExtra("list", ArrayList(addsAsuna))
-            addsAsuna.clear()
-            startActivity(intent)
-
-            addsAsuna.clear()
-            fab.visibility = View.GONE
+            showAds()
         }
 
         return rootView
@@ -69,6 +63,24 @@ class AsunaListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getList()
+
+        inter = advController.createInterstitialAds(R.string.ads_inter_uid)
+
+        inter.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                val intent = Intent(
+                    activity,
+                    ActionActivity::class.java
+                )
+
+                intent.putExtra("list", ArrayList(addsAsuna))
+                addsAsuna.clear()
+                startActivity(intent)
+
+                addsAsuna.clear()
+                fab.visibility = View.GONE
+            }
+        }
     }
 
     private fun getList() {
@@ -88,15 +100,18 @@ class AsunaListFragment : Fragment() {
                     cardsArr.add(card)
                 }
                 var index = 0
-                advController.createUnifiedAds(2, R.string.ads_native_uid, object : AdUnifiedListening() {
+                count = i
+
+                indexAdv = count / 3
+                advController.createUnifiedAds(indexAdv, R.string.ads_native_uid, object : AdUnifiedListening() {
                     override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
                         if (ads != null) {
-                            index += 5
+                            index += 3
                             cardsArr.add(index, ads)
+                            index += 1
                         }
 
                         if (!Adloader.isLoading) {
-                            count = i
                             getAdapter()
                         }
                     }
@@ -159,11 +174,23 @@ class AsunaListFragment : Fragment() {
         })
 
         cardAdapter?.cardCount = count
-        cardAdapter?.indexAdv = 5
+        cardAdapter?.indexAdv = 3
+        cardAdapter?.countAdv = indexAdv
 
         cardsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = cardAdapter
+        }
+    }
+
+    private fun showAds() {
+        if (inter.isLoaded) {
+            inter.show()
+        } else {
+            Toast.makeText(
+                activity, "Failed.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }
