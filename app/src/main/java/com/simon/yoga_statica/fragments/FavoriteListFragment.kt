@@ -180,7 +180,7 @@ class FavoriteListFragment : Fragment() {
 
                             })
 
-                            cardAdapter?.cardCount = count
+                            cardAdapter?.cardCount = cardsArr.size
 
                             asunaFavList.apply {
                                 layoutManager = LinearLayoutManager(activity)
