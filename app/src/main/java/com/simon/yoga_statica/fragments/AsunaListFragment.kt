@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.RequestOptions.option
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.formats.UnifiedNativeAd
@@ -26,6 +26,7 @@ import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
+
 
 class AsunaListFragment : Fragment() {
     private lateinit var cardsRecyclerView: RecyclerView
@@ -103,19 +104,26 @@ class AsunaListFragment : Fragment() {
                 count = i
 
                 indexAdv = count / 3
-                advController.createUnifiedAds(indexAdv, R.string.ads_native_uid, object : AdUnifiedListening() {
-                    override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
-                        if (ads != null) {
-                            index += 3
-                            cardsArr.add(index, ads)
-                            index += 1
-                        }
+                advController.createUnifiedAds(
+                    indexAdv,
+                    R.string.ads_native_uid,
+                    object : AdUnifiedListening() {
+                        override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
+                            if (ads != null) {
+                                index += 3
+                                try {
+                                    cardsArr.add(index, ads)
+                                } catch (e: IndexOutOfBoundsException) {
+                                    Log.d("e", e.toString())
+                                }
+                                index += 1
+                            }
 
-                        if (!Adloader.isLoading) {
-                            getAdapter()
+                            if (!Adloader.isLoading) {
+                                getAdapter()
+                            }
                         }
-                    }
-                })
+                    })
 
 
             }
@@ -141,7 +149,7 @@ class AsunaListFragment : Fragment() {
                     addsAsuna.sortBy { it }
                     Log.d("list", addsAsuna.toString())
                     Toast.makeText(
-                        activity , "Асана добавлена",
+                        activity, "Асана добавлена",
                         Toast.LENGTH_SHORT
                     ).show()
                 }

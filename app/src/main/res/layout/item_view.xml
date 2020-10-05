@@ -59,16 +59,6 @@
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/asanaEn"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@+id/asanaTitle"
-                android:layout_marginLeft="100dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="15dp"
-                android:text="AsanaEn" />
-
             <ImageView
                 android:id="@+id/yogaIcon1"
                 android:layout_width="50dp"
@@ -161,7 +151,7 @@
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_favorite_border_black_24dp" />
+                    app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
                 <TextView
                     android:id="@+id/publish"
@@ -197,7 +187,7 @@
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_chat_bubble_outline_black_24dp" />
+                    app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp" />
 
                 <TextView
                     android:id="@+id/socialAll"
@@ -248,23 +238,10 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/DescFirst"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_below="@+id/image"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="sans-serif-light"
-                android:text="titleBottom"
-                android:textColor="@color/colorTextTitle"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/nameTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/DescFirst"
+                android:layout_below="@id/image"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"

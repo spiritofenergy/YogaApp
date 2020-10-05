@@ -12,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,8 @@ class ActionActivity : AppCompatActivity() {
     lateinit var time: TextView
     lateinit var cong: TextView
     lateinit var allTime: TextView
+    private lateinit var pauseAction: Button
+
     var x: Int = 0
 
     private val IS_READY = "isReady"
@@ -112,6 +115,7 @@ class ActionActivity : AppCompatActivity() {
         time = findViewById(R.id.time)
         cong = findViewById(R.id.cong)
         allTime = findViewById(R.id.allTime)
+        pauseAction = findViewById(R.id.pauseAction)
 
         x = if (!prefs.contains(APP_PREFERENCES_COUNT)) {
             30
@@ -131,6 +135,18 @@ class ActionActivity : AppCompatActivity() {
         }.start()
 
         Log.d("list", list.toString())
+
+        pauseAction.setOnClickListener {
+            if (it.tag == "active") {
+                mainHandler.removeCallbacks(updateTextTask)
+                it.tag = "pause"
+                pauseAction.text = "Старт"
+            } else {
+                mainHandler.post(updateTextTask)
+                it.tag = "active"
+                pauseAction.text = "Пауза"
+            }
+        }
     }
 
     override fun onPause() {
@@ -226,6 +242,7 @@ class ActionActivity : AppCompatActivity() {
                 nameAsuna.visibility = View.GONE
                 imageMain.visibility = View.GONE
                 time.visibility = View.GONE
+                pauseAction.visibility = View.GONE
                 findViewById<TextView>(R.id.textActAsuna).visibility = View.GONE
                 cong.visibility = View.VISIBLE
                 allTime.visibility = View.VISIBLE

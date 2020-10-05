@@ -152,6 +152,15 @@ class MainActivity : AppCompatActivity() {
 
                 true
             }
+            R.id.addAsunsInDB -> {
+                val intent = Intent(
+                    this,
+                    AddActivity::class.java
+                )
+                startActivity(intent)
+
+                true
+            }
             R.id.openProfile -> {
                 openProfile()
 

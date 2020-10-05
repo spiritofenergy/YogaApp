@@ -9,6 +9,8 @@
         android:roundIcon="@drawable/icon_app"
         android:supportsRtl="true"
         android:theme="@style/Default" >
+        <activity android:name=".activies.AddActivity" >
+        </activity>
         <activity android:name=".activies.ActionActivity" >
         </activity>
         <activity android:name=".activies.MainActivity" />
