@@ -54,16 +54,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = Firebase.auth
 
+        auth = Firebase.auth
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
         if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
             setTheme(R.style.AppTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-                "coffee" -> setTheme(R.style.CoffeeAppTheme)
+
                 "default" -> setTheme(R.style.AppTheme)
+                "red" -> setTheme(R.style.RedAppTheme)
+                "orange" -> setTheme(R.style.OrangeAppTheme)
+                "green" -> setTheme(R.style.GreenAppTheme)
+                "coffee" -> setTheme(R.style.CoffeeAppTheme)
+
             }
         }
         setContentView(R.layout.activity_main)

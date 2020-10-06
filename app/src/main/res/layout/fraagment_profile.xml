@@ -164,6 +164,39 @@
                     android:text="Default" />
 
                 <RadioButton
+                    android:id="@+id/radioRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="80dp"
+                    android:drawableLeft="@drawable/red_theme"
+                    android:text=" Red " />
+
+                <RadioButton
+                    android:id="@+id/radioOrange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="80dp"
+                    android:drawableLeft="@drawable/orange_theme"
+                    android:text="Orange" />
+
+
+
+                <RadioButton
+                    android:id="@+id/radioGreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="80dp"
+                    android:drawableLeft="@drawable/green_theme"
+                    android:text="Green" />
+
+
+                <RadioButton
                     android:id="@+id/radioCoffee"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -171,7 +204,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="80dp"
                     android:drawableLeft="@drawable/coffee_theme"
-                    android:text="Coffee" />
+                    android:text="@string/coffee" />
 
             </RadioGroup>
         </LinearLayout>

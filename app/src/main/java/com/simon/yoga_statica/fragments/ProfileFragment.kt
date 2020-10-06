@@ -54,6 +54,10 @@ class ProfileFragment : Fragment() {
 
     private lateinit var radioDefault: RadioButton
     private lateinit var radioCoffee: RadioButton
+    private lateinit var radioGreen: RadioButton
+    private lateinit var radioRed: RadioButton
+    private lateinit var radioOrange: RadioButton
+
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
     private val APP_PREFERENCES_COUNT = "count"
@@ -64,7 +68,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
+          val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
         activity?.setTitle("Настройки профиля")
 
@@ -82,7 +86,12 @@ class ProfileFragment : Fragment() {
         radio90 = rootView.findViewById(R.id.radio90)
 
         radioDefault = rootView.findViewById(R.id.radioDefault)
+        radioRed = rootView.findViewById(R.id.radioRed)
+        radioOrange = rootView.findViewById(R.id.radioOrange)
+        radioGreen = rootView.findViewById(R.id.radioGreen)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
+
+
 
         setTheme = rootView.findViewById(R.id.setThemeGroup)
         setSecond = rootView.findViewById(R.id.setSecond)
@@ -99,6 +108,21 @@ class ProfileFragment : Fragment() {
                 R.id.radioDefault -> {
                     if (theme != "default") {
                         set = "default"
+                    }
+                }
+                R.id.radioRed -> {
+                    if (theme != "red") {
+                        set = "red"
+                    }
+                }
+                R.id.radioOrange -> {
+                    if (theme != "orange") {
+                        set = "orange"
+                    }
+                }
+                R.id.radioGreen -> {
+                    if (theme != "green") {
+                        set = "green"
                     }
                 }
                 R.id.radioCoffee -> {
@@ -211,8 +235,12 @@ class ProfileFragment : Fragment() {
                         radioDefault.isChecked = true
                     } else {
                         when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-                            "coffee" -> radioCoffee.isChecked = true
+
                             "default" -> radioDefault.isChecked = true
+                            "red" -> radioRed.isChecked = true
+                            "orange" -> radioOrange.isChecked = true
+                            "green" -> radioGreen.isChecked = true
+                            "coffee" -> radioCoffee.isChecked = true
                         }
                     }
                 }

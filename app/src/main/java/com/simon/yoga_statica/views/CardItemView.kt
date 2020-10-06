@@ -76,14 +76,21 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             "default"
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-                "coffee" -> "coffee"
+
                 "default" -> "default"
-                else -> "default"
+                "red"    -> "red"
+                "orange" -> "orange"
+                "green"  -> "green"
+                "coffee" -> "coffee"
+                else     -> "default"
             }
         }
 
         progressBar.indeterminateDrawable = when (theme) {
             "default" -> parent.context.getDrawable(R.drawable.spinner_ring)
+            "red" -> parent.context.getDrawable(R.drawable.spinner_ring_red)
+            "orange" -> parent.context.getDrawable(R.drawable.spinner_ring_orange)
+            "green" -> parent.context.getDrawable(R.drawable.spinner_ring_green)
             "coffee" -> parent.context.getDrawable(R.drawable.spinner_ring_coffee)
             else ->  parent.context.getDrawable(R.drawable.spinner_ring)
         }
@@ -105,6 +112,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         commentImg.setImageResource(
             when (theme) {
                 "default" -> R.drawable.ic_chat_bubble_outline_black_24dp
+                "red" -> R.drawable.ic_chat_bubble_outline_black_24dp_red
+                "orange" -> R.drawable.ic_chat_bubble_outline_black_24dp_orange
+                "green" -> R.drawable.ic_chat_bubble_outline_black_24dp_green
                 "coffee" -> R.drawable.ic_chat_bubble_outline_black_24dp_coffee
                 else ->  R.drawable.ic_chat_bubble_outline_black_24dp
             }
@@ -113,6 +123,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         lane.setTextColor(
             when (theme) {
                 "default" -> R.color.colorPrimary
+                "red" -> R.color.colorPrimaryDark_red
+                "orange" -> R.color.colorPrimaryDark_orange
+                "green" -> R.color.colorPrimaryDark_green
                 "coffee" -> R.color.colorPrimaryCoffee
                 else ->  R.color.colorPrimary
             }
@@ -121,6 +134,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         buttonSettings.setImageResource(
             when (theme) {
                 "default" -> R.drawable.ic_more_horiz_black_24dp
+                "red" -> R.drawable.ic_more_horiz_black_24dp_red
+                "orange" -> R.drawable.ic_more_horiz_black_24dp_orange
+                "green" -> R.drawable.ic_more_horiz_black_24dp_green
                 "coffee" -> R.drawable.ic_more_horiz_black_24dp_coffee
                 else ->  R.drawable.ic_more_horiz_black_24dp
             }
@@ -176,6 +192,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         likeImg.setImageResource(
                             when (theme) {
                                 "default" -> R.drawable.ic_baseline_favorite_24
+                                "red" -> R.drawable.ic_baseline_favorite_24_red
+                                "orange" -> R.drawable.ic_baseline_favorite_24_orange
+                                "green" -> R.drawable.ic_baseline_favorite_24_green
                                 "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
                                 else ->  R.drawable.ic_baseline_favorite_24
                             }
@@ -185,6 +204,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         likeImg.setImageResource(
                             when (theme) {
                                 "default" -> R.drawable.ic_favorite_border_black_24dp
+                                "red" -> R.drawable.ic_favorite_border_black_24dp_red
+                                "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
+                                "green" -> R.drawable.ic_favorite_border_black_24dp_green
                                 "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
                                 else ->  R.drawable.ic_favorite_border_black_24dp
                             }
@@ -194,6 +216,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     likeImg.setImageResource(
                         when (theme) {
                             "default" -> R.drawable.ic_favorite_border_black_24dp
+                            "red" -> R.drawable.ic_favorite_border_black_24dp_red
+                            "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
+                            "green" -> R.drawable.ic_favorite_border_black_24dp_green
                             "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
                             else ->  R.drawable.ic_favorite_border_black_24dp
                         }
@@ -215,6 +240,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     likeImg.setImageResource(
                         when (theme) {
                             "default" -> R.drawable.ic_favorite_border_black_24dp
+                            "red" -> R.drawable.ic_favorite_border_black_24dp_red
+                            "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
+                            "green" -> R.drawable.ic_favorite_border_black_24dp_green
                             "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
                             else ->  R.drawable.ic_favorite_border_black_24dp
                         }
@@ -230,6 +258,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     likeImg.setImageResource(
                         when (theme) {
                             "default" -> R.drawable.ic_baseline_favorite_24
+                            "red" -> R.drawable.ic_baseline_favorite_24_red
+                            "orange" -> R.drawable.ic_baseline_favorite_24_orange
+                            "green" -> R.drawable.ic_baseline_favorite_24_green
                             "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
                             else ->  R.drawable.ic_baseline_favorite_24
                         }

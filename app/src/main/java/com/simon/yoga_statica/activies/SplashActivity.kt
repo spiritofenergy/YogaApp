@@ -36,8 +36,11 @@ class SplashActivity : AppCompatActivity() {
             setTheme(R.style.AsunaTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-                "coffee" -> setTheme(R.style.CoffeeAppThemeMin)
                 "default" -> setTheme(R.style.AsunaTheme)
+                "red" -> setTheme(R.style.RedAppThemeMin)
+                "orange" -> setTheme(R.style.OrangeAppThemeMin)
+                "green" -> setTheme(R.style.GreenAppThemeMin)
+                "coffee" -> setTheme(R.style.CoffeeAppThemeMin)
             }
         }
 
