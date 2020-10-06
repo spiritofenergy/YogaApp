@@ -83,8 +83,13 @@ class ActionActivity : AppCompatActivity() {
             setTheme(R.style.AppTheme)
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-                "coffee" -> setTheme(R.style.CoffeeAppTheme)
+
                 "default" -> setTheme(R.style.AppTheme)
+                "red" -> setTheme(R.style.RedAppTheme)
+                "orange" -> setTheme(R.style.OrangeAppTheme)
+                "green" -> setTheme(R.style.GreenAppTheme)
+                "coffee" -> setTheme(R.style.CoffeeAppTheme)
+
             }
         }
 

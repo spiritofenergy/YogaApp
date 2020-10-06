@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
-import android.media.Image
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -22,15 +20,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.Card
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.simon.yoga_statica.fragments.AsunaFragment
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
@@ -110,14 +105,11 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         }
 
         commentImg.setImageResource(
-            when (theme) {
-                "default" -> R.drawable.ic_chat_bubble_outline_black_24dp
-                "red" -> R.drawable.ic_chat_bubble_outline_black_24dp_red
-                "orange" -> R.drawable.ic_chat_bubble_outline_black_24dp_orange
-                "green" -> R.drawable.ic_chat_bubble_outline_black_24dp_green
-                "coffee" -> R.drawable.ic_chat_bubble_outline_black_24dp_coffee
-                else ->  R.drawable.ic_chat_bubble_outline_black_24dp
-            }
+            parent.resources.getIdentifier(
+                "ic_chat_bubble_outline_black_24dp_$theme",
+                "drawable",
+                parent.context.packageName
+            )
         )
 
         lane.setTextColor(
@@ -132,14 +124,11 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         )
 
         buttonSettings.setImageResource(
-            when (theme) {
-                "default" -> R.drawable.ic_more_horiz_black_24dp
-                "red" -> R.drawable.ic_more_horiz_black_24dp_red
-                "orange" -> R.drawable.ic_more_horiz_black_24dp_orange
-                "green" -> R.drawable.ic_more_horiz_black_24dp_green
-                "coffee" -> R.drawable.ic_more_horiz_black_24dp_coffee
-                else ->  R.drawable.ic_more_horiz_black_24dp
-            }
+            parent.resources.getIdentifier(
+                "ic_more_horiz_black_24dp_$theme",
+                "drawable",
+                parent.context.packageName
+            )
         )
 
         thumbnails.child("${card.thumbPath}.jpeg")
@@ -190,39 +179,20 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 if (auth.currentUser != null) {
                     if (isLiked.text == "1") {
                         likeImg.setImageResource(
-                            when (theme) {
-                                "default" -> R.drawable.ic_baseline_favorite_24
-                                "red" -> R.drawable.ic_baseline_favorite_24_red
-                                "orange" -> R.drawable.ic_baseline_favorite_24_orange
-                                "green" -> R.drawable.ic_baseline_favorite_24_green
-                                "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
-                                else ->  R.drawable.ic_baseline_favorite_24
-                            }
+                            setLikeImage(
+                                false,
+                                theme
+                            )
                         )
 
                     } else {
                         likeImg.setImageResource(
-                            when (theme) {
-                                "default" -> R.drawable.ic_favorite_border_black_24dp
-                                "red" -> R.drawable.ic_favorite_border_black_24dp_red
-                                "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
-                                "green" -> R.drawable.ic_favorite_border_black_24dp_green
-                                "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
-                                else ->  R.drawable.ic_favorite_border_black_24dp
-                            }
+                            setLikeImage(
+                                true,
+                                theme
+                            )
                         )
                     }
-                } else {
-                    likeImg.setImageResource(
-                        when (theme) {
-                            "default" -> R.drawable.ic_favorite_border_black_24dp
-                            "red" -> R.drawable.ic_favorite_border_black_24dp_red
-                            "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
-                            "green" -> R.drawable.ic_favorite_border_black_24dp_green
-                            "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
-                            else ->  R.drawable.ic_favorite_border_black_24dp
-                        }
-                    )
                 }
             }
             .addOnFailureListener { exception ->
@@ -238,14 +208,10 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         .update("likes", card.likesCount)
                     publish.text = (card.likesCount).toString()
                     likeImg.setImageResource(
-                        when (theme) {
-                            "default" -> R.drawable.ic_favorite_border_black_24dp
-                            "red" -> R.drawable.ic_favorite_border_black_24dp_red
-                            "orange" -> R.drawable.ic_favorite_border_black_24dp_orange
-                            "green" -> R.drawable.ic_favorite_border_black_24dp_green
-                            "coffee" -> R.drawable.ic_favorite_border_black_24dp_coffee
-                            else ->  R.drawable.ic_favorite_border_black_24dp
-                        }
+                        setLikeImage(
+                            true,
+                            theme
+                        )
                     )
                     isLiked.text = "0"
                 } else {
@@ -256,14 +222,10 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                         .update("likes", card.likesCount)
                     publish.text = (card.likesCount).toString()
                     likeImg.setImageResource(
-                        when (theme) {
-                            "default" -> R.drawable.ic_baseline_favorite_24
-                            "red" -> R.drawable.ic_baseline_favorite_24_red
-                            "orange" -> R.drawable.ic_baseline_favorite_24_orange
-                            "green" -> R.drawable.ic_baseline_favorite_24_green
-                            "coffee" -> R.drawable.ic_baseline_favorite_24_coffee
-                            else ->  R.drawable.ic_baseline_favorite_24
-                        }
+                        setLikeImage(
+                            false,
+                            theme
+                        )
                     )
                     isLiked.text = "1"
                 }
@@ -286,6 +248,22 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 }
             }
             popupMenu.show()
+        }
+    }
+
+    private fun setLikeImage(empty: Boolean, theme: String) : Int {
+        return if (empty) {
+            parent.resources.getIdentifier(
+                "ic_favorite_border_black_24dp_$theme",
+                "drawable",
+                parent.context.packageName
+            )
+        } else {
+            parent.resources.getIdentifier(
+                "ic_baseline_favorite_24_$theme",
+                "drawable",
+                parent.context.packageName
+            )
         }
     }
 }

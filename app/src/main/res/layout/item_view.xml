@@ -151,7 +151,7 @@
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+                    app:srcCompat="@drawable/ic_favorite_border_black_24dp_default" />
 
                 <TextView
                     android:id="@+id/publish"
@@ -187,7 +187,7 @@
                     android:layout_height="18dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp" />
+                    app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp_default" />
 
                 <TextView
                     android:id="@+id/socialAll"
@@ -255,7 +255,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:clickable="true"
-                android:src="@drawable/ic_more_horiz_black_24dp" />
+                android:src="@drawable/ic_more_horiz_black_24dp_default" />
 
 
         </RelativeLayout>
