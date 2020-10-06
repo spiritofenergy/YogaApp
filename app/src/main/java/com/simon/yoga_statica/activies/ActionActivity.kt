@@ -73,6 +73,8 @@ class ActionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setTitle("Тренировка")
+
         auth = Firebase.auth
 
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
