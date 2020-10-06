@@ -37,6 +37,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var counterTwo: TextView = itemView.findViewById(R.id.counterTwo)
     private var counterFirst: TextView = itemView.findViewById(R.id.counterFirst)
     var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
+    private var nameTwo: TextView = itemView.findViewById(R.id.nameTwo)
     private var socialAll: TextView = itemView.findViewById(R.id.socialAll)
     private var publish: TextView = itemView.findViewById(R.id.publish)
     private var layoutDate1: FrameLayout = itemView.findViewById(R.id.layoutDate1)
@@ -92,6 +93,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         titleCard.text = card.title
         socialAll.text = card.commentsCount.toString()
         publish.text = card.likesCount.toString()
+        nameTwo.text = card.shortDesc
         isLiked.text = "0"
 
         var id = auth.currentUser?.uid

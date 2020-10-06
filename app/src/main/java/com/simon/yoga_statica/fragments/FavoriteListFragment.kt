@@ -54,6 +54,8 @@ class FavoriteListFragment : Fragment() {
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_favorite, container, false)
 
+        activity?.setTitle("Любимые асуны")
+
         auth = Firebase.auth
 
         id = auth.currentUser?.uid
@@ -131,6 +133,7 @@ class FavoriteListFragment : Fragment() {
                                         card.likesCount = (document.data["likes"] as Long).toInt()
                                         card.commentsCount = (document.data["comments"] as Long).toInt()
                                         card.thumbPath = document.data["thumbPath"].toString()
+                                        card.shortDesc = document.data["shortDescription"].toString()
                                         cardsArr.add(card)
                                         allAsuna.add(card.id)
                                     }

@@ -72,8 +72,10 @@ class AsunaFragment : Fragment() {
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    title.text = document.data?.get("title").toString()
-                    textDescription.text = document.data?.get("description").toString()
+                    val titleCard = document.data?.get("title").toString()
+                    title.text = titleCard
+                    activity?.setTitle(titleCard)
+                    textDescription.text = """${document.data?.get("description")}"""
                     countComment = (document.data?.get("comments") as Long).toInt()
                     thumbnails.child("${document.data?.get("thumbPath")}.jpeg")
                         .downloadUrl

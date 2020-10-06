@@ -66,6 +66,8 @@ class ProfileFragment : Fragment() {
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
+        activity?.setTitle("Настройки профиля")
+
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         auth = Firebase.auth

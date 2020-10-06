@@ -48,6 +48,8 @@ class AsunaListFragment : Fragment() {
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_list, container, false)
 
+        activity?.setTitle(R.string.app_name)
+
         advController = AdvController(container?.context!!)
         advController.init()
 
@@ -98,6 +100,7 @@ class AsunaListFragment : Fragment() {
                     card.likesCount = (document.data["likes"] as Long).toInt()
                     card.commentsCount = (document.data["comments"] as Long).toInt()
                     card.thumbPath = document.data["thumbPath"].toString()
+                    card.shortDesc = document.data["shortDescription"].toString()
                     cardsArr.add(card)
                 }
                 var index = 0

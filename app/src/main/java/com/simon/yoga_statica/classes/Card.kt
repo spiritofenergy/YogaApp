@@ -7,5 +7,6 @@ class Card {
     var likesCount: Int = 0
     var commentsCount: Int = 0
     lateinit var title: String
+    lateinit var shortDesc: String
     lateinit var thumbPath: String
 }
