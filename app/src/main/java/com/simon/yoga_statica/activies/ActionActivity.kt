@@ -271,7 +271,7 @@ class ActionActivity : AppCompatActivity() {
                 if (document != null) {
                     nameAsuna.text = document.data?.get("title").toString()
 
-                    thumbnails.child("${document.data?.get("thumbPath")}.jpeg")
+                    thumbnails.child("${document.data?.get("thumbPath").toString().split(" ")[0]}.jpeg")
                         .downloadUrl
                         .addOnSuccessListener {
 
@@ -324,8 +324,8 @@ class ActionActivity : AppCompatActivity() {
     }
 
     private fun showAdv() {
-        if (inter.isLoaded) {
-            inter.show()
-        }
+//        if (inter.isLoaded) {
+//            inter.show()
+//        }
     }
 }

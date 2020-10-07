@@ -28,7 +28,7 @@
                 android:id="@+id/progressBarRecyclerView"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
-                android:layout_alignBottom="@+id/image"
+                android:layout_alignBottom="@+id/imgFrame"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="0dp"
                 android:indeterminate="true"
@@ -59,54 +59,21 @@
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/yogaIcon1"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="59dp"
-                android:layout_marginRight="70dp"
-                android:layout_marginBottom="15dp"
-                android:src="@mipmap/radzhakapotasana" />
-
-            <ImageView
-                android:id="@+id/yogaIcon2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/asanaTitle"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="15dp"
-                android:src="@mipmap/gomukxasana" />
-
 
             <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/nameTwo"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="50dp"
-                android:layout_marginRight="150dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/round_white"
-                android:padding="5dp">
-
-            </FrameLayout>
-
-
-            <ImageView
-                android:id="@+id/image"
+                android:id="@+id/imgFrame"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="115dp"
-                android:autofillHints="@mipmap/radzhakapotasana"
-                android:scaleType="fitCenter"
-                android:transitionName="img"
-                tools:ignore="UnusedAttribute" />
+                android:layout_marginTop="100dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="fitCenter"
+                    android:transitionName="img"
+                    tools:ignore="UnusedAttribute" />
+            </FrameLayout>
 
 
             <FrameLayout
@@ -241,7 +208,7 @@
                 android:id="@+id/nameTwo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/image"
+                android:layout_below="@id/imgFrame"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
@@ -255,7 +222,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:clickable="true"
-                android:src="@drawable/ic_more_horiz_black_24dp_default" />
+                app:srcCompat="@drawable/ic_more_horiz_black_24dp_default" />
 
 
         </RelativeLayout>

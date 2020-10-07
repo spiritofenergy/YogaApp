@@ -17,6 +17,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Button" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="background">@drawable/inset_button_default</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
     <style name="RedAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_red</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_red</item>
@@ -57,10 +63,5 @@
     <style name="CoffeeAppThemeMin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryCoffee</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkCoffee</item>
-    </style>
-
-    <style name="PurpleButton" parent="@style/Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">#1a237e</item>
-        <item name="colorControlHighlight">#673ab7</item>
     </style>
 </resources>

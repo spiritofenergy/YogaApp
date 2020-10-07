@@ -69,7 +69,7 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
             openListener?.onClick(card.id, position)
         }
 
-        holder.image.setOnClickListener {
+        holder.imgFrame.setOnClickListener {
             openListener?.onClick(card.id, position)
         }
 

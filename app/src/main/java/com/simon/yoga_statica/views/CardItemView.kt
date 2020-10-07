@@ -13,6 +13,8 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.simon.yoga_statica.adapters.SliderAdapter
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
@@ -39,7 +42,8 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     var social: FrameLayout = itemView.findViewById(R.id.social)
     private var likeImg: ImageView = itemView.findViewById(R.id.likeImg)
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
-    var image: ImageView = itemView.findViewById(R.id.image)
+    var image: ViewPager2 = itemView.findViewById(R.id.image)
+    var imgFrame: FrameLayout = itemView.findViewById(R.id.imgFrame)
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
     private var lane: TextView = itemView.findViewById(R.id.lane)
@@ -130,16 +134,16 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 parent.context.packageName
             )
         )
+        val images = card.thumbPath.split(" ")
+        image.adapter = SliderAdapter(images)
+        Log.d("img", images.toString())
 
-        thumbnails.child("${card.thumbPath}.jpeg")
+        thumbnails.child("${images[0]}.jpeg")
             .downloadUrl
             .addOnSuccessListener {
                 Glide.with(parent.context)
                     .load(it)
-                    .into(yogaIconGrand)
-                Glide.with(parent.context)
-                    .load(it)
-                    .listener(object : RequestListener<Drawable> {
+                    .listener( object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
                             model: Any?,
@@ -157,14 +161,16 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                             isFirstResource: Boolean
                         ): Boolean {
                             progressBar.visibility = View.GONE
+
                             return false
                         }
-                    })
-                    .into(image)
 
+                    })
+                    .into(yogaIconGrand)
             }.addOnFailureListener { exception ->
                 Log.d("log", "get failed with ", exception)
             }
+
 
         db.collection("likes").document(card.id)
             .get()

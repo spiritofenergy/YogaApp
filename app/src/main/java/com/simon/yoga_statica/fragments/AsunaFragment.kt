@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -22,6 +23,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.CommentAdapter
+import com.simon.yoga_statica.adapters.SliderAdapter
 import com.simon.yoga_statica.classes.Comment
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -36,7 +38,7 @@ class AsunaFragment : Fragment() {
 
     private lateinit var title: TextView
     private lateinit var textDescription: TextView
-    private lateinit var imageWorkout: ImageView
+    private lateinit var imageWorkout: ViewPager2
     private lateinit var comment: EditText
     private lateinit var commentSend: Button
     private lateinit var commentList: RecyclerView
@@ -68,6 +70,8 @@ class AsunaFragment : Fragment() {
         commentList = rootView.findViewById(R.id.commentList)
         commentAddArea = rootView.findViewById(R.id.commentAddArea)
 
+        var images: List<String>
+
         db.collection("asunaRU").document(idAsuna)
             .get()
             .addOnSuccessListener { document ->
@@ -77,15 +81,8 @@ class AsunaFragment : Fragment() {
                     activity?.setTitle(titleCard)
                     textDescription.text = """${document.data?.get("description")}"""
                     countComment = (document.data?.get("comments") as Long).toInt()
-                    thumbnails.child("${document.data?.get("thumbPath")}.jpeg")
-                        .downloadUrl
-                        .addOnSuccessListener {
-                            Glide.with(this)
-                                .load(it)
-                                .into(imageWorkout)
-                        }.addOnFailureListener { exception ->
-                            Log.d("log", "get failed with ", exception)
-                        }
+                    images = document.data?.get("thumbPath").toString().split(" ")
+                    imageWorkout.adapter = SliderAdapter(images)
                 }
             }
             .addOnFailureListener { exception ->

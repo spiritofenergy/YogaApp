@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.activies
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -8,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -19,6 +21,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -42,6 +46,7 @@ class AddActivity : AppCompatActivity() {
     private val avatars: StorageReference = storage.reference
 
     private var edit = false
+    private var photo = false
     private var count = 0
 
     private lateinit var addTitle: EditText
@@ -57,6 +62,7 @@ class AddActivity : AppCompatActivity() {
 
     private val RESULT_IMAGE = 3214
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitle("Добавление асуны")
@@ -86,6 +92,7 @@ class AddActivity : AppCompatActivity() {
         addLongAsuns = findViewById(R.id.addLongAsuns)
         addImage = findViewById(R.id.addImage)
         addAsuns = findViewById(R.id.addAsuns)
+//        addAsuns.background = ContextCompat.getDrawable(this, R.drawable.inset_button_default)
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -114,7 +121,22 @@ class AddActivity : AppCompatActivity() {
         }
 
         addAsuns.setOnClickListener {
-            addAsunaInFire()
+            AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Добавление асaны")
+                .setMessage("Вы уверены, что хотите завершить редактирование?")
+                .setPositiveButton("Завершить") { _, _ ->
+                    if (edit && addTitle.text.isNotEmpty() && addLongAsuns.text.isNotEmpty() && addShortAsuns.text.isNotEmpty())
+                        addAsunaInFire()
+                    else
+                        Toast.makeText(
+                            this, "Заполните все поля",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
+                .setNegativeButton("Нет") { _, _ ->
+                }
+                .show()
         }
 
     }
@@ -185,7 +207,7 @@ class AddActivity : AppCompatActivity() {
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
-
+                                photo = true
                                 openAvatar(downloadUri)
 
                                 db.collection("users")
@@ -270,17 +292,3 @@ class AddActivity : AppCompatActivity() {
     }
 
 }
-
-//Триконасана
-
-//Поза треугольника довольно-таки сложная асана для тех, у кого с гибкостью всё печально.
-//И хороша для остальных — развивает баланс, растягивает подколенные сухожилия и внутреннюю поверхность бёдер.
-//Как сделать: стойте прямо, ноги расставьте широко.
-//Правая ступня «смотрит» вперёд, левая — в сторону, в которую направлен ваш корпус.
-//В таком положении таз слегка развернётся. Обе ноги должны быть прямыми.
-//Поднимите руки (но не плечи) в стороны так, чтобы они образовали одну прямую линию, параллельную полу.
-//Тяните правую ладонь, а за ней и корпус вперёд, будто вас кто-то тянет к стене.
-//Как только поймёте, что тянуться дальше не можете, опустите руку вниз и, если сможете,         поставьте ладонь на пол впереди или сзади ноги. Если нет, держите руку на ноге.
-//Сохраняйте прямую линию в руках и смотрите вверх, на левую ладонь.
-//Вес распределите равномерно на обе ноги, а в корпусе не допускайте прогиба.
-//Дышите глубоко и спокойно.

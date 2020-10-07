@@ -332,14 +332,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAdv() {
-        if (inter.isLoaded) {
-            inter.show()
-        } else {
-            Toast.makeText(
-                baseContext, "Failed.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+//        if (inter.isLoaded) {
+//            inter.show()
+//        } else {
+//            Toast.makeText(
+//                baseContext, "Failed.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
     }
 }
 
