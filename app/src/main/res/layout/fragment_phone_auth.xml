@@ -24,11 +24,23 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Код"
-        android:inputType="textPassword"
+        android:inputType="textPersonName|text"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/phoneUserAuth" />
+
+    <Button
+        android:id="@+id/checkPhone"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Отправить код"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/codePhoneAuth" />
 
     <Button
         android:id="@+id/signInPhone"
@@ -36,8 +48,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Войти"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/codePhoneAuth" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

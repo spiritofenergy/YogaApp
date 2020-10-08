@@ -49,8 +49,6 @@ class AuthFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
 
-        auth.useAppLanguage()
-
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -71,22 +69,6 @@ class AuthFragment : Fragment() {
                 }
             }
         }.attach()
-
-//        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                if (tab != null) {
-//                    Log.d("pos",  tab.position.toString())
-//                    tabsItems.currentItem = tab.position
-//                }
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//            }
-//
-//        })
 
         signInGoogle = rootView.findViewById(R.id.google_signIn_auth)
         signInGoogle.setOnClickListener {
