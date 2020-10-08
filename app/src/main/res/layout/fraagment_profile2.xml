@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:id="@+id/avatarI"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageAvatar"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                tools:srcCompat="@tools:sample/avatars[0]" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/addAvatar"
+            style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/avatarI"
+            android:layout_alignParentRight="false"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:tint="@color/design_default_color_on_secondary"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_baseline_add_24" />
+
+        <TextView
+            android:id="@+id/nameUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addAvatar"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:id="@+id/statusBlock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/nameUser"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Статус: " />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/statusBlock"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:gravity="center_horizontal"
+                android:text="Настройки темы"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/setThemeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginRight="60dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioCoffee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/ic_baseline_coffee_brightness_1_24"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/ic_baseline_blue_brightness_1_24"
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioRed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/ic_baseline_red_brightness_1_24"
+
+                    />
+
+                <RadioButton
+                    android:id="@+id/radioOrange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:button="@drawable/ic_baseline_orange_brightness_1_24"
+                    />
+
+
+
+                <RadioButton
+                    android:id="@+id/radioGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:button="@drawable/ic_baseline_lime_brightness_1_24"
+                    />
+
+
+            </RadioGroup>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="65dp"
+                android:layout_marginRight="60dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coffee"
+                    android:layout_weight="1"
+                    android:textSize="18sp">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blue"
+                    android:layout_weight="1"
+                    android:textSize="18sp">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Red"
+                    android:layout_weight="1"
+                    android:textSize="18sp">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Orange"
+                    android:layout_weight="1"
+                    android:textSize="18sp">
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lime"
+                    android:layout_weight="1"
+                    android:textSize="18sp">
+                </TextView>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/settingTime"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/settingTheme"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:gravity="center_horizontal"
+                android:text="Настройки времени"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/setSecond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="30 сек" />
+
+                <RadioButton
+                    android:id="@+id/radio60"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="60 сек"
+                     />
+
+                <RadioButton
+                    android:id="@+id/radio90"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="false"
+                    android:text="90  сек"
+                   />
+            </RadioGroup>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/settingTime"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/headStat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:gravity="center_horizontal"
+                android:text="Статистика"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="80dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="Выполненные асуны: " />
+
+                <TextView
+                    android:id="@+id/countAsuns"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="80dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TextView" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>
