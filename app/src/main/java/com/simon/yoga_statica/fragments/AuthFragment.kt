@@ -6,18 +6,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -25,6 +25,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.MainActivity
+import com.simon.yoga_statica.adapters.AuthAdapter
 import kotlin.math.sign
 
 class AuthFragment : Fragment() {
@@ -34,13 +35,12 @@ class AuthFragment : Fragment() {
 
     private val auth = Firebase.auth
 
-    private lateinit var emailText: EditText
-    private lateinit var passwordText: EditText
-
     private lateinit var signInGoogle: Button
-    private lateinit var signInEmail: Button
     private lateinit var signUpOpen: Button
     private lateinit var openWithoutAuth: Button
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var tabsItems: ViewPager2
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,32 +49,49 @@ class AuthFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
 
+        auth.useAppLanguage()
+
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
 
+        tabLayout = rootView.findViewById(R.id.tabs)
+        tabsItems = rootView.findViewById(R.id.tabs_items)
+        tabsItems.adapter = AuthAdapter(this, tabLayout.tabCount)
+
+        TabLayoutMediator(tabLayout, tabsItems) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = "E-Mail"
+                }
+                1 -> {
+                    tab.text = "Телефон"
+                }
+            }
+        }.attach()
+
+//        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                if (tab != null) {
+//                    Log.d("pos",  tab.position.toString())
+//                    tabsItems.currentItem = tab.position
+//                }
+//            }
+//
+//            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//            }
+//
+//            override fun onTabReselected(tab: TabLayout.Tab?) {
+//            }
+//
+//        })
+
         signInGoogle = rootView.findViewById(R.id.google_signIn_auth)
         signInGoogle.setOnClickListener {
             val signInIntent: Intent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, 123)
-        }
-
-        emailText = rootView.findViewById(R.id.emailUserAuth)
-        passwordText = rootView.findViewById(R.id.passwordUserAuth)
-
-        signInEmail = rootView.findViewById(R.id.signInEmail)
-        signInEmail.setOnClickListener {
-            val email = emailText.text
-            val password = passwordText.text
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuthWithEmail(email.toString(), password.toString())
-            } else {
-                Toast.makeText(activity, "Заполните все поля",
-                    Toast.LENGTH_SHORT).show()
-            }
         }
 
         signUpOpen = rootView.findViewById(R.id.signUpOpen)
@@ -150,22 +167,6 @@ class AuthFragment : Fragment() {
             }
     }
 
-    private fun firebaseAuthWithEmail(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(activity!!) { task ->
-                if (task.isSuccessful) {
-                    Log.d("auth", "signInWithEmail:success")
-                    val user = auth.currentUser
-
-                    openMain()
-                } else {
-                    Log.w("auth", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(activity, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
     private fun addUserToDatabase(currentUser: FirebaseUser?) {
         val user = hashMapOf(
             "id" to currentUser?.uid.toString().trim(),
@@ -197,7 +198,7 @@ class AuthFragment : Fragment() {
             activity,
             MainActivity::class.java
         )
-
+        activity?.finish()
         startActivity(intent)
     }
 }

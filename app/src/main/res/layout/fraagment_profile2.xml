@@ -235,7 +235,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:text="60 сек"
-                     />
+                    android:visibility="gone" />
 
                 <RadioButton
                     android:id="@+id/radio90"
@@ -245,7 +245,7 @@
                     android:layout_marginRight="10dp"
                     android:checked="false"
                     android:text="90  сек"
-                   />
+                    android:visibility="gone" />
             </RadioGroup>
         </LinearLayout>
 

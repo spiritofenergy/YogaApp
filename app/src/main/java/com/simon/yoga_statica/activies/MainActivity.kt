@@ -118,11 +118,10 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.toolbar_menu_main, menu)
 
         if (auth.currentUser != null) {
-            menu?.getItem(3)?.isVisible = false
             menu?.getItem(0)?.isVisible = true
             menu?.getItem(1)?.isVisible = true
             menu?.getItem(2)?.isVisible = true
-            menu?.getItem(4)?.isVisible = true
+            menu?.getItem(3)?.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -167,13 +166,17 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.openProfile -> {
-                openProfile()
-
-                true
-            }
-            R.id.google_signin -> {
-                val signInIntent: Intent = mGoogleSignInClient.signInIntent
-                startActivityForResult(signInIntent, 123)
+                if (auth.currentUser != null)
+                    openProfile()
+                else {
+                    val intent = Intent(
+                        this,
+                        SplashActivity::class.java
+                    )
+                    intent.putExtra("auth", true)
+                    finish()
+                    startActivity(intent)
+                }
 
                 true
             }
@@ -243,88 +246,6 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 123) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-    }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-
-            // Signed in successfully, show authenticated UI.
-            Log.d("login", "signInWithEmail:success")
-            firebaseAuthWithGoogle(account?.idToken.toString())
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(
-                "err",
-                "signInResult:failed code=" + e.statusCode
-            )
-            Toast.makeText(
-                baseContext, "Authentication failed.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("login", "signInWithCredential:success")
-
-                    val user = auth.currentUser
-                    addUserToDatabase(user)
-
-                    val intent = intent
-                    finish()
-                    startActivity(intent)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w("login", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-            }
-    }
-
-    private fun addUserToDatabase(currentUser: FirebaseUser?) {
-        val user = hashMapOf(
-            "id" to currentUser?.uid.toString().trim(),
-            "email" to currentUser?.email.toString().trim(),
-            "name" to "User",
-            "root" to "user",
-            "countAsuns" to 0,
-            "status" to 1,
-            "sec" to 30,
-            "colorTheme" to "default",
-            "photo" to ""
-        )
-
-        db.collection("users")
-            .whereEqualTo("id", currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (documents.isEmpty)
-                    db.collection("users")
-                        .add(user)
-            }
-            .addOnFailureListener { exception ->
-                Log.w("home", "Error getting documents: ", exception)
-            }
     }
 
     fun setDisplayBack(show: Boolean) {

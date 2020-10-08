@@ -52,8 +52,12 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
 //        splashFragment
+        val authR = intent.getBooleanExtra("auth", false)
 
-        startThread()
+        if (authR)
+            addAuthFragment()
+        else
+            startThread()
     }
 
     private fun startThread() {
@@ -65,6 +69,7 @@ class SplashActivity : AppCompatActivity() {
                 e.printStackTrace()
             } finally {
                 if (auth.currentUser != null) {
+                    finish()
                     startActivity(
                         Intent(
                             this,
