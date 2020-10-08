@@ -10,21 +10,23 @@
 
     <color name="colorPrimary_green">#80FF84</color>
     <color name="colorPrimaryDark_green">#4caf50</color>
+    <color name="colorAccent_green">#80FF84</color>
 
     <color name="colorPrimary_lime">#f2ff80</color>
     <color name="colorPrimaryDark_lime">#cddc39</color>
+    <color name="colorAccent_lime">#f2ff80</color>
 
     <color name="colorPrimary_red">#FF8880</color>
     <color name="colorPrimaryDark_red">#f44336</color>
+    <color name="colorAccent_red">#FF8880</color>
 
     <color name="colorPrimary_orange">#ffcc80</color>
     <color name="colorPrimaryDark_orange">#FF9800</color>
-
-    <color name="colorPrimary_blue">#089ed9</color>
-    <color name="colorPrimaryDark_blue">#1887b3</color>
+    <color name="colorAccent_orange">#ffcc80</color>
 
     <color name="colorPrimary_coffee">#8A6552</color>
     <color name="colorPrimaryDark_coffee">#462521</color>
+    <color name="colorAccent_coffee">#8A6552</color>
 
     <color name="colorPrimaryCoffee">#8A6552</color>
     <color name="colorPrimaryDarkCoffee">#462521</color>

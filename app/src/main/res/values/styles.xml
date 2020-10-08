@@ -26,42 +26,50 @@
     <style name="RedAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_red</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_red</item>
+        <item name="colorAccent">@color/colorAccent_red</item>
     </style>
 
     <style name="RedAppThemeMin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_red</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_red</item>
+        <item name="colorAccent">@color/colorAccent_red</item>
     </style>
 
     <style name="OrangeAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_orange</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_orange</item>
+        <item name="colorAccent">@color/colorAccent_orange</item>
      </style>
 
     <style name="OrangeAppThemeMin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_orange</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_orange</item>
+        <item name="colorAccent">@color/colorAccent_orange</item>
      </style>
 
 
     <style name="GreenAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/gnt_green</item>
         <item name="colorPrimaryDark">@color/gnt_ad_green</item>
+        <item name="colorAccent">@color/gnt_green</item>
     </style>
 
     <style name="GreenAppThemeMin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/gnt_green</item>
         <item name="colorPrimaryDark">@color/gnt_ad_green</item>
+        <item name="colorAccent">@color/gnt_green</item>
     </style>
 
 
     <style name="CoffeeAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryCoffee</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkCoffee</item>
+        <item name="colorAccent">@color/colorAccent_coffee</item>
     </style>
 
     <style name="CoffeeAppThemeMin" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimaryCoffee</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkCoffee</item>
+        <item name="colorAccent">@color/colorAccentCoffee</item>
     </style>
 </resources>
