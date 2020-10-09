@@ -49,7 +49,7 @@ class ActionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTitle("Тренировка")
+        title = "Тренировка"
 
         auth = Firebase.auth
 
@@ -78,9 +78,8 @@ class ActionActivity : AppCompatActivity() {
 
         inter = advController.createInterstitialAds(R.string.ads_inter_uid)
 
-//        TODO("Check finish")
-
-        openAsanaAct()
+        if (savedInstanceState == null)
+            openAsanaAct()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -105,6 +104,10 @@ class ActionActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (!finish) {
+            val fragment = supportFragmentManager.findFragmentById(R.id.frame_action)
+            fragment as ActionFragment
+            fragment.onPause()
+
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Завершение тренировки")
@@ -114,7 +117,7 @@ class ActionActivity : AppCompatActivity() {
                     super.onBackPressed()
                 }
                 .setNegativeButton("Нет") { dialogInterface: DialogInterface, i: Int ->
-
+                    fragment.onStart()
                 }
                 .show()
         } else {

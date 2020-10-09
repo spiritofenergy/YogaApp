@@ -35,7 +35,6 @@ class ActionFragment : Fragment() {
     private lateinit var doublePlayer: MediaPlayer
 
     private lateinit var auth: FirebaseAuth
-    private var isReady = true
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -53,12 +52,18 @@ class ActionFragment : Fragment() {
     var position: Int = 0
 
     var curSec: Int = 0
+    var allSec: Int = 0
+
+    var curSecPause: Int = 0
+    var allSecPause: Int = 0
+
     var isStart = false
 
     private val IS_START = "isStart"
     private val CURRENT_SECOND = "currentSecond"
     private val CURRENT_POSITION = "currentPosition"
     private val LIST = "list"
+    private val ALL_SECOND = "allSec"
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_COUNT = "count"
@@ -66,7 +71,6 @@ class ActionFragment : Fragment() {
 
     private lateinit var rootView: View
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,15 +82,20 @@ class ActionFragment : Fragment() {
 
         if (savedInstanceState != null) {
             with(savedInstanceState) {
-                isReady = getBoolean(IS_START)
+                isStart = getBoolean(IS_START)
                 position = getInt(CURRENT_POSITION)
                 curSec = getInt(CURRENT_SECOND)
-
+                allSec = getInt(ALL_SECOND)
                 list = getStringArrayList(LIST) as ArrayList<String>
 
                 addAsuna(list[position])
             }
         }
+
+        Log.d("all", allSec.toString())
+        Log.d("is", isStart.toString())
+        Log.d("curSec", curSec.toString())
+        Log.d("list", list.toString())
 
         auth = Firebase.auth
 
@@ -100,10 +109,10 @@ class ActionFragment : Fragment() {
         timeCur = rootView.timeCur
         startPauseAction = rootView.startPauseAction
 
-        timeCur
-
-        time.base = SystemClock.elapsedRealtime()
-        time.start()
+        if (isStart) {
+            startPauseAction.tag = "active"
+            startPauseAction.text = activity?.resources?.getString(R.string.stop_action)
+        }
 
         x = if (!prefs.contains(APP_PREFERENCES_COUNT)) {
             30
@@ -116,14 +125,8 @@ class ActionFragment : Fragment() {
             }
         }
 
-        addAsuna(list[position])
-
-        timeCur.isCountDown = true
-        timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
-
         timeCur.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val sec = SystemClock.elapsedRealtime() - it.base
-            Log.d("hello", sec.toString())
 
             if (sec > 0) {
 
@@ -164,10 +167,29 @@ class ActionFragment : Fragment() {
             }
         }
 
+        addAsuna(list[position])
+
         return rootView
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onStart() {
+        super.onStart()
 
+        time.base = SystemClock.elapsedRealtime()
+        if (allSec != 0)
+            time.base = SystemClock.elapsedRealtime() - 1000 * allSec
+        time.start()
+
+        timeCur.isCountDown = true
+        timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
+
+        if (curSec != 0) {
+            timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
+            if (isStart)
+                timeCur.start()
+        }
+    }
 
     fun setListAsuns(listR: ArrayList<String>) {
         list = listR
@@ -206,6 +228,12 @@ class ActionFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        time.stop()
+        timeCur.stop()
+        if (isStart)
+            curSec = (SystemClock.elapsedRealtime() - timeCur.base).toInt() / -1000
+//        isStart = false
+        allSec = (SystemClock.elapsedRealtime() - time.base).toInt() / 1000
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -214,6 +242,7 @@ class ActionFragment : Fragment() {
             putString(APP_PREFERENCES_FRAGMENT, "action")
             putBoolean(IS_START, isStart)
             putInt(CURRENT_SECOND, curSec)
+            putInt(ALL_SECOND, allSec)
             putInt(CURRENT_POSITION, position)
             putStringArrayList(LIST, list)
         }
