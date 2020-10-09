@@ -52,7 +52,10 @@ class ActionFragment : Fragment() {
     var x: Int = 0
     var position: Int = 0
 
-    private val IS_READY = "isReady"
+    var curSec: Int = 0
+    var isStart = false
+
+    private val IS_START = "isStart"
     private val CURRENT_SECOND = "currentSecond"
     private val CURRENT_POSITION = "currentPosition"
     private val LIST = "list"
@@ -75,8 +78,9 @@ class ActionFragment : Fragment() {
 
         if (savedInstanceState != null) {
             with(savedInstanceState) {
-                isReady = getBoolean(IS_READY)
+                isReady = getBoolean(IS_START)
                 position = getInt(CURRENT_POSITION)
+                curSec = getInt(CURRENT_SECOND)
 
                 list = getStringArrayList(LIST) as ArrayList<String>
 
@@ -123,6 +127,11 @@ class ActionFragment : Fragment() {
 
             if (sec > 0) {
 
+                startPauseAction.tag = "pause"
+                startPauseAction.text = activity?.resources?.getString(R.string.start_action)
+                curSec = 0
+                isStart = false
+
                 timeCur.stop()
                 timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
                 position += 1
@@ -134,8 +143,25 @@ class ActionFragment : Fragment() {
         }
 
         startPauseAction.setOnClickListener {
-            timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
-            timeCur.start()
+            if (startPauseAction.tag == "pause") {
+                if (curSec != 0)
+                    timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
+                else
+                    timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
+                timeCur.start()
+
+                isStart = true
+                startPauseAction.tag = "active"
+                startPauseAction.text = activity?.resources?.getString(R.string.stop_action)
+            } else {
+                timeCur.stop()
+                curSec = (SystemClock.elapsedRealtime() - timeCur.base).toInt() / -1000
+                startPauseAction.tag = "pause"
+
+                isStart = false
+
+                startPauseAction.text = activity?.resources?.getString(R.string.start_action)
+            }
         }
 
         return rootView
@@ -186,7 +212,8 @@ class ActionFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.run {
             putString(APP_PREFERENCES_FRAGMENT, "action")
-//            putInt(CURRENT_SECOND, counter.sec)
+            putBoolean(IS_START, isStart)
+            putInt(CURRENT_SECOND, curSec)
             putInt(CURRENT_POSITION, position)
             putStringArrayList(LIST, list)
         }

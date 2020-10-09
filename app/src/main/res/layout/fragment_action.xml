@@ -122,7 +122,7 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:tag="active"
+                    android:tag="pause"
                     android:text="@string/start_action" />
             </LinearLayout>
 
@@ -130,7 +130,7 @@
                 android:id="@+id/allTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cong"
+                android:layout_below="@id/timers"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginRight="40dp"
