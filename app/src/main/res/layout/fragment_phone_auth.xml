@@ -25,7 +25,7 @@
         android:ems="10"
         android:hint="Код"
         android:inputType="textPersonName|text"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"

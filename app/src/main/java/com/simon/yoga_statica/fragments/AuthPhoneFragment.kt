@@ -109,7 +109,6 @@ class AuthPhoneFragment : Fragment() {
                     resendToken = token
 
                     checkPhone.visibility = View.GONE
-                    codeText.visibility = View.VISIBLE
                     signInPhone.visibility = View.VISIBLE
                 }
             })
