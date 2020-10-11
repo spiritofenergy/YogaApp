@@ -71,18 +71,26 @@ class AddActivity : AppCompatActivity() {
 
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
-            setTheme(R.style.AppTheme)
+        val theme = if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
+            "default"
         } else {
             when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
 
-                "default" -> setTheme(R.style.AppTheme)
-                "red" -> setTheme(R.style.RedAppTheme)
-                "orange" -> setTheme(R.style.OrangeAppTheme)
-                "green" -> setTheme(R.style.GreenAppTheme)
-                "coffee" -> setTheme(R.style.CoffeeAppTheme)
-
+                "default" -> "default"
+                "red"    -> "red"
+                "orange" -> "orange"
+                "green"  -> "green"
+                "coffee" -> "coffee"
+                else     -> "default"
             }
+        }
+
+        when (theme) {
+            "default" -> setTheme(R.style.AppTheme)
+            "red" -> setTheme(R.style.RedAppTheme)
+            "orange" -> setTheme(R.style.OrangeAppTheme)
+            "green" -> setTheme(R.style.GreenAppTheme)
+            "coffee" -> setTheme(R.style.CoffeeAppTheme)
         }
         setContentView(R.layout.activity_add)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -92,7 +100,14 @@ class AddActivity : AppCompatActivity() {
         addLongAsuns = findViewById(R.id.addLongAsuns)
         addImage = findViewById(R.id.addImage)
         addAsuns = findViewById(R.id.addAsuns)
-//        addAsuns.background = ContextCompat.getDrawable(this, R.drawable.inset_button_default)
+        addAsuns.background = ContextCompat.getDrawable(
+            this,
+            resources.getIdentifier(
+                "inset_button_$theme",
+                "drawable",
+                packageName
+            )
+        )
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

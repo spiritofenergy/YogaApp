@@ -12,61 +12,67 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:id="@+id/avatarI"
+            android:id="@+id/profile_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:background="@drawable/profile_bg_default"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
-            <ImageView
-                android:id="@+id/imageAvatar"
-                android:layout_width="150dp"
+            <LinearLayout
+                android:id="@+id/avatarI"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageAvatar"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    tools:srcCompat="@tools:sample/avatars[0]" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/addAvatar"
+                style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:tint="@color/design_default_color_on_secondary"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
+
+            <TextView
+                android:id="@+id/nameUser"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                tools:srcCompat="@tools:sample/avatars[0]" />
-        </LinearLayout>
+                android:gravity="center_horizontal"
+                android:textSize="24sp" />
 
-        <ImageButton
-            android:id="@+id/addAvatar"
-            style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/avatarI"
-            android:layout_alignParentRight="false"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:tint="@color/design_default_color_on_secondary"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_baseline_add_24" />
+            <LinearLayout
+                android:id="@+id/statusBlock"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/nameUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/addAvatar"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:textSize="24sp" />
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Статус: " />
 
-        <LinearLayout
-            android:id="@+id/statusBlock"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/nameUser"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Статус: " />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -74,7 +80,7 @@
             android:id="@+id/settingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/statusBlock"
+            android:layout_below="@id/profile_info"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -93,10 +99,10 @@
                 android:id="@+id/setThemeGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="70dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="60dp"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -104,16 +110,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:button="@drawable/ic_baseline_coffee_brightness_1_24"
-                    />
+                    android:button="@drawable/ic_baseline_coffee_brightness_1_24" />
 
                 <RadioButton
                     android:id="@+id/radioDefault"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:button="@drawable/ic_baseline_blue_brightness_1_24"
-                    />
+                    android:button="@drawable/ic_baseline_blue_brightness_1_24" />
 
                 <RadioButton
                     android:id="@+id/radioRed"
@@ -130,9 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
 
-                    android:button="@drawable/ic_baseline_orange_brightness_1_24"
-                    />
-
+                    android:button="@drawable/ic_baseline_orange_brightness_1_24" />
 
 
                 <RadioButton
@@ -141,55 +143,54 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
 
-                    android:button="@drawable/ic_baseline_lime_brightness_1_24"
-                    />
+                    android:button="@drawable/ic_baseline_lime_brightness_1_24" />
 
 
             </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="65dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginRight="60dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Coffee"
-                    android:layout_weight="1"
-                    android:textSize="18sp">
-                </TextView>
+                    android:textSize="18sp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="Blue"
-                    android:layout_weight="1"
-                    android:textSize="18sp">
-                </TextView>
+                    android:textSize="18sp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text=" Red"
-                    android:layout_weight="1"
-                    android:textSize="18sp">
-                </TextView>
+                    android:textSize="18sp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text=" Orange"
-                    android:layout_weight="1"
-                    android:textSize="18sp">
-                </TextView>
+                    android:textSize="18sp"></TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lime"
                     android:layout_weight="1"
-                    android:textSize="18sp">
-                </TextView>
+                    android:text="Lime"
+                    android:textSize="18sp"></TextView>
 
             </LinearLayout>
         </LinearLayout>
