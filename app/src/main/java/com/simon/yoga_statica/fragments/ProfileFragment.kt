@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -27,7 +28,9 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
+import kotlinx.android.synthetic.main.fraagment_profile2.*
 
+@SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -36,6 +39,8 @@ class ProfileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private var user = User()
 
+    private lateinit var idUser: TextView
+    private lateinit var emailUser: TextView
     private lateinit var nameUser: TextView
     private lateinit var status: TextView
     private lateinit var countAsuns: TextView
@@ -45,6 +50,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var setTheme: RadioGroup
     private lateinit var setSecond: RadioGroup
+    private lateinit var chooseDyh: RadioGroup
+    private lateinit var chooseMusic: RadioGroup
 
     private lateinit var radio30: RadioButton
     private lateinit var radio60: RadioButton
@@ -55,6 +62,10 @@ class ProfileFragment : Fragment() {
     private lateinit var radioGreen: RadioButton
     private lateinit var radioRed: RadioButton
     private lateinit var radioOrange: RadioButton
+
+    private lateinit var switchDyhSwitch: Switch
+    private lateinit var simpleSwitchMusic: Switch
+    private lateinit var simpleSwitchShava: Switch
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
@@ -68,15 +79,17 @@ class ProfileFragment : Fragment() {
     ): View? {
           val rootView: View = inflater.inflate(R.layout.fraagment_profile2, container, false)
 
-        activity?.setTitle("Настройки профиля")
+        activity?.title = "Настройки профиля"
 
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         auth = Firebase.auth
 
+        idUser = rootView.findViewById(R.id.idUser)
+        emailUser = rootView.findViewById(R.id.emailUser)
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
-        addAvatar = rootView.findViewById(R.id.addAvatar)
+//        addAvatar = rootView.findViewById(R.id.addAvatar)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
 
         radio30 = rootView.findViewById(R.id.radio30)
@@ -89,7 +102,39 @@ class ProfileFragment : Fragment() {
         radioGreen = rootView.findViewById(R.id.radioGreen)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
+        chooseDyh = rootView.findViewById(R.id.ChooseDyh)
+        chooseMusic = rootView.findViewById(R.id.ChooseMusic)
 
+        switchDyhSwitch = rootView.findViewById(R.id.switchDyhSwitch)
+        simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
+        simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
+
+        if (switchDyhSwitch.isChecked) {
+            chooseDyh.visibility = View.VISIBLE
+        } else {
+            chooseDyh.visibility = View.GONE
+        }
+        if (simpleSwitchMusic.isChecked) {
+            chooseMusic.visibility = View.VISIBLE
+        } else {
+            chooseMusic.visibility = View.GONE
+        }
+
+        switchDyhSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                chooseDyh.visibility = View.VISIBLE
+            } else {
+                chooseDyh.visibility = View.GONE
+            }
+        }
+
+        simpleSwitchMusic.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                chooseMusic.visibility = View.VISIBLE
+            } else {
+                chooseMusic.visibility = View.GONE
+            }
+        }
 
         setTheme = rootView.findViewById(R.id.setThemeGroup)
         setSecond = rootView.findViewById(R.id.setSecond)
@@ -167,7 +212,7 @@ class ProfileFragment : Fragment() {
                 .apply()
         }
 
-        addAvatar.setOnClickListener {
+        imageAvatar.setOnClickListener {
             getImage()
         }
 
@@ -187,18 +232,20 @@ class ProfileFragment : Fragment() {
                         user.photo = document["photo"].toString()
                     }
 
+                    idUser.text = user.id
+                     if (user.email.isNotEmpty()) {
+                         emailUser.text = user.email
+                    } else {
+                         //emailUser.text = user.phone
+                     }
                     nameUser.text = user.name
                     countAsuns.text = user.countAsuns.toString()
 
                     if (user.photo == "") {
                         imageAvatar.setImageResource(R.mipmap.ic_launcher)
-                        addAvatar.visibility = View.VISIBLE
                     } else {
                         val downloadUri: Uri = Uri.parse(user.photo)
                         openAvatar(downloadUri)
-                        imageAvatar.setOnClickListener {
-                            getImage()
-                        }
                     }
 
                     Log.d("email", user.email)
@@ -336,7 +383,6 @@ class ProfileFragment : Fragment() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    addAvatar.visibility = View.GONE
 
                     return false
                 }

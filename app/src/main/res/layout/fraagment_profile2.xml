@@ -12,7 +12,7 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:id="@+id/profile_info"
+            android:id="@+id/avatarI"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -32,40 +32,44 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/nameUser"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:textSize="33sp"
-                    android:text="@string/User">
-                    </TextView>
+                    android:text="@string/User"
+                    android:textSize="33sp"></TextView>
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:layout_weight="1"
+                <TextView
+                    android:id="@+id/idUser"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
 
-                        android:text="@string/ID"
-                        >
+                    android:text="@string/ID"
+                    android:textSize="20sp">
 
-                    </TextView>
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:layout_weight="1"
+                </TextView>
 
-                        android:text="@string/email">
+                <TextView
+                    android:id="@+id/emailUser"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
 
-                    </TextView>
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:layout_weight="1"
+                    android:text="@string/email"
+                    android:textSize="20sp">
 
-                        android:text="@string/status">
+                </TextView>
 
-                    </TextView>
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="@string/status"
+                    android:textSize="20sp">
+
+                </TextView>
 
             </LinearLayout>
         </LinearLayout>
@@ -295,6 +299,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/switchDyh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/statistica"
@@ -310,13 +315,105 @@
             </TextView>
 
             <Switch
-                android:id="@+id/simpleSwitch"
+                android:id="@+id/switchDyhSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
                 android:checked="true"
-                 android:layout_marginRight="40dp"
-                android:textSize="25sp"
-                android:padding="40dp"/>
+                android:padding="40dp"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/ChooseDyh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchDyh"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/dyh1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Дыхание 1" />
+
+            <RadioButton
+                android:id="@+id/dyh2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Дыхание 2" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/switchMusic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ChooseDyh"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Музыка"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simpleSwitchMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="false"
+                android:padding="40dp"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/ChooseMusic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchMusic"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/music1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Музыка 1" />
+
+            <RadioButton
+                android:id="@+id/music2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Музыка 2" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/switchShava"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ChooseMusic"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Шавасана"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simpleSwitchShava"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="true"
+                android:padding="40dp"
+                android:textSize="25sp" />
         </LinearLayout>
 
     </RelativeLayout>
