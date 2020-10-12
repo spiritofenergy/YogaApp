@@ -16,4 +16,8 @@
     <string name="start_action">Старт</string>
     <string name="stop_action">Пауза</string>
     <string name="congratulation">Поздравляем!\nТренировка закончена</string>
+    <string name="User">Name</string>
+    <string name="ID">id</string>
+    <string name="email">email</string>
+    <string name="status">status</string>
 </resources>

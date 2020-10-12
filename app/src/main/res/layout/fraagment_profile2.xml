@@ -15,7 +15,6 @@
             android:id="@+id/avatarI"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <ImageView
@@ -23,58 +22,63 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
                 tools:srcCompat="@tools:sample/avatars[0]" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="@dimen/gnt_text_size_large"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="33sp"
+                    android:text="@string/User">
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+
+                        android:text="@string/ID"
+                        >
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+
+                        android:text="@string/email">
+
+                    </TextView>
+                    <TextView
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_weight="1"
+
+                        android:text="@string/status">
+
+                    </TextView>
+
+            </LinearLayout>
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/addAvatar"
-            style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/avatarI"
-            android:layout_alignParentRight="false"
-            android:layout_marginTop="20dp"
-            android:clickable="true"
-            android:tint="@color/design_default_color_on_secondary"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_baseline_add_24" />
 
-        <TextView
-            android:id="@+id/nameUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/addAvatar"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:textSize="24sp" />
 
-        <LinearLayout
-            android:id="@+id/statusBlock"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/nameUser"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Статус: " />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/settingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/statusBlock"
+            android:layout_below="@id/avatarI"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -252,6 +256,7 @@
 
 
         <LinearLayout
+            android:id="@+id/statistica"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/settingTime"
@@ -282,7 +287,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:text="Выполненные асуны: " />
+                    android:text="Выполненные асаны: " />
 
                 <TextView
                     android:id="@+id/countAsuns"
@@ -291,29 +296,32 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="80dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="TextView" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statistica"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Дыхание"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simpleSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                 android:layout_marginRight="40dp"
+                android:textSize="25sp"
+                android:padding="40dp"/>
         </LinearLayout>
 
     </RelativeLayout>
