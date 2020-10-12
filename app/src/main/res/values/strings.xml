@@ -9,8 +9,6 @@
     <string name="yoga_workout" translatable="false">YOGA WORKOUT</string>
     <string name="time_workout">Время тренировки</string>
     <string name="time_asana">Время асаны</string>
-    <string name="_0_00_00">0:00:00</string>
-    <string name="_00_00">00:00</string>
     <string name="toolbar_title">Настройки</string>
     <string name="coffee">Coffee</string>
     <string name="start_action">Старт</string>
@@ -20,4 +18,15 @@
     <string name="ID">id</string>
     <string name="email">email</string>
     <string name="status">status</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="code">Код</string>
+    <string name="phone">Телефон</string>
+    <string name="send_code">Отправить код</string>
+    <string name="or_sign_in">или войти с помощью</string>
+    <string name="without_sign_in">Войти без регистрации</string>
+    <string name="c_google">Войти c помощью Google</string>
+    <string name="or">или</string>
+    <string name="e_mail_sign_in">Регистрация через E-Mail</string>
 </resources>
