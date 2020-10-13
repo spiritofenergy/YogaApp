@@ -225,6 +225,7 @@ class ProfileFragment : Fragment() {
                         user.name = document["name"].toString()
                         user.id = document["id"].toString()
                         user.email = document["email"].toString()
+                        user.phone = document["phone"].toString()
                         user.status = (document["status"] as Long).toInt()
                         user.sec = (document["sec"] as Long).toInt()
                         user.colorTheme = document["colorTheme"].toString()
@@ -232,11 +233,13 @@ class ProfileFragment : Fragment() {
                         user.photo = document["photo"].toString()
                     }
 
+                    Log.d("phone", user.phone)
+
                     idUser.text = user.id
-                     if (user.email.isNotEmpty()) {
+                     if (user.email != "null") {
                          emailUser.text = user.email
                     } else {
-                         //emailUser.text = user.phone
+                         emailUser.text = user.phone
                      }
                     nameUser.text = user.name
                     countAsuns.text = user.countAsuns.toString()

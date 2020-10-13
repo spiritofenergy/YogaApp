@@ -132,21 +132,23 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.favoriteBut -> {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                val listFragment = FavoriteListFragment()
-                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                if (container.tag == "usual_display") {
-                    with (transaction) {
-                        replace(R.id.fragmentContainer, listFragment)
-                        addToBackStack(null)
-                        commit()
-                    }
-                } else {
-                    findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
-                    with (transaction) {
-                        replace(R.id.list_frag, listFragment)
-                        addToBackStack(null)
-                        commit()
+                if (getCurFragment() != "favorite") {
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    val listFragment = FavoriteListFragment()
+                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                    if (container.tag == "usual_display") {
+                        with(transaction) {
+                            replace(R.id.fragmentContainer, listFragment)
+                            addToBackStack(null)
+                            commit()
+                        }
+                    } else {
+                        findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
+                        with(transaction) {
+                            replace(R.id.list_frag, listFragment)
+                            addToBackStack(null)
+                            commit()
+                        }
                     }
                 }
 
@@ -162,9 +164,11 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.openProfile -> {
-                if (auth.currentUser != null)
-                    openProfile()
-                else {
+                if (auth.currentUser != null) {
+                    if (getCurFragment() != "profile") {
+                        openProfile()
+                    }
+                } else {
                     val intent = Intent(
                         this,
                         SplashActivity::class.java

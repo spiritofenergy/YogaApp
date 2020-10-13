@@ -232,7 +232,7 @@ class ActionFragment : Fragment() {
         timeCur.stop()
         if (isStart)
             curSec = (SystemClock.elapsedRealtime() - timeCur.base).toInt() / -1000
-//        isStart = false
+
         allSec = (SystemClock.elapsedRealtime() - time.base).toInt() / 1000
     }
 
