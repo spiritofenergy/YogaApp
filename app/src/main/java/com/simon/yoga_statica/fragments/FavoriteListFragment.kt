@@ -204,10 +204,18 @@ class FavoriteListFragment : Fragment() {
         if (inter.isLoaded) {
             inter.show()
         } else {
-            Toast.makeText(
-                activity, "Failed.",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            val intent = Intent(
+                activity,
+                ActionActivity::class.java
+            )
+
+            intent.putExtra("list", ArrayList(addsAsuna))
+            addsAsuna.clear()
+            startActivity(intent)
+
+            fab.visibility = View.GONE
+
         }
     }
 }

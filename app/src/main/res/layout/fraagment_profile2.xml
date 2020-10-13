@@ -12,75 +12,77 @@
         android:gravity="center_horizontal">
 
         <LinearLayout
-            android:id="@+id/profile_info"
+            android:id="@+id/avatarI"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/profile_bg_default"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/avatarI"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageAvatar"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    tools:srcCompat="@tools:sample/avatars[0]" />
-            </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/addAvatar"
-                style="@style/Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:tint="@color/design_default_color_on_secondary"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_baseline_add_24" />
-
-            <TextView
-                android:id="@+id/nameUser"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/imageAvatar"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:gravity="center_horizontal"
-                android:textSize="24sp" />
-
+                android:layout_marginLeft="30dp"
+                tools:srcCompat="@tools:sample/avatars[0]" />
             <LinearLayout
-                android:id="@+id/statusBlock"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="@dimen/gnt_text_size_large"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/nameUser"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="Статус: " />
+                    android:text="@string/User"
+                    android:textSize="33sp"></TextView>
+
+                <TextView
+                    android:id="@+id/idUser"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="@string/ID"
+                    android:textSize="20sp">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/emailUser"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="@string/email"
+                    android:textSize="20sp">
+
+                </TextView>
 
                 <TextView
                     android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:text="@string/status"
+                    android:textSize="20sp">
+
+                </TextView>
 
             </LinearLayout>
-
         </LinearLayout>
+
+
+
+
 
         <LinearLayout
             android:id="@+id/settingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/profile_info"
+            android:layout_below="@id/avatarI"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -253,6 +255,7 @@
 
 
         <LinearLayout
+            android:id="@+id/statistica"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/settingTime"
@@ -283,7 +286,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:text="Выполненные асуны: " />
+                    android:text="Выполненные асаны: " />
 
                 <TextView
                     android:id="@+id/countAsuns"
@@ -292,29 +295,125 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <LinearLayout
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/switchDyh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/statistica"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Дыхание"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/switchDyhSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="true"
+                android:padding="40dp"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/ChooseDyh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchDyh"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/dyh1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="80dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="80dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:layout_height="wrap_content"
+                android:text="Дыхание 1" />
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="TextView" />
+            <RadioButton
+                android:id="@+id/dyh2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Дыхание 2" />
+        </RadioGroup>
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/switchMusic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ChooseDyh"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Музыка"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simpleSwitchMusic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="false"
+                android:padding="40dp"
+                android:textSize="25sp" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/ChooseMusic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchMusic"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/music1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Музыка 1" />
+
+            <RadioButton
+                android:id="@+id/music2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Музыка 2" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/switchShava"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ChooseMusic"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Шавасана"
+                android:textSize="35dp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simpleSwitchShava"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="true"
+                android:padding="40dp"
+                android:textSize="25sp" />
         </LinearLayout>
 
     </RelativeLayout>
