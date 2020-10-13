@@ -8,15 +8,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.simon.yoga_statica.classes.Card
-import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import com.simon.yoga_statica.views.AdItemView
 import com.simon.yoga_statica.views.CardItemView
-import java.util.*
 
 class CardAdapter(private val list: List<Any>,private val fragmentManager: FragmentManager) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var listener: OnRecyclerItemClickListener? = null
-    private var openListener: OnClickOpenListener? = null
+    private var addListener: OnRecyclerItemClickListener? = null
+    private var openListener: OnRecyclerItemClickListener? = null
     var cardCount = 0
     var indexAdv = 0
     var countAdv = 0
@@ -24,11 +22,11 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
     private val TYPE_CARD = 1
     private val TYPE_AD = 0
 
-    fun setOnClickItemAddListener(listener: OnRecyclerItemClickListener) {
-        this.listener = listener
+    fun setOnClickAdd(listener: OnRecyclerItemClickListener) {
+        addListener = listener
     }
 
-    fun setOnClickOpen(listener: OnClickOpenListener) {
+    fun setOnClickOpen(listener: OnRecyclerItemClickListener) {
         openListener = listener
     }
 
@@ -39,8 +37,6 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
         }
         return CardItemView(inflater, parent)
      }
-
-
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -59,22 +55,22 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
             card.currentCardNum = position + 1 - (position / (indexAdv + 1))
         else
             card.currentCardNum = position + 1
-        holder.bind(card, fragmentManager)
+        holder.bind(card, fragmentManager, openListener)
 
         holder.addAsuna.setOnClickListener {
-            listener?.onItemClicked(card.id, position)
+            addListener?.onItemClicked(card.id, position)
         }
 
         holder.titleCard.setOnClickListener {
-            openListener?.onClick(card.id, position)
+            openListener?.onItemClicked(card.id, position)
         }
 
         holder.imgFrame.setOnClickListener {
-            openListener?.onClick(card.id, position)
+            openListener?.onItemClicked(card.id, position)
         }
 
         holder.social.setOnClickListener {
-            openListener?.onClick(card.id, position)
+            openListener?.onItemClicked(card.id, position)
         }
 
     }

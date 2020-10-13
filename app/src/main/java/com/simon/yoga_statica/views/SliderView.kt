@@ -19,7 +19,7 @@ import com.simon.yoga_statica.R
 class SliderView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(
     R.layout.slider_image_item, parent, false)) {
 
-    private var image: ImageView = itemView.findViewById(R.id.slider_image)
+    var image: ImageView = itemView.findViewById(R.id.slider_image)
     private val storage = Firebase.storage
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
 

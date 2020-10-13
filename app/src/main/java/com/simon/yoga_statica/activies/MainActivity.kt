@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.activies
 
+import androidx.fragment.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,8 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManagerNonConfig
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
@@ -25,11 +28,11 @@ import com.simon.yoga_statica.fragments.AsunaFragment
 import com.simon.yoga_statica.fragments.AsunaListFragment
 import com.simon.yoga_statica.fragments.FavoriteListFragment
 import com.simon.yoga_statica.fragments.ProfileFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val db = Firebase.firestore
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
@@ -139,6 +142,7 @@ class MainActivity : AppCompatActivity() {
                         commit()
                     }
                 } else {
+                    findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
                     with (transaction) {
                         replace(R.id.list_frag, listFragment)
                         addToBackStack(null)
@@ -190,6 +194,10 @@ class MainActivity : AppCompatActivity() {
         val count = supportFragmentManager.backStackEntryCount
         if (count == 1) supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
+        if (getCurFragment() == "profile" && container.tag != "usual_display") {
+            findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
+        }
+
         Log.d("c", count.toString())
 
         super.onBackPressed()
@@ -207,6 +215,7 @@ class MainActivity : AppCompatActivity() {
                     commit()
                 }
             } else {
+                findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.GONE
                 with (transaction) {
                     replace(R.id.list_frag, listFragment)
                     addToBackStack(null)
@@ -253,6 +262,22 @@ class MainActivity : AppCompatActivity() {
 //                Toast.LENGTH_SHORT
 //            ).show()
 //        }
+    }
+
+    private fun getCurFragment(): String {
+        val fragment: Fragment? = if (container.tag == "usual_display") {
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        } else {
+            supportFragmentManager.findFragmentById(R.id.list_frag)
+        }
+
+        return when (fragment) {
+            is AsunaListFragment -> "main"
+            is FavoriteListFragment -> "favorite"
+            is ProfileFragment -> "profile"
+            is AsunaFragment -> "asana"
+            else -> ""
+        }
     }
 }
 

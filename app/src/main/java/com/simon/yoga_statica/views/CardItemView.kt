@@ -29,6 +29,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.adapters.SliderAdapter
+import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
+import java.text.FieldPosition
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
@@ -63,7 +65,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("HardwareIds", "UseCompatLoadingForDrawables")
 
-    fun bind(card: Card, fragmentManager: FragmentManager) {
+    fun bind(card: Card, fragmentManager: FragmentManager, listener: OnRecyclerItemClickListener?) {
 
         this.fragmentManager = fragmentManager
 
@@ -135,7 +137,12 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             )
         )
         val images = card.thumbPath.split(" ")
-        image.adapter = SliderAdapter(images)
+
+        val sliderAdapter = SliderAdapter(images)
+        if (listener != null)
+            sliderAdapter.setOnClickOpenListener(listener, card.id)
+
+        image.adapter = sliderAdapter
         Log.d("img", images.toString())
 
         thumbnails.child("${images[0]}.jpeg")

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.auth.ktx.auth
@@ -21,6 +22,7 @@ import com.simon.yoga_statica.fragments.SplashFragment
 
 class SplashActivity : AppCompatActivity() {
     private val auth = Firebase.auth
+    private lateinit var container: FrameLayout
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
@@ -64,7 +66,7 @@ class SplashActivity : AppCompatActivity() {
                 }
                 .show()
         }
-
+        container = findViewById(R.id.splashFragment)
         val authR = intent.getBooleanExtra("auth", false)
 
         if (authR)
@@ -91,8 +93,10 @@ class SplashActivity : AppCompatActivity() {
                             )
                         )
                     } else {
-                        Log.d("auth", "NONE")
-                        addAuthFragment()
+                        if (container.tag != "land-x") {
+                            Log.d("auth", "NONE")
+                            addAuthFragment()
+                        }
                     }
                 }
             }
@@ -101,10 +105,20 @@ class SplashActivity : AppCompatActivity() {
 
     private fun addSplashFragment() {
         val listFragment = SplashFragment()
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        var transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         with(transaction) {
             replace(R.id.splashFragment, listFragment)
             commit()
+        }
+        if (container.tag == "land-x") {
+            if (auth.currentUser == null) {
+                val authFragment = AuthFragment()
+                transaction = supportFragmentManager.beginTransaction()
+                with(transaction) {
+                    replace(R.id.authFragment, authFragment)
+                    commit()
+                }
+            }
         }
 
     }

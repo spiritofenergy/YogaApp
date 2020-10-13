@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdListener
@@ -24,7 +23,6 @@ import com.simon.yoga_statica.activies.ActionActivity
 import com.simon.yoga_statica.adapters.CardAdapter
 import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.Card
-import com.simon.yoga_statica.interfaces.OnClickOpenListener
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
 class FavoriteListFragment : Fragment() {
@@ -140,7 +138,7 @@ class FavoriteListFragment : Fragment() {
                                 }
                             }
                             val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
-                            cardAdapter?.setOnClickItemAddListener(object : OnRecyclerItemClickListener {
+                            cardAdapter?.setOnClickAdd(object : OnRecyclerItemClickListener {
                                 override fun onItemClicked(asuna: String, position: Int) {
                                     if (asuna in addsAsuna) {
                                         addsAsuna.removeAt(addsAsuna.indexOf(asuna))
@@ -171,14 +169,17 @@ class FavoriteListFragment : Fragment() {
 
                             })
 
-                            cardAdapter?.setOnClickOpen(object : OnClickOpenListener {
-                                override fun onClick(asuna: String, position: Int) {
+                            cardAdapter?.setOnClickOpen(object : OnRecyclerItemClickListener {
+                                override fun onItemClicked(asuna: String, position: Int) {
                                     val listFragment = AsunaFragment()
                                     listFragment.setAsuna(asuna)
                                     fragmentManager?.beginTransaction()
                                         ?.replace(R.id.fragmentContainer, listFragment)
                                         ?.addToBackStack(null)
                                         ?.commit()
+                                }
+
+                                override fun onItemLongClicked(position: Int) {
                                 }
 
                             })

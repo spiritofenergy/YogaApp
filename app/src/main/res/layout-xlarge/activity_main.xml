@@ -15,5 +15,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:tag="tablet_display"/>
+        android:tag="tablet_display"
+        android:visibility="visible" />
 </LinearLayout>
