@@ -130,18 +130,20 @@ class ActionFragment : Fragment() {
 
             if (sec > 0) {
 
-                startPauseAction.tag = "pause"
-                startPauseAction.text = activity?.resources?.getString(R.string.start_action)
-                curSec = 0
-                isStart = false
+//                startPauseAction.tag = "pause"
+//                startPauseAction.text = activity?.resources?.getString(R.string.start_action)
+//                curSec = 0
+//                isStart = false
 
-                timeCur.stop()
                 timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
                 position += 1
                 if (position < list.size)
                     addAsuna(list[position])
-                else
+                else {
+                    time.stop()
+                    timeCur.stop()
                     openCongratulations()
+                }
             }
         }
 
