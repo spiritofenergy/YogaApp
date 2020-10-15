@@ -47,6 +47,7 @@ class ProfileFragment : Fragment() {
     private lateinit var countAsuns: TextView
     private lateinit var addAvatar: ImageButton
     private lateinit var errorDyh: TextView
+    private lateinit var errorShava: TextView
 
     private lateinit var imageAvatar: ImageView
 
@@ -94,6 +95,7 @@ class ProfileFragment : Fragment() {
 //        addAvatar = rootView.findViewById(R.id.addAvatar)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
         errorDyh = rootView.errorDyh
+        errorShava = rootView.errorShava
 
         radio30 = rootView.findViewById(R.id.radio30)
         radio60 = rootView.findViewById(R.id.radio60)
@@ -124,6 +126,11 @@ class ProfileFragment : Fragment() {
         } else {
             chooseMusic.visibility = View.GONE
         }
+        if (simpleSwitchShava.isChecked) {
+            errorShava.visibility = View.GONE
+        } else {
+            errorShava.visibility = View.VISIBLE
+        }
 
         switchDyhSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -140,6 +147,14 @@ class ProfileFragment : Fragment() {
                 chooseMusic.visibility = View.VISIBLE
             } else {
                 chooseMusic.visibility = View.GONE
+            }
+        }
+
+        simpleSwitchShava.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                errorShava.visibility = View.GONE
+            } else {
+                errorShava.visibility = View.VISIBLE
             }
         }
 

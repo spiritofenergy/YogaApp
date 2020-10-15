@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -118,6 +119,10 @@ class SplashActivity : AppCompatActivity() {
                     replace(R.id.authFragment, authFragment)
                     commit()
                 }
+            } else {
+                val authFragment: FrameLayout = findViewById(R.id.authFragment)
+
+                authFragment.visibility = View.GONE
             }
         }
 

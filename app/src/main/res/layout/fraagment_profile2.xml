@@ -36,7 +36,7 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:text="@string/User"
-                    android:textSize="33sp"></TextView>
+                    android:textSize="33sp" />
 
                 <TextView
                     android:id="@+id/idUser"
@@ -94,7 +94,7 @@
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="80dp"
                 android:gravity="center_horizontal"
-                android:text="Настройки темы"
+                android:text="@string/setting_theme"
                 android:textSize="18sp" />
 
             <RadioGroup
@@ -164,35 +164,35 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Coffee"
-                    android:textSize="18sp"></TextView>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Blue"
-                    android:textSize="18sp"></TextView>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=" Red"
-                    android:textSize="18sp"></TextView>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text=" Orange"
-                    android:textSize="18sp"></TextView>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lime"
-                    android:textSize="18sp"></TextView>
+                    android:textSize="18sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -212,7 +212,7 @@
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="80dp"
                 android:gravity="center_horizontal"
-                android:text="Настройки времени"
+                android:text="@string/setting_time"
                 android:textSize="18sp" />
 
             <RadioGroup
@@ -270,7 +270,7 @@
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="80dp"
                 android:gravity="center_horizontal"
-                android:text="Статистика"
+                android:text="@string/statistic"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -286,7 +286,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:text="Выполненные асаны: " />
+                    android:text="@string/all_count_asana" />
 
                 <TextView
                     android:id="@+id/countAsuns"
@@ -309,7 +309,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Дыхание"
+                android:text="@string/dyh"
                 android:textSize="35dp">
 
             </TextView>
@@ -428,6 +428,19 @@
                 android:padding="40dp"
                 android:textSize="25sp" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/errorShava"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchShava"
+            android:text="@string/add_shava"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/colorAccent_red"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>
