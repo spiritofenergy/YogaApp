@@ -111,7 +111,7 @@ class ActionActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Завершение тренировки")
-                .setMessage("Вы уверены, что хотите завершить тренировку?")
+                .setMessage("Вы уверены, что хотите завершить тренировку? Статистика не сохранится!")
                 .setPositiveButton("Завершить") { dialog, which ->
                     showAdv()
                     super.onBackPressed()

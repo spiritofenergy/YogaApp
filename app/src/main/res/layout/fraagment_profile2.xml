@@ -324,11 +324,24 @@
                 android:textSize="25sp" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/errorDyh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/switchDyh"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="15dp"
+            android:text="@string/add_dyh"
+            android:textColor="@color/colorAccent_red"
+            android:visibility="gone" />
+
         <RadioGroup
             android:id="@+id/ChooseDyh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/switchDyh"
+            android:layout_below="@id/errorDyh"
             android:orientation="vertical">
 
             <RadioButton

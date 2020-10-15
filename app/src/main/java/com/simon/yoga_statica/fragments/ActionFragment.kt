@@ -258,6 +258,7 @@ class ActionFragment : Fragment() {
 
     private fun openCongratulations() {
         val fragment = CongratulationFragment()
+        fragment.setCount(list.size)
         val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
         if (transaction != null)
             with(transaction) {

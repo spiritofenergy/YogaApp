@@ -29,4 +29,5 @@
     <string name="c_google">Войти c помощью Google</string>
     <string name="or">или</string>
     <string name="e_mail_sign_in">Регистрация через E-Mail</string>
+    <string name="add_dyh">Необходимо включить дыхание</string>
 </resources>

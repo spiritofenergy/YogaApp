@@ -59,6 +59,29 @@
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/yogaIcon1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="70dp"
+                android:layout_marginBottom="15dp"
+                android:src="@mipmap/radzhakapotasana" />
+
+            <ImageView
+                android:id="@+id/yogaIcon2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/asanaTitle"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:src="@mipmap/gomukxasana" />
+
 
             <FrameLayout
                 android:id="@+id/imgFrame"

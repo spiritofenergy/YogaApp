@@ -29,6 +29,7 @@ import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
 import kotlinx.android.synthetic.main.fraagment_profile2.*
+import kotlinx.android.synthetic.main.fraagment_profile2.view.*
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
@@ -45,6 +46,7 @@ class ProfileFragment : Fragment() {
     private lateinit var status: TextView
     private lateinit var countAsuns: TextView
     private lateinit var addAvatar: ImageButton
+    private lateinit var errorDyh: TextView
 
     private lateinit var imageAvatar: ImageView
 
@@ -91,6 +93,7 @@ class ProfileFragment : Fragment() {
         status = rootView.findViewById(R.id.status)
 //        addAvatar = rootView.findViewById(R.id.addAvatar)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
+        errorDyh = rootView.errorDyh
 
         radio30 = rootView.findViewById(R.id.radio30)
         radio60 = rootView.findViewById(R.id.radio60)
@@ -111,8 +114,10 @@ class ProfileFragment : Fragment() {
 
         if (switchDyhSwitch.isChecked) {
             chooseDyh.visibility = View.VISIBLE
+            errorDyh.visibility = View.GONE
         } else {
             chooseDyh.visibility = View.GONE
+            errorDyh.visibility = View.VISIBLE
         }
         if (simpleSwitchMusic.isChecked) {
             chooseMusic.visibility = View.VISIBLE
@@ -123,8 +128,10 @@ class ProfileFragment : Fragment() {
         switchDyhSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 chooseDyh.visibility = View.VISIBLE
+                errorDyh.visibility = View.GONE
             } else {
                 chooseDyh.visibility = View.GONE
+                errorDyh.visibility = View.VISIBLE
             }
         }
 
@@ -256,9 +263,9 @@ class ProfileFragment : Fragment() {
 
                     status.text = when (user.status) {
                         1 -> "Новичок"
-                        2 -> ""
-                        3 -> ""
-                        else -> ""
+                        2 -> "Средний"
+                        3 -> "Проффесионал"
+                        else -> "Новичок"
                     }
 
                     when (user.status) {
@@ -361,7 +368,7 @@ class ProfileFragment : Fragment() {
 
     private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
+        intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }

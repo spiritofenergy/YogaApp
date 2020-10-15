@@ -98,6 +98,7 @@ class AsunaListFragment : Fragment() {
                     card.commentsCount = (document.data["comments"] as Long).toInt()
                     card.thumbPath = document.data["thumbPath"].toString()
                     card.shortDesc = document.data["shortDescription"].toString()
+                    card.openImages = document.data["openAsans"].toString().split("")
                     cardsArr.add(card)
                 }
                 var index = 0
@@ -145,6 +146,7 @@ class AsunaListFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
+//                    addsAsuna.addAll(openAsuns)
                     addsAsuna.add(asuna)
                     addsAsuna.sortBy { it }
                     Log.d("list", addsAsuna.toString())
