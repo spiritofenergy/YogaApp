@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.ImageView
@@ -25,8 +27,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
-import com.simon.yoga_statica.classes.Counter
 import kotlinx.android.synthetic.main.fragment_action.view.*
+
 
 class ActionFragment : Fragment() {
 
@@ -42,6 +44,7 @@ class ActionFragment : Fragment() {
 
     lateinit var nameAsuna: TextView
     lateinit var textAsana: TextView
+    private lateinit var partAction: TextView
     lateinit var imageMain: ImageView
     lateinit var time: Chronometer
     lateinit var timeCur: Chronometer
@@ -53,9 +56,6 @@ class ActionFragment : Fragment() {
 
     var curSec: Int = 0
     var allSec: Int = 0
-
-    var curSecPause: Int = 0
-    var allSecPause: Int = 0
 
     var isStart = false
 
@@ -101,6 +101,10 @@ class ActionFragment : Fragment() {
 
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
+
+        partAction = rootView.partAction
+
+        partAction.text = "Основное"
 
         nameAsuna = rootView.findViewById(R.id.nameAsuna)
         textAsana = rootView.descAsana
@@ -168,6 +172,8 @@ class ActionFragment : Fragment() {
                 startPauseAction.text = activity?.resources?.getString(R.string.start_action)
             }
         }
+
+        setUpFadeAnimation(partAction)
 
         addAsuna(list[position])
 
@@ -254,9 +260,28 @@ class ActionFragment : Fragment() {
         val fragment = CongratulationFragment()
         val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
         if (transaction != null)
-            with (transaction) {
+            with(transaction) {
                 replace(R.id.frame_action, fragment)
                 commit()
             }
+    }
+
+    private fun setUpFadeAnimation(textView: TextView) {
+        val fadeIn: Animation = AlphaAnimation(0.0f, 1.0f)
+        fadeIn.duration = 1000
+
+        val fadeOut: Animation = AlphaAnimation(1.0f, 0.0f)
+        fadeOut.duration = 1000
+        fadeOut.startOffset = 8000
+        fadeIn.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationEnd(arg0: Animation) {
+                textView.startAnimation(fadeOut)
+            }
+
+            override fun onAnimationRepeat(arg0: Animation) {}
+            override fun onAnimationStart(arg0: Animation) {}
+        })
+
+        textView.startAnimation(fadeIn)
     }
 }

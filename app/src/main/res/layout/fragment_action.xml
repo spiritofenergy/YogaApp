@@ -22,9 +22,21 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/partAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+            <TextView
                 android:id="@+id/nameAsuna"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/partAction"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/design_default_color_on_secondary"
