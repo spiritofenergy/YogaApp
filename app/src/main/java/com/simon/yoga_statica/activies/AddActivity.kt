@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -28,6 +29,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.adapters.SliderAdapter
 
 class AddActivity : AppCompatActivity() {
 
@@ -39,13 +41,16 @@ class AddActivity : AppCompatActivity() {
     private var photo = false
     private var count = 0
 
-    private var images = ""
+    private var images: MutableList<String> = mutableListOf()
+    private var imagesStr = ""
 
     private lateinit var addTitle: EditText
     private lateinit var addShortAsuns: EditText
     private lateinit var addLongAsuns: EditText
     private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
+
+    private lateinit var addedImage: ViewPager2
 
     private lateinit var auth: FirebaseAuth
 
@@ -92,6 +97,7 @@ class AddActivity : AppCompatActivity() {
         addLongAsuns = findViewById(R.id.addLongAsuns)
         addImage = findViewById(R.id.addImage)
         addAsuns = findViewById(R.id.addAsuns)
+        addedImage = findViewById(R.id.addedImage)
         addAsuns.background = ContextCompat.getDrawable(
             this,
             resources.getIdentifier(
@@ -202,12 +208,16 @@ class AddActivity : AppCompatActivity() {
                 RESULT_IMAGE -> {
                     val selectedImageUri: Uri? = data?.data
 
-                    Log.d("images", images)
+                    Log.d("images", images.toString())
 
                     if (selectedImageUri != null) {
                         val upload: UploadTask = avatars
                             .child("thumbnails/asuna${count}.jpeg")
                             .putFile(selectedImageUri)
+
+                        images.add("asuna${count}")
+                        imagesStr = images.joinToString(separator = " ")
+
                         Log.d("imagesOne", "true")
                         val urlTask = upload.continueWithTask { task ->
                             if (!task.isSuccessful) {
@@ -221,7 +231,9 @@ class AddActivity : AppCompatActivity() {
                                 val downloadUri = task.result
                                 photo = true
 
-                                images = "asuna${count}"
+                                Log.d("urls", images.joinToString())
+
+                                addedImage.adapter = SliderAdapter(images)
                             } else {
                                 Toast.makeText(
                                     this, "Upload image failed.",
@@ -229,19 +241,20 @@ class AddActivity : AppCompatActivity() {
                                 ).show()
                             }
                         }
+
                     } else {
                         val clipData: ClipData? = data?.clipData
 
                         if (clipData != null) {
                             Log.d("imagesNoNe", "true")
-                            // Add to Array And Storage
-                            // Add Delete
-                            // If delete -> Delete from Storage
-                            // Add New ImageViews By Array
+
                             for (i in 0 until clipData.itemCount) {
                                 val upload: UploadTask = avatars
                                     .child("thumbnails/asuna${count}_${i}.jpeg")
                                     .putFile(clipData.getItemAt(i).uri)
+
+                                images.add("asuna${count}_${i}")
+                                imagesStr = images.joinToString(separator = " ")
 
                                 val urlTask = upload.continueWithTask { task ->
                                     if (!task.isSuccessful) {
@@ -255,8 +268,6 @@ class AddActivity : AppCompatActivity() {
                                         val downloadUri = task.result
                                         photo = true
 
-                                        images += "asuna${count}_${i} "
-                                        Log.d("images", images)
                                     } else {
                                         Toast.makeText(
                                             this, "Upload image failed.",
@@ -264,7 +275,7 @@ class AddActivity : AppCompatActivity() {
                                         ).show()
                                     }
                                 }
-                                Log.d("images", images)
+                                addedImage.adapter = SliderAdapter(images)
                             }
                         }
                     }
@@ -308,7 +319,7 @@ class AddActivity : AppCompatActivity() {
             .set(hashMapOf(
                 "comments" to 0,
                 "likes" to 0,
-                "thumbPath" to images,
+                "thumbPath" to imagesStr,
                 "title" to addTitle.text.toString(),
                 "shortDescription" to addShortAsuns.text.toString(),
                 "description" to addLongAsuns.text.toString()
