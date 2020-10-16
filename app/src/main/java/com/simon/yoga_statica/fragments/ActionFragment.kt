@@ -53,11 +53,13 @@ class ActionFragment : Fragment() {
 
     var x: Int = 0
     var position: Int = 0
+    var countAll = 0
 
     var curSec: Int = 0
     var allSec: Int = 0
 
     var isStart = false
+    var closeExist = true
 
     private val IS_START = "isStart"
     private val CURRENT_SECOND = "currentSecond"
@@ -68,6 +70,7 @@ class ActionFragment : Fragment() {
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_COUNT = "count"
     private val APP_PREFERENCES_FRAGMENT = "fragment"
+    private val APP_PREFERENCES_SHAVA = "shava"
 
     private lateinit var rootView: View
 
@@ -102,6 +105,9 @@ class ActionFragment : Fragment() {
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
 
+        countAll = list.size
+        if (closeExist) countAll++
+
         partAction = rootView.partAction
 
         partAction.text = "Основное"
@@ -129,24 +135,31 @@ class ActionFragment : Fragment() {
             }
         }
 
+        closeExist = if (!prefs.contains(APP_PREFERENCES_SHAVA)) {
+            true
+        } else {
+            prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
+        }
+
         timeCur.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val sec = SystemClock.elapsedRealtime() - it.base
 
             if (sec > 0) {
-
-//                startPauseAction.tag = "pause"
-//                startPauseAction.text = activity?.resources?.getString(R.string.start_action)
-//                curSec = 0
-//                isStart = false
-
                 timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
                 position += 1
                 if (position < list.size)
                     addAsuna(list[position])
                 else {
-                    time.stop()
-                    timeCur.stop()
-                    openCongratulations()
+                    if (!closeExist) {
+                        time.stop()
+                        timeCur.stop()
+                        openCongratulations()
+                    } else {
+                        closeExist = false
+                        partAction.text = "Заключение"
+                        setUpFadeAnimation(partAction)
+                        addAsuna(activity?.resources?.getString(R.string.shava_id)!!)
+                    }
                 }
             }
         }
@@ -258,7 +271,7 @@ class ActionFragment : Fragment() {
 
     private fun openCongratulations() {
         val fragment = CongratulationFragment()
-        fragment.setCount(list.size)
+        fragment.setCount(countAll)
         val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
         if (transaction != null)
             with(transaction) {
@@ -279,8 +292,8 @@ class ActionFragment : Fragment() {
                 textView.startAnimation(fadeOut)
             }
 
-            override fun onAnimationRepeat(arg0: Animation) {}
-            override fun onAnimationStart(arg0: Animation) {}
+            override fun onAnimationRepeat(arg: Animation) {}
+            override fun onAnimationStart(arg: Animation) {}
         })
 
         textView.startAnimation(fadeIn)

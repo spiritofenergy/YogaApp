@@ -195,7 +195,7 @@ class AddActivity : AppCompatActivity() {
 
     private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
+        intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }

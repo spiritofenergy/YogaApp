@@ -73,6 +73,9 @@ class ProfileFragment : Fragment() {
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
     private val APP_PREFERENCES_COUNT = "count"
+    private val APP_PREFERENCES_SHAVA = "shava"
+    private val APP_PREFERENCES_DYH = "dyh"
+    private val APP_PREFERENCES_MUSIC = "shava"
     private val RESULT_IMAGE = 3214
 
     override fun onCreateView(
@@ -136,25 +139,49 @@ class ProfileFragment : Fragment() {
             if (isChecked) {
                 chooseDyh.visibility = View.VISIBLE
                 errorDyh.visibility = View.GONE
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_DYH, "")
+                    .apply()
             } else {
                 chooseDyh.visibility = View.GONE
                 errorDyh.visibility = View.VISIBLE
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_DYH, "off")
+                    .apply()
             }
         }
 
         simpleSwitchMusic.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_MUSIC, "")
+                    .apply()
                 chooseMusic.visibility = View.VISIBLE
             } else {
                 chooseMusic.visibility = View.GONE
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_MUSIC, "off")
+                    .apply()
             }
         }
 
         simpleSwitchShava.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 errorShava.visibility = View.GONE
+                prefs
+                    .edit()
+                    .putBoolean(APP_PREFERENCES_SHAVA, true)
+                    .apply()
             } else {
                 errorShava.visibility = View.VISIBLE
+                prefs
+                    .edit()
+                    .putBoolean(APP_PREFERENCES_SHAVA, false)
+                    .apply()
             }
         }
 

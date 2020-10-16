@@ -153,13 +153,13 @@ class AuthFragment : Fragment() {
         val user = hashMapOf(
             "id" to currentUser?.uid.toString().trim(),
             "email" to currentUser?.email.toString().trim(),
-            "name" to "User",
+            "name" to auth.currentUser?.displayName,
             "root" to "user",
             "countAsuns" to 0,
             "status" to 1,
             "sec" to 30,
             "colorTheme" to "default",
-            "photo" to ""
+            "photo" to auth.currentUser?.photoUrl.toString()
         )
 
         db.collection("users")
