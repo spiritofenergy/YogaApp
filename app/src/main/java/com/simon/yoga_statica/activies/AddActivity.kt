@@ -1,12 +1,8 @@
 package com.simon.yoga_statica.activies
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -16,14 +12,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -37,7 +28,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
-import com.simon.yoga_statica.fragments.FavoriteListFragment
 
 class AddActivity : AppCompatActivity() {
 
@@ -49,10 +39,12 @@ class AddActivity : AppCompatActivity() {
     private var photo = false
     private var count = 0
 
+    private var images = ""
+
     private lateinit var addTitle: EditText
     private lateinit var addShortAsuns: EditText
     private lateinit var addLongAsuns: EditText
-    private lateinit var addImage: ImageView
+    private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
 
     private lateinit var auth: FirebaseAuth
@@ -193,9 +185,11 @@ class AddActivity : AppCompatActivity() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
@@ -207,11 +201,14 @@ class AddActivity : AppCompatActivity() {
             when (requestCode) {
                 RESULT_IMAGE -> {
                     val selectedImageUri: Uri? = data?.data
+
+                    Log.d("images", images)
+
                     if (selectedImageUri != null) {
                         val upload: UploadTask = avatars
                             .child("thumbnails/asuna${count}.jpeg")
                             .putFile(selectedImageUri)
-
+                        Log.d("imagesOne", "true")
                         val urlTask = upload.continueWithTask { task ->
                             if (!task.isSuccessful) {
                                 task.exception?.let {
@@ -223,32 +220,51 @@ class AddActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
                                 photo = true
-                                openAvatar(downloadUri)
 
-                                db.collection("users")
-                                    .whereEqualTo("id", auth.currentUser?.uid)
-                                    .get()
-                                    .addOnSuccessListener { documents ->
-                                        if (!documents.isEmpty) {
-                                            for (document in documents) {
-                                                db.collection("users")
-                                                    .document(document.id)
-                                                    .update("photo", downloadUri.toString())
-                                            }
-
-
-                                        }
-
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        Log.w("home", "Error getting documents: ", exception)
-                                    }
-
+                                images = "asuna${count}"
                             } else {
                                 Toast.makeText(
                                     this, "Upload image failed.",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                            }
+                        }
+                    } else {
+                        val clipData: ClipData? = data?.clipData
+
+                        if (clipData != null) {
+                            Log.d("imagesNoNe", "true")
+                            // Add to Array And Storage
+                            // Add Delete
+                            // If delete -> Delete from Storage
+                            // Add New ImageViews By Array
+                            for (i in 0 until clipData.itemCount) {
+                                val upload: UploadTask = avatars
+                                    .child("thumbnails/asuna${count}_${i}.jpeg")
+                                    .putFile(clipData.getItemAt(i).uri)
+
+                                val urlTask = upload.continueWithTask { task ->
+                                    if (!task.isSuccessful) {
+                                        task.exception?.let {
+                                            throw it
+                                        }
+                                    }
+                                    avatars.child("thumbnails/asuna${count}.jpeg").downloadUrl
+                                }.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val downloadUri = task.result
+                                        photo = true
+
+                                        images += "asuna${count}_${i} "
+                                        Log.d("images", images)
+                                    } else {
+                                        Toast.makeText(
+                                            this, "Upload image failed.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                                Log.d("images", images)
                             }
                         }
                     }
@@ -257,34 +273,34 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    private fun openAvatar(downloadUri: Uri) {
-        Glide.with(this)
-            .load(downloadUri)
-            .listener( object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    addImage.scaleType = ImageView.ScaleType.FIT_CENTER
-
-                    return false
-                }
-
-            })
-            .into(addImage)
-    }
+//    private fun openAvatar(downloadUri: Uri) {
+//        Glide.with(this)
+//            .load(downloadUri)
+//            .listener( object : RequestListener<Drawable> {
+//                override fun onLoadFailed(
+//                    e: GlideException?,
+//                    model: Any?,
+//                    target: Target<Drawable>?,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    return false
+//                }
+//
+//                override fun onResourceReady(
+//                    resource: Drawable?,
+//                    model: Any?,
+//                    target: Target<Drawable>?,
+//                    dataSource: DataSource?,
+//                    isFirstResource: Boolean
+//                ): Boolean {
+//                    addImage.scaleType = ImageView.ScaleType.FIT_CENTER
+//
+//                    return false
+//                }
+//
+//            })
+//            .into(addImage)
+//    }
 
     private fun addAsunaInFire() {
         db.collection("asunaRU")
@@ -292,7 +308,7 @@ class AddActivity : AppCompatActivity() {
             .set(hashMapOf(
                 "comments" to 0,
                 "likes" to 0,
-                "thumbPath" to "asuna${count}",
+                "thumbPath" to images,
                 "title" to addTitle.text.toString(),
                 "shortDescription" to addShortAsuns.text.toString(),
                 "description" to addLongAsuns.text.toString()
