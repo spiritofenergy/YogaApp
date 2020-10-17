@@ -1,10 +1,13 @@
 package com.simon.yoga_statica.adapters
 
 import android.content.Context
+import android.os.Build
 
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import com.simon.yoga_statica.views.SliderView
@@ -24,6 +27,7 @@ class SliderAdapter(private val images: List<String>) : RecyclerView.Adapter<Sli
         return SliderView(inflater, parent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: SliderView, position: Int) {
         holder.bind(images[position])
 

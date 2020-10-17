@@ -206,16 +206,21 @@ class AddActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 RESULT_IMAGE -> {
+                    for (item in images) {
+                        avatars.child("thumbnails/$item.jpeg").delete()
+                    }
+                    images.clear()
                     val selectedImageUri: Uri? = data?.data
 
                     Log.d("images", images.toString())
 
                     if (selectedImageUri != null) {
+                        val nameImg = getRandomString(16)
                         val upload: UploadTask = avatars
-                            .child("thumbnails/asuna${count}.jpeg")
+                            .child("thumbnails/$nameImg.jpeg")
                             .putFile(selectedImageUri)
 
-                        images.add("asuna${count}")
+                        images.add(nameImg)
                         imagesStr = images.joinToString(separator = " ")
 
                         Log.d("imagesOne", "true")
@@ -225,7 +230,7 @@ class AddActivity : AppCompatActivity() {
                                     throw it
                                 }
                             }
-                            avatars.child("thumbnails/asuna${count}.jpeg").downloadUrl
+                            avatars.child("thumbnails/$nameImg.jpeg").downloadUrl
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
@@ -236,7 +241,7 @@ class AddActivity : AppCompatActivity() {
                                 addedImage.adapter = SliderAdapter(images)
                             } else {
                                 Toast.makeText(
-                                    this, "Upload image failed.",
+                                    this, "Upload image failed. ${task.exception}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -249,11 +254,12 @@ class AddActivity : AppCompatActivity() {
                             Log.d("imagesNoNe", "true")
 
                             for (i in 0 until clipData.itemCount) {
+                                val nameImg = getRandomString(16)
                                 val upload: UploadTask = avatars
-                                    .child("thumbnails/asuna${count}_${i}.jpeg")
+                                    .child("thumbnails/$nameImg.jpeg")
                                     .putFile(clipData.getItemAt(i).uri)
 
-                                images.add("asuna${count}_${i}")
+                                images.add(nameImg)
                                 imagesStr = images.joinToString(separator = " ")
 
                                 val urlTask = upload.continueWithTask { task ->
@@ -262,20 +268,19 @@ class AddActivity : AppCompatActivity() {
                                             throw it
                                         }
                                     }
-                                    avatars.child("thumbnails/asuna${count}.jpeg").downloadUrl
+                                    avatars.child("thumbnails/$nameImg.jpeg").downloadUrl
                                 }.addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         val downloadUri = task.result
                                         photo = true
-
+                                        addedImage.adapter = SliderAdapter(images)
                                     } else {
                                         Toast.makeText(
-                                            this, "Upload image failed.",
+                                            this, "Upload image failed. ${task.exception?.message}",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
                                 }
-                                addedImage.adapter = SliderAdapter(images)
                             }
                         }
                     }
@@ -312,6 +317,13 @@ class AddActivity : AppCompatActivity() {
 //            })
 //            .into(addImage)
 //    }
+
+    private fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
+    }
 
     private fun addAsunaInFire() {
         db.collection("asunaRU")

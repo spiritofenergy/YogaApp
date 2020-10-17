@@ -32,4 +32,15 @@ class AdvController(private val ctx: Context) {
 
         listening.Adloader = adLoad
     }
+
+    fun createUnifiedAd(unitid: Int, listening: AdUnifiedListening) {
+        val builder: AdLoader.Builder =  AdLoader.Builder(ctx, ctx.getString(unitid))
+        builder.forUnifiedNativeAd(listening)
+        builder.withAdListener(listening)
+
+        val adLoad: AdLoader = builder.build()
+        adLoad.loadAd(AdRequest.Builder().build())
+
+        listening.Adloader = adLoad
+    }
 }

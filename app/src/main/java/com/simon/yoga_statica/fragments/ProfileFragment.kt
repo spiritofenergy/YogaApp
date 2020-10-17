@@ -374,7 +374,9 @@ class ProfileFragment : Fragment() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
 
-                                openAvatar(downloadUri)
+                                if (isAdded) {
+                                    openAvatar(downloadUri)
+                                }
 
                                 db.collection("users")
                                     .whereEqualTo("id", auth.currentUser?.uid)
@@ -412,7 +414,7 @@ class ProfileFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
+        startActivityForResult(Intent.createChooser(intent, "Выберите изображения"), RESULT_IMAGE)
     }
 
     private fun openAvatar(downloadUri: Uri) {

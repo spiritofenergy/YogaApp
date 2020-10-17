@@ -33,7 +33,6 @@ import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import java.text.FieldPosition
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
-    private var progressBar: ProgressBar = itemView.findViewById(R.id.progressBarRecyclerView)
     private var counterTwo: TextView = itemView.findViewById(R.id.counterTwo)
     private var counterFirst: TextView = itemView.findViewById(R.id.counterFirst)
     var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
@@ -62,9 +61,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    @SuppressLint("HardwareIds", "UseCompatLoadingForDrawables")
-
     fun bind(card: Card, fragmentManager: FragmentManager, listener: OnRecyclerItemClickListener?) {
 
         this.fragmentManager = fragmentManager
@@ -85,15 +81,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 "coffee" -> "coffee"
                 else     -> "default"
             }
-        }
-
-        progressBar.indeterminateDrawable = when (theme) {
-            "default" -> parent.context.getDrawable(R.drawable.spinner_ring)
-            "red" -> parent.context.getDrawable(R.drawable.spinner_ring_red)
-            "orange" -> parent.context.getDrawable(R.drawable.spinner_ring_orange)
-            "green" -> parent.context.getDrawable(R.drawable.spinner_ring_green)
-            "coffee" -> parent.context.getDrawable(R.drawable.spinner_ring_coffee)
-            else ->  parent.context.getDrawable(R.drawable.spinner_ring)
         }
 
         counterTwo.text = card.currentCardNum.toString()
@@ -150,29 +137,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
             .addOnSuccessListener {
                 Glide.with(parent.context)
                     .load(it)
-                    .listener( object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            progressBar.visibility = View.GONE
-
-                            return false
-                        }
-
-                    })
                     .into(yogaIconGrand)
             }.addOnFailureListener { exception ->
                 Log.d("log", "get failed with ", exception)

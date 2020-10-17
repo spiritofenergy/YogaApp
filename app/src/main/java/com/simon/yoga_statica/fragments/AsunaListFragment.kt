@@ -20,6 +20,7 @@ import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.ActionActivity
 import com.simon.yoga_statica.activies.MainActivity
 import com.simon.yoga_statica.adapters.CardAdapter
+import com.simon.yoga_statica.classes.Ad
 import com.simon.yoga_statica.classes.AdUnifiedListening
 import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.Card
@@ -105,28 +106,17 @@ class AsunaListFragment : Fragment() {
                 count = i
 
                 indexAdv = count / 3
-                advController.createUnifiedAds(
-                    indexAdv,
-                    R.string.ads_native_uid,
-                    object : AdUnifiedListening() {
-                        override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
-                            if (ads != null) {
-                                index += 3
-                                try {
-                                    cardsArr.add(index, ads)
-                                } catch (e: IndexOutOfBoundsException) {
-                                    Log.d("e", e.toString())
-                                }
-                                index += 1
-                            }
 
-                            if (!Adloader.isLoading) {
-                                getAdapter()
-                            }
-                        }
-                    })
+                for (counter in 0 until indexAdv) {
+                    index += 3
+                    val ad = Ad()
+                    ad.ad = "Ad"
+                    cardsArr.add(index, ad)
 
+                    index += 1
+                }
 
+                getAdapter()
             }
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)

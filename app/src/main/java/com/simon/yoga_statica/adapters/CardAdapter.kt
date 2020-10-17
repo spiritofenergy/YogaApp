@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.simon.yoga_statica.classes.Ad
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import com.simon.yoga_statica.views.AdItemView
@@ -44,7 +45,7 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
 
         if (viewType == TYPE_AD) {
             holder as AdItemView
-            holder.bind(list[position] as UnifiedNativeAd)
+            holder.bind()
 
             return
         }
@@ -77,6 +78,6 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
     override fun getItemCount(): Int = list.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (list[position] is UnifiedNativeAd) TYPE_AD else TYPE_CARD
+        return if (list[position] is Ad) TYPE_AD else TYPE_CARD
     }
 }
