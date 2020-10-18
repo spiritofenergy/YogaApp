@@ -41,7 +41,6 @@ class CongratulationFragment : Fragment() {
                     for (document in documents) {
 
                         val countAsunsUser = (document["countAsuns"] as Long).toInt()
-                        Log.d("asuns", countAsunsUser.toString())
 
                         if (countAsunsUser + countAsuns >= 100) {
                             db.collection("users")

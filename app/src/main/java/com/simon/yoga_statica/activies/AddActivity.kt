@@ -173,6 +173,9 @@ class AddActivity : AppCompatActivity() {
                 .setTitle("Завершение добавления асуны")
                 .setMessage("Вы уверены, что хотите завершить добавление?")
                 .setPositiveButton("Завершить") { _, _ ->
+                    for (item in images) {
+                        avatars.child("thumbnails/$item.jpeg").delete()
+                    }
                     super.onBackPressed()
                 }
                 .setNegativeButton("Нет") { _, _ ->
@@ -215,7 +218,7 @@ class AddActivity : AppCompatActivity() {
                     Log.d("images", images.toString())
 
                     if (selectedImageUri != null) {
-                        val nameImg = getRandomString(16)
+                        val nameImg = getRandomString(28)
                         val upload: UploadTask = avatars
                             .child("thumbnails/$nameImg.jpeg")
                             .putFile(selectedImageUri)
@@ -254,7 +257,7 @@ class AddActivity : AppCompatActivity() {
                             Log.d("imagesNoNe", "true")
 
                             for (i in 0 until clipData.itemCount) {
-                                val nameImg = getRandomString(16)
+                                val nameImg = getRandomString(28)
                                 val upload: UploadTask = avatars
                                     .child("thumbnails/$nameImg.jpeg")
                                     .putFile(clipData.getItemAt(i).uri)

@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -45,6 +46,7 @@ class ProfileFragment : Fragment() {
     private lateinit var nameUser: TextView
     private lateinit var status: TextView
     private lateinit var countAsuns: TextView
+    private lateinit var phoneUser: TextView
     private lateinit var addAvatar: ImageButton
     private lateinit var errorDyh: TextView
     private lateinit var errorShava: TextView
@@ -93,6 +95,7 @@ class ProfileFragment : Fragment() {
 
         idUser = rootView.findViewById(R.id.idUser)
         emailUser = rootView.findViewById(R.id.emailUser)
+        phoneUser = rootView.phoneUser
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
 //        addAvatar = rootView.findViewById(R.id.addAvatar)
@@ -265,43 +268,65 @@ class ProfileFragment : Fragment() {
             getImage()
         }
 
+        user.name = auth.currentUser?.displayName.toString()
+        user.id = auth.currentUser?.uid.toString()
+        user.email = auth.currentUser?.email
+        user.phone = auth.currentUser?.phoneNumber
+        user.photo = auth.currentUser?.photoUrl
+
+        idUser.text = user.id
+        emailUser.text = user.email
+        phoneUser.text = user.phone
+
+        if (user.email == "") {
+            emailUser.visibility = View.GONE
+        }
+        if (user.phone == "") {
+            phoneUser.visibility = View.GONE
+        }
+        nameUser.text = user.name
+
+        val photo = user.photo
+        if (photo == null) {
+            imageAvatar.setImageResource(R.mipmap.ic_launcher)
+        } else {
+            openAvatar(photo)
+        }
+
+        if (!prefs.contains(APP_PREFERENCES_COUNT)) {
+            radio30.isChecked = true
+        } else {
+            when (prefs.getInt(APP_PREFERENCES_COUNT, 30)) {
+                30 -> radio30.isChecked = true
+                60 -> radio60.isChecked = true
+                90 -> radio90.isChecked = true
+            }
+        }
+
+        if (!prefs.contains(APP_PREFERENCES_THEME)) {
+            radioDefault.isChecked = true
+        } else {
+            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
+
+                "default" -> radioDefault.isChecked = true
+                "red" -> radioRed.isChecked = true
+                "orange" -> radioOrange.isChecked = true
+                "green" -> radioGreen.isChecked = true
+                "coffee" -> radioCoffee.isChecked = true
+            }
+        }
+
         db.collection("users")
             .whereEqualTo("id", auth.currentUser?.uid)
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
                     for (document in documents) {
-                        user.name = document["name"].toString()
-                        user.id = document["id"].toString()
-                        user.email = document["email"].toString()
-                        user.phone = document["phone"].toString()
                         user.status = (document["status"] as Long).toInt()
-                        user.sec = (document["sec"] as Long).toInt()
-                        user.colorTheme = document["colorTheme"].toString()
                         user.countAsuns = (document["countAsuns"] as Long).toInt()
-                        user.photo = document["photo"].toString()
                     }
 
-                    Log.d("phone", user.phone)
-
-                    idUser.text = user.id
-                     if (user.email != "null") {
-                         emailUser.text = user.email
-                    } else {
-                         emailUser.text = user.phone
-                     }
-                    nameUser.text = user.name
                     countAsuns.text = user.countAsuns.toString()
-
-                    if (user.photo == "") {
-                        imageAvatar.setImageResource(R.mipmap.ic_launcher)
-                    } else {
-                        val downloadUri: Uri = Uri.parse(user.photo)
-                        openAvatar(downloadUri)
-                    }
-
-                    Log.d("email", user.email)
-                    Log.d("st", user.status.toString())
 
                     status.text = when (user.status) {
                         1 -> "Новичок"
@@ -317,31 +342,7 @@ class ProfileFragment : Fragment() {
                             radio90.visibility = View.VISIBLE
                         }
                     }
-
-                    if (!prefs.contains(APP_PREFERENCES_COUNT)) {
-                        radio30.isChecked = true
-                    } else {
-                        when (prefs.getInt(APP_PREFERENCES_COUNT, 30)) {
-                            30 -> radio30.isChecked = true
-                            60 -> radio60.isChecked = true
-                            90 -> radio90.isChecked = true
-                        }
-                    }
-
-                    if (!prefs.contains(APP_PREFERENCES_THEME)) {
-                        radioDefault.isChecked = true
-                    } else {
-                        when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-
-                            "default" -> radioDefault.isChecked = true
-                            "red" -> radioRed.isChecked = true
-                            "orange" -> radioOrange.isChecked = true
-                            "green" -> radioGreen.isChecked = true
-                            "coffee" -> radioCoffee.isChecked = true
-                        }
-                    }
                 }
-
             }
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
@@ -378,25 +379,10 @@ class ProfileFragment : Fragment() {
                                     openAvatar(downloadUri)
                                 }
 
-                                db.collection("users")
-                                    .whereEqualTo("id", auth.currentUser?.uid)
-                                    .get()
-                                    .addOnSuccessListener { documents ->
-                                        if (!documents.isEmpty) {
-                                            for (document in documents) {
-                                                db.collection("users")
-                                                    .document(document.id)
-                                                    .update("photo", downloadUri.toString())
-                                            }
-
-
-                                        }
-
-                                    }
-                                    .addOnFailureListener { exception ->
-                                        Log.w("home", "Error getting documents: ", exception)
-                                    }
-
+                                val profileUpdates = userProfileChangeRequest {
+                                  photoUri = downloadUri
+                                }
+                                auth.currentUser!!.updateProfile(profileUpdates)
                             } else {
                                 Toast.makeText(
                                     activity, "Upload image failed.",

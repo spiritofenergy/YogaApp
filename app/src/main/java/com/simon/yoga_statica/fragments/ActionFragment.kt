@@ -105,9 +105,6 @@ class ActionFragment : Fragment() {
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
 
-        countAll = list.size
-        if (closeExist) countAll++
-
         partAction = rootView.partAction
 
         partAction.text = "Основное"
@@ -140,6 +137,9 @@ class ActionFragment : Fragment() {
         } else {
             prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
         }
+
+        countAll = list.size
+        if (closeExist) countAll++
 
         timeCur.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val sec = SystemClock.elapsedRealtime() - it.base

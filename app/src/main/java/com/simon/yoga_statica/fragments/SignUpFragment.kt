@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
@@ -67,6 +68,13 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     Log.d("auth", "createUserWithEmail:success")
                     val user = auth.currentUser
+
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = name
+                    }
+
+                    user!!.updateProfile(profileUpdates)
+
                     addUserToDatabase(user)
 
                     openMain()
@@ -81,14 +89,9 @@ class SignUpFragment : Fragment() {
     private fun addUserToDatabase(currentUser: FirebaseUser?) {
         val user = hashMapOf(
             "id" to currentUser?.uid.toString().trim(),
-            "email" to currentUser?.email.toString().trim(),
-            "name" to name,
             "root" to "user",
             "countAsuns" to 0,
-            "status" to 1,
-            "sec" to 30,
-            "colorTheme" to "default",
-            "photo" to ""
+            "status" to 1
         )
 
         db.collection("users")

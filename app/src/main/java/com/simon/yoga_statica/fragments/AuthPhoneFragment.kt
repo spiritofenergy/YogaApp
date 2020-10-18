@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
@@ -128,6 +129,12 @@ class AuthPhoneFragment : Fragment() {
                     Log.d("auth", "signInWithCredential:success")
 
                     val user = task.result?.user
+
+                    val profileUpdates = userProfileChangeRequest {
+                        displayName = "User"
+                    }
+                    user!!.updateProfile(profileUpdates)
+
                     addUserToDatabase(user)
 
                     openMain()
@@ -145,14 +152,9 @@ class AuthPhoneFragment : Fragment() {
     private fun addUserToDatabase(currentUser: FirebaseUser?) {
         val user = hashMapOf(
             "id" to currentUser?.uid.toString().trim(),
-            "phone" to currentUser?.phoneNumber.toString().trim(),
-            "name" to "User",
             "root" to "user",
             "countAsuns" to 0,
-            "status" to 1,
-            "sec" to 30,
-            "colorTheme" to "default",
-            "photo" to ""
+            "status" to 1
         )
 
         db.collection("users")

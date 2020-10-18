@@ -61,6 +61,8 @@ class AsunaFragment : Fragment() {
         val rootView: View = inflater.inflate(R.layout.fragment_asuna, container, false)
 
         auth = Firebase.auth
+        if (auth.currentUser != null)
+            name = auth.currentUser?.displayName.toString()
 
         title = rootView.findViewById(R.id.textTitle)
         textDescription = rootView.findViewById(R.id.textDescription)
@@ -87,20 +89,6 @@ class AsunaFragment : Fragment() {
             }
             .addOnFailureListener { exception ->
                 Log.w("gets", "Error getting documents.", exception)
-            }
-
-        db.collection("users")
-            .whereEqualTo("id", auth.currentUser?.uid)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (document in documents) {
-                        name = document["name"].toString()
-                    }
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("home", "Error getting documents: ", exception)
             }
 
         db.collection("comments")
