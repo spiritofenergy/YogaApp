@@ -98,7 +98,6 @@ class ProfileFragment : Fragment() {
         phoneUser = rootView.phoneUser
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
-//        addAvatar = rootView.findViewById(R.id.addAvatar)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
         errorDyh = rootView.errorDyh
         errorShava = rootView.errorShava
@@ -119,6 +118,8 @@ class ProfileFragment : Fragment() {
         switchDyhSwitch = rootView.findViewById(R.id.switchDyhSwitch)
         simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
+
+        simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
 
         if (switchDyhSwitch.isChecked) {
             chooseDyh.visibility = View.VISIBLE
