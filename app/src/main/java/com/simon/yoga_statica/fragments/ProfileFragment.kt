@@ -31,6 +31,7 @@ import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
 import kotlinx.android.synthetic.main.fraagment_profile2.*
 import kotlinx.android.synthetic.main.fraagment_profile2.view.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
@@ -71,6 +72,8 @@ class ProfileFragment : Fragment() {
     private lateinit var switchDyhSwitch: Switch
     private lateinit var simpleSwitchMusic: Switch
     private lateinit var simpleSwitchShava: Switch
+
+    private lateinit var openDialog: Button
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
@@ -120,6 +123,12 @@ class ProfileFragment : Fragment() {
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
 
         simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
+
+        openDialog = rootView.openDialog
+        openDialog.setOnClickListener {
+            val dialog = EditDialogFragment()
+            dialog.show(fragmentManager!!, "edit_profile")
+        }
 
         if (switchDyhSwitch.isChecked) {
             chooseDyh.visibility = View.VISIBLE

@@ -86,14 +86,20 @@
         </LinearLayout>
 
 
-
+        <Button
+            android:id="@+id/openDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/avatarI"
+            android:padding="20dp"
+            android:text="@string/edit_profile" />
 
 
         <LinearLayout
             android:id="@+id/settingTheme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/avatarI"
+            android:layout_below="@id/openDialog"
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="vertical">
