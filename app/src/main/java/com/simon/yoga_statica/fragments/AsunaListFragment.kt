@@ -47,7 +47,7 @@ class AsunaListFragment : Fragment() {
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_list, container, false)
 
-        activity?.setTitle(R.string.app_name)
+        activity?.title = activity?.resources?.getString(R.string.app_name)
 
         advController = AdvController(container?.context!!)
         advController.init()
@@ -59,12 +59,13 @@ class AsunaListFragment : Fragment() {
             showAds()
         }
 
+        getList()
+
         return rootView
     }
 
     override fun onResume() {
         super.onResume()
-        getList()
 
         inter = advController.createInterstitialAds(R.string.ads_inter_uid)
 
@@ -99,7 +100,7 @@ class AsunaListFragment : Fragment() {
                     card.commentsCount = (document.data["comments"] as Long).toInt()
                     card.thumbPath = document.data["thumbPath"].toString()
                     card.shortDesc = document.data["shortDescription"].toString()
-                    card.openImages = document.data["openAsans"].toString().split("")
+                    card.openImages = document.data["openAsans"].toString()
                     cardsArr.add(card)
                 }
                 var index = 0
@@ -128,17 +129,25 @@ class AsunaListFragment : Fragment() {
         val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
         cardAdapter?.setOnClickAdd(object : OnRecyclerItemClickListener {
             override fun onItemClicked(asuna: String, position: Int) {
-                if (asuna in addsAsuna) {
-                    addsAsuna.removeAt(addsAsuna.indexOf(asuna))
+                var isExist = false
+                val asunaList = asuna.split(" ")
+                for (asunaOne in asunaList) {
+                    if (asunaOne in addsAsuna) {
+                        isExist = true
+                    }
+                }
+                if (isExist) {
+                    for (asunaOne in asunaList) {
+                        addsAsuna.removeAt(addsAsuna.indexOf(asunaOne))
+                    }
                     Log.d("list", addsAsuna.toString())
                     Toast.makeText(
                         activity, "Асана удалена",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-//                    addsAsuna.addAll(openAsuns)
-                    addsAsuna.add(asuna)
-                    addsAsuna.sortBy { it }
+                    addsAsuna.addAll(asunaList)
+
                     Log.d("list", addsAsuna.toString())
                     Toast.makeText(
                         activity, "Асана добавлена",

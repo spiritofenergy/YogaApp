@@ -9,5 +9,5 @@ class Card {
     lateinit var title: String
     lateinit var shortDesc: String
     lateinit var thumbPath: String
-    lateinit var openImages: List<String>
+    lateinit var openImages: String
 }

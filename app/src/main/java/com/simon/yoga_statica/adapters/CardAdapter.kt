@@ -59,7 +59,7 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
         holder.bind(card, fragmentManager, openListener)
 
         holder.addAsuna.setOnClickListener {
-            addListener?.onItemClicked(card.id, position)
+            addListener?.onItemClicked( card.openImages + " " + card.id, position)
         }
 
         holder.titleCard.setOnClickListener {

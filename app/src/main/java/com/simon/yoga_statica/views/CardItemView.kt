@@ -193,12 +193,25 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     isLiked.text = "0"
                 } else {
                     card.likesCount += 1
-                    db.collection("likes").document(card.id)
-                        .set(
-                            hashMapOf(
-                                id to true
-                            )
-                        )
+                    db.collection("likes")
+                        .document(card.id)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            Log.d("res", result.toString())
+                            if (!result.exists()) {
+                                Log.d("test", "asd")
+                                db.collection("likes").document(card.id)
+                                    .set(
+                                        hashMapOf(
+                                            id to true
+                                        )
+                                    )
+                            } else {
+                                Log.d("test", "asv")
+                                db.collection("likes").document(card.id)
+                                    .update(id, true)
+                            }
+                        }
                     db.collection("asunaRU").document(card.id)
                         .update("likes", card.likesCount)
                     publish.text = (card.likesCount).toString()

@@ -39,7 +39,8 @@ class EditDialogFragment : DialogFragment() {
         nameEdit.append(auth.currentUser?.displayName)
 
         phoneEdit = rootView.userPhoneEdit
-        phoneEdit.append(auth.currentUser?.phoneNumber)
+        if (auth.currentUser?.phoneNumber != null)
+            phoneEdit.append(auth.currentUser?.phoneNumber)
 
         emailEdit = rootView.userEmailEdit
         emailEdit.append(auth.currentUser?.email)
