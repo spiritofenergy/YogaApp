@@ -112,7 +112,7 @@ class ProfileFragment : Fragment() {
         radioDefault = rootView.findViewById(R.id.radioDefault)
         radioRed = rootView.findViewById(R.id.radioRed)
         radioOrange = rootView.findViewById(R.id.radioOrange)
-        radioGreen = rootView.findViewById(R.id.radioGreen)
+        radioGreen = rootView.findViewById(R.id.radioLime)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
         chooseDyh = rootView.findViewById(R.id.ChooseDyh)
@@ -225,9 +225,9 @@ class ProfileFragment : Fragment() {
                         set = "orange"
                     }
                 }
-                R.id.radioGreen -> {
-                    if (theme != "green") {
-                        set = "green"
+                R.id.radioLime -> {
+                    if (theme != "lime") {
+                        set = "lime"
                     }
                 }
                 R.id.radioCoffee -> {

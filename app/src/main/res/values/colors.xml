@@ -7,14 +7,9 @@
     <color name="colorPrimaryDark">#1887b3</color>
     <color name="colorAccent">#089ed9</color>
 
-
-    <color name="colorPrimary_green">#80FF84</color>
-    <color name="colorPrimaryDark_green">#4caf50</color>
-    <color name="colorAccent_green">#80FF84</color>
-
-    <color name="colorPrimary_lime">#f2ff80</color>
-    <color name="colorPrimaryDark_lime">#cddc39</color>
-    <color name="colorAccent_lime">#f2ff80</color>
+    <color name="colorPrimary_lime">#8BC34A</color>
+    <color name="colorPrimaryDark_lime">#43A047</color>
+    <color name="colorAccent_lime">#64DD17</color>
 
     <color name="colorPrimary_red">#FF8880</color>
     <color name="colorPrimaryDark_red">#f44336</color>

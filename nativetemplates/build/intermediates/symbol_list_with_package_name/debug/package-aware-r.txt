@@ -424,11 +424,12 @@ color error_color_material_dark
 color error_color_material_light
 color foreground_material_dark
 color foreground_material_light
+color gnt_Dark_lime
 color gnt_ad_green
 color gnt_black
 color gnt_blue
 color gnt_gray
-color gnt_green
+color gnt_lime
 color gnt_outline
 color gnt_red
 color gnt_test_background_color

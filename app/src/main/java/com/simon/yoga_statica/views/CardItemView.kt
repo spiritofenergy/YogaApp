@@ -77,7 +77,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 "default" -> "default"
                 "red"    -> "red"
                 "orange" -> "orange"
-                "green"  -> "green"
+                "lime"  -> "lime"
                 "coffee" -> "coffee"
                 else     -> "default"
             }
@@ -110,7 +110,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                 "default" -> R.color.colorPrimary
                 "red" -> R.color.colorPrimaryDark_red
                 "orange" -> R.color.colorPrimaryDark_orange
-                "green" -> R.color.colorPrimaryDark_green
+                "lime" -> R.color.colorPrimaryDark_lime
                 "coffee" -> R.color.colorPrimaryCoffee
                 else ->  R.color.colorPrimary
             }

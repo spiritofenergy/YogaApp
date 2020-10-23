@@ -63,7 +63,7 @@ class ActionActivity : AppCompatActivity() {
                 "default" -> setTheme(R.style.AppTheme)
                 "red" -> setTheme(R.style.RedAppTheme)
                 "orange" -> setTheme(R.style.OrangeAppTheme)
-                "green" -> setTheme(R.style.GreenAppTheme)
+                "lime" -> setTheme(R.style.LimeAppTheme)
                 "coffee" -> setTheme(R.style.CoffeeAppTheme)
 
             }

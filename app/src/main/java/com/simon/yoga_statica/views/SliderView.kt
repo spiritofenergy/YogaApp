@@ -67,7 +67,7 @@ class SliderView(inflater: LayoutInflater, private val parent: ViewGroup) : Recy
             "default" -> parent.context.getDrawable(R.drawable.spinner_ring)
             "red" -> parent.context.getDrawable(R.drawable.spinner_ring_red)
             "orange" -> parent.context.getDrawable(R.drawable.spinner_ring_orange)
-            "green" -> parent.context.getDrawable(R.drawable.spinner_ring_green)
+            "green" -> parent.context.getDrawable(R.drawable.spinner_ring_lime)
             "coffee" -> parent.context.getDrawable(R.drawable.spinner_ring_coffee)
             else ->  parent.context.getDrawable(R.drawable.spinner_ring)
         }
