@@ -22,12 +22,14 @@ import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import kotlinx.android.synthetic.main.fragment_action.view.*
+import org.w3c.dom.Document
 
 
 class ActionFragment : Fragment() {
@@ -60,6 +62,8 @@ class ActionFragment : Fragment() {
 
     var isStart = false
     var closeExist = true
+    var dyhExist = ""
+    var isDyh = false
 
     private val IS_START = "isStart"
     private val CURRENT_SECOND = "currentSecond"
@@ -71,6 +75,7 @@ class ActionFragment : Fragment() {
     private val APP_PREFERENCES_COUNT = "count"
     private val APP_PREFERENCES_FRAGMENT = "fragment"
     private val APP_PREFERENCES_SHAVA = "shava"
+    private val APP_PREFERENCES_DYH = "dyh"
 
     private lateinit var rootView: View
 
@@ -132,10 +137,22 @@ class ActionFragment : Fragment() {
             }
         }
 
+        dyhExist = if (!prefs.contains(APP_PREFERENCES_DYH)) {
+            "dyh1"
+        } else {
+            prefs.getString(APP_PREFERENCES_DYH, "dyh1").toString()
+        }
+
         closeExist = if (!prefs.contains(APP_PREFERENCES_SHAVA)) {
             true
         } else {
             prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
+        }
+
+        if (dyhExist != "" || dyhExist != "off") {
+            isDyh = true
+            list.add(0, dyhExist)
+            partAction.text = "Дыхание"
         }
 
         countAll = list.size
@@ -147,9 +164,14 @@ class ActionFragment : Fragment() {
             if (sec > 0) {
                 timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
                 position += 1
-                if (position < list.size)
+                if (position < list.size) {
+                    if (isDyh) {
+                        isDyh = false
+                        partAction.text = "Основное"
+                        setUpFadeAnimation(partAction)
+                    }
                     addAsuna(list[position])
-                else {
+                } else {
                     if (!closeExist) {
                         time.stop()
                         timeCur.stop()
@@ -217,13 +239,23 @@ class ActionFragment : Fragment() {
     }
 
     private fun addAsuna(asuna: String) {
-
-        db.collection("asunaRU").document(asuna)
+        val documentRef: DocumentReference
+        if (asuna.contains("open")) {
+            documentRef = db.collection("openAsunaRU").document(asuna)
+        } else {
+            if (asuna.contains("dyh")) {
+                documentRef = db.collection("dyh").document(asuna)
+            } else {
+                documentRef = db.collection("asunaRU").document(asuna)
+            }
+        }
+        documentRef
             .get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     nameAsuna.text = document.data?.get("title").toString()
-                    textAsana.text = document.data?.get("description").toString()
+                    if (document.data?.get("description").toString() != "null")
+                        textAsana.text = document.data?.get("description").toString()
 
                     thumbnails.child(
                         "${

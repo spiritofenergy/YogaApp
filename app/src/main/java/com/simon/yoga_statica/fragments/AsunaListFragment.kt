@@ -100,7 +100,7 @@ class AsunaListFragment : Fragment() {
                     card.commentsCount = (document.data["comments"] as Long).toInt()
                     card.thumbPath = document.data["thumbPath"].toString()
                     card.shortDesc = document.data["shortDescription"].toString()
-                    card.openImages = document.data["openAsans"].toString()
+                    card.openAsans = document.data["openAsans"].toString()
                     cardsArr.add(card)
                 }
                 var index = 0

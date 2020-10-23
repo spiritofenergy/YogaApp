@@ -133,6 +133,8 @@ class FavoriteListFragment : Fragment() {
                                         card.thumbPath = document.data["thumbPath"].toString()
                                         card.shortDesc = document.data["shortDescription"].toString()
                                         cardsArr.add(card)
+                                        card.openAsans = document.data["openAsans"].toString()
+                                        allAsuna.addAll(card.openAsans.split(" "))
                                         allAsuna.add(card.id)
                                     }
                                 }
@@ -140,16 +142,25 @@ class FavoriteListFragment : Fragment() {
                             val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
                             cardAdapter?.setOnClickAdd(object : OnRecyclerItemClickListener {
                                 override fun onItemClicked(asuna: String, position: Int) {
-                                    if (asuna in addsAsuna) {
-                                        addsAsuna.removeAt(addsAsuna.indexOf(asuna))
+                                    var isExist = false
+                                    val asunaList = asuna.split(" ")
+                                    for (asunaOne in asunaList) {
+                                        if (asunaOne in addsAsuna) {
+                                            isExist = true
+                                        }
+                                    }
+                                    if (isExist) {
+                                        for (asunaOne in asunaList) {
+                                            addsAsuna.removeAt(addsAsuna.indexOf(asunaOne))
+                                        }
                                         Log.d("list", addsAsuna.toString())
                                         Toast.makeText(
                                             activity, "Асуна удалена из списка выполняемых асун",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
-                                        addsAsuna.add(asuna)
-                                        addsAsuna.sortBy { it }
+                                        addsAsuna.addAll(asunaList)
+
                                         Log.d("list", addsAsuna.toString())
                                         Toast.makeText(
                                             activity, "Асуна добавлена в список выполняемых асун",

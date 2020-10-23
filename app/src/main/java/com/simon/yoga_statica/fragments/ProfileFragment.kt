@@ -68,6 +68,10 @@ class ProfileFragment : Fragment() {
     private lateinit var radioGreen: RadioButton
     private lateinit var radioRed: RadioButton
     private lateinit var radioOrange: RadioButton
+    private lateinit var dyh1: RadioButton
+    private lateinit var dyh2: RadioButton
+    private lateinit var music1: RadioButton
+    private lateinit var music2: RadioButton
 
     private lateinit var switchDyhSwitch: Switch
     private lateinit var simpleSwitchMusic: Switch
@@ -118,17 +122,61 @@ class ProfileFragment : Fragment() {
         chooseDyh = rootView.findViewById(R.id.ChooseDyh)
         chooseMusic = rootView.findViewById(R.id.ChooseMusic)
 
+        dyh1 = rootView.dyh1
+        dyh2 = rootView.dyh2
+        music1 = rootView.music1
+        music2 = rootView.music2
+
         switchDyhSwitch = rootView.findViewById(R.id.switchDyhSwitch)
         simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
 
         simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
 
+        if (!prefs.contains(APP_PREFERENCES_DYH)) {
+            switchDyhSwitch.isChecked = true
+        } else {
+            when (prefs.getString(APP_PREFERENCES_DYH, "dyh1")) {
+                "off" -> {
+                    switchDyhSwitch.isChecked = false
+                }
+                "dyh1" -> {
+                    switchDyhSwitch.isChecked = true
+                    dyh1.isChecked = true
+                }
+                "dyh2" -> {
+                    switchDyhSwitch.isChecked = true
+                    dyh2.isChecked = true
+                }
+            }
+
+        }
+
+        dyh1.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_DYH, "dyh1")
+                    .apply()
+            }
+        }
+
+        dyh2.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_DYH, "dyh2")
+                    .apply()
+            }
+        }
+
         openDialog = rootView.openDialog
         openDialog.setOnClickListener {
             val dialog = EditDialogFragment()
             dialog.show(fragmentManager!!, "edit_profile")
         }
+
+
 
         if (switchDyhSwitch.isChecked) {
             chooseDyh.visibility = View.VISIBLE
@@ -154,8 +202,9 @@ class ProfileFragment : Fragment() {
                 errorDyh.visibility = View.GONE
                 prefs
                     .edit()
-                    .putString(APP_PREFERENCES_DYH, "")
+                    .putString(APP_PREFERENCES_DYH, "dyh1")
                     .apply()
+                dyh1.isChecked = true
             } else {
                 chooseDyh.visibility = View.GONE
                 errorDyh.visibility = View.VISIBLE
@@ -170,9 +219,10 @@ class ProfileFragment : Fragment() {
             if (isChecked) {
                 prefs
                     .edit()
-                    .putString(APP_PREFERENCES_MUSIC, "")
+                    .putString(APP_PREFERENCES_MUSIC, "music1")
                     .apply()
                 chooseMusic.visibility = View.VISIBLE
+                music1.isChecked = true
             } else {
                 chooseMusic.visibility = View.GONE
                 prefs
