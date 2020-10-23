@@ -37,6 +37,6 @@
     <string name="dyh">Дыхание</string>
     <string name="add_shava">Желательно добавить заключительную асану</string>
     <string name="shava_id">asuna09</string>
-    <string name="edit_profile">Редактирование профиля</string>
+    <string name="edit_profile">Редактирование</string>
     <string name="save_edit">Сохранить</string>
 </resources>

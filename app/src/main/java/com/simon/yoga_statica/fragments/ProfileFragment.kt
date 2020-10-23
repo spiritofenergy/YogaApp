@@ -29,8 +29,8 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
-import kotlinx.android.synthetic.main.fraagment_profile2.*
-import kotlinx.android.synthetic.main.fraagment_profile2.view.*
+import kotlinx.android.synthetic.main.fraagment_profile.*
+import kotlinx.android.synthetic.main.fraagment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-          val rootView: View = inflater.inflate(R.layout.fraagment_profile2, container, false)
+          val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
         activity?.title = "Настройки профиля"
 
