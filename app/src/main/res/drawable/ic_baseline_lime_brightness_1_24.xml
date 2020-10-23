@@ -3,7 +3,7 @@
     android:height="44dp"
     android:viewportWidth="24"
     android:viewportHeight="24"
-    android:tint="@color/colorPrimaryDark_lime">
+    android:tint="@color/colorAccent_lime">
     <path
         android:fillColor="@color/colorPrimary_lime"
         android:pathData="M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0"/>

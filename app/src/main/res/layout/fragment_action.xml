@@ -5,151 +5,134 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/partAction"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <TextView
+        android:id="@+id/nameAsuna"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/partAction"
+        android:gravity="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/partAction" />
 
-            <TextView
-                android:id="@+id/partAction"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:paddingBottom="8dp"
+        android:layout_below="@id/nameAsuna"
+        app:layout_constraintTop_toBottomOf="@id/nameAsuna">
 
-            <TextView
-                android:id="@+id/nameAsuna"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/partAction"
-                android:gravity="center"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/partAction" />
+        <TextView
+            android:id="@+id/descAsana"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/descAsana"
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nameAsuna"
-                android:padding="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nameAsuna" />
-
-            <ImageView
-                android:id="@+id/image2"
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:layout_below="@id/descAsana"
-                android:autofillHints="@mipmap/radzhakapotasana"
-                android:scaleType="fitCenter"
-                android:transitionName="img"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/descAsana"
-                tools:ignore="UnusedAttribute" />
-
-            <LinearLayout
-                android:id="@+id/timers"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/image2"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/image2">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/time_workout" />
-
-                    <Chronometer
-                        android:id="@+id/timeAllAction"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@color/design_default_color_on_secondary"
-                        android:textSize="36sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView13"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/time_asana" />
-
-                    <Chronometer
-                        android:id="@+id/timeCur"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@color/design_default_color_on_secondary"
-                        android:textSize="36sp" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/timers"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/timers">
-
-                <Button
-                    android:id="@+id/startPauseAction"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:tag="pause"
-                    android:text="@string/start_action" />
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/scroll"
+        android:autofillHints="@mipmap/radzhakapotasana"
+        android:scaleType="fitCenter"
+        android:transitionName="img"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scroll"
+        tools:ignore="UnusedAttribute" />
+
+    <LinearLayout
+
+        android:id="@+id/timers"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image2"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image2">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/time_workout" />
+
+            <Chronometer
+                android:id="@+id/timeAllAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="36sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/time_asana" />
+
+            <Chronometer
+                android:id="@+id/timeCur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="36sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/startPauseAction"
+        style="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:tag="pause"
+        android:text="@string/start_action"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timers"
+        app:layout_constraintVertical_bias="0.959" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,8 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
-import kotlinx.android.synthetic.main.fraagment_profile2.*
-import kotlinx.android.synthetic.main.fraagment_profile2.view.*
+import kotlinx.android.synthetic.main.fraagment_profile.*
+import kotlinx.android.synthetic.main.fraagment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -92,7 +92,7 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-          val rootView: View = inflater.inflate(R.layout.fraagment_profile2, container, false)
+          val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
         activity?.title = "Настройки профиля"
 
@@ -116,7 +116,7 @@ class ProfileFragment : Fragment() {
         radioDefault = rootView.findViewById(R.id.radioDefault)
         radioRed = rootView.findViewById(R.id.radioRed)
         radioOrange = rootView.findViewById(R.id.radioOrange)
-        radioGreen = rootView.findViewById(R.id.radioGreen)
+        radioGreen = rootView.findViewById(R.id.radioLime)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
         chooseDyh = rootView.findViewById(R.id.ChooseDyh)
@@ -275,9 +275,9 @@ class ProfileFragment : Fragment() {
                         set = "orange"
                     }
                 }
-                R.id.radioGreen -> {
-                    if (theme != "green") {
-                        set = "green"
+                R.id.radioLime -> {
+                    if (theme != "lime") {
+                        set = "lime"
                     }
                 }
                 R.id.radioCoffee -> {

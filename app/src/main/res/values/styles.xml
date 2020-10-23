@@ -17,12 +17,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Button" parent="@style/Widget.AppCompat.Button.Colored">
-        <item name="background">@drawable/inset_button_default</item>
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="android:textColor">#000000</item>
-    </style>
-
     <style name="RedAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary_red</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_red</item>
@@ -48,17 +42,17 @@
      </style>
 
 
-    <style name="GreenAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/gnt_green</item>
-        <item name="colorPrimaryDark">@color/gnt_ad_green</item>
-        <item name="colorAccent">@color/gnt_green</item>
-    </style>
+     <style name="LimeAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+         <item name="colorPrimary">@color/gnt_lime</item>
+         <item name="colorPrimaryDark">@color/gnt_Dark_lime</item>
+         <item name="colorAccent">@color/gnt_lime</item>
+        </style>
 
-    <style name="GreenAppThemeMin" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/gnt_green</item>
-        <item name="colorPrimaryDark">@color/gnt_ad_green</item>
-        <item name="colorAccent">@color/gnt_green</item>
-    </style>
+        <style name="LimeAppThemeMin" parent="Theme.AppCompat.Light.NoActionBar">
+            <item name="colorPrimary">@color/gnt_lime</item>
+            <item name="colorPrimaryDark">@color/gnt_Dark_lime</item>
+            <item name="colorAccent">@color/gnt_lime</item>
+        </style>
 
 
     <style name="CoffeeAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -71,5 +65,11 @@
         <item name="colorPrimary">@color/colorPrimaryCoffee</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkCoffee</item>
         <item name="colorAccent">@color/colorAccentCoffee</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="background">@drawable/inset_button_default</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColor">#000000</item>
     </style>
 </resources>

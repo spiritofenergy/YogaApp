@@ -76,7 +76,7 @@ class AddActivity : AppCompatActivity() {
                 "default" -> "default"
                 "red"    -> "red"
                 "orange" -> "orange"
-                "green"  -> "green"
+                "lime"  -> "lime"
                 "coffee" -> "coffee"
                 else     -> "default"
             }
@@ -86,7 +86,7 @@ class AddActivity : AppCompatActivity() {
             "default" -> setTheme(R.style.AppTheme)
             "red" -> setTheme(R.style.RedAppTheme)
             "orange" -> setTheme(R.style.OrangeAppTheme)
-            "green" -> setTheme(R.style.GreenAppTheme)
+            "lime" -> setTheme(R.style.LimeAppTheme)
             "coffee" -> setTheme(R.style.CoffeeAppTheme)
         }
         setContentView(R.layout.activity_add)
