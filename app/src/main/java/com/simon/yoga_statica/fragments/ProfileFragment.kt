@@ -98,6 +98,15 @@ class ProfileFragment : Fragment() {
 
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
+        try {
+            prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
+        } catch (e: ClassCastException) {
+            prefs
+                .edit()
+                .putBoolean(APP_PREFERENCES_SHAVA, true)
+                .apply()
+        }
+
         auth = Firebase.auth
 
         idUser = rootView.findViewById(R.id.idUser)
