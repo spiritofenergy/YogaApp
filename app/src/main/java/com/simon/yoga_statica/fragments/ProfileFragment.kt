@@ -84,7 +84,7 @@ class ProfileFragment : Fragment() {
     private val APP_PREFERENCES_COUNT = "count"
     private val APP_PREFERENCES_SHAVA = "shava"
     private val APP_PREFERENCES_DYH = "dyh"
-    private val APP_PREFERENCES_MUSIC = "shava"
+    private val APP_PREFERENCES_MUSIC = "music"
     private val RESULT_IMAGE = 3214
 
     override fun onCreateView(
