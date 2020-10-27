@@ -305,44 +305,31 @@
                 android:textSize="20sp" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/errorDyh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/switchDyh"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:text="@string/add_dyh"
-            android:textColor="@color/colorAccent_red"
-            android:visibility="gone" />
-
         <RadioGroup
             android:id="@+id/ChooseDyh"
             android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/errorDyh"
+            android:layout_below="@id/switchDyh"
+            android:layout_marginLeft="30dp"
             android:orientation="horizontal">
 
 
-                <RadioButton
-                    android:id="@+id/dyh1"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text="Капалапхати" />
+            <RadioButton
+                android:id="@+id/dyh1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Капалапхати"
+                android:textSize="18sp" />
 
-                <RadioButton
-                    android:id="@+id/dyh2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:textSize="18sp"
-                    android:text="Пхастрика" />
+            <RadioButton
+                android:id="@+id/dyh2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="Пхастрика"
+                android:textSize="18sp" />
 
             <RadioButton
                 android:id="@+id/dyh3"
@@ -350,8 +337,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="false"
-                android:textSize="18sp"
-                android:text="Уджаи" />
+                android:text="Уджаи"
+                android:textSize="18sp" />
 
         </RadioGroup>
 
@@ -467,19 +454,6 @@
                 android:checked="true"
                 android:textSize="25sp" />
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/errorShava"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/switchShava"
-            android:text="@string/add_shava"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:textColor="@color/colorAccent_red"
-            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>

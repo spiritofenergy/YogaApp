@@ -2,20 +2,19 @@ package com.simon.yoga_statica.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.icu.text.MessageFormat.format
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.format.DateFormat.format
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -30,7 +29,10 @@ import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import kotlinx.android.synthetic.main.fragment_action.view.*
 import org.w3c.dom.Document
-
+import java.lang.Math.abs
+import java.lang.String.format
+import java.text.DateFormat
+import java.text.MessageFormat
 
 class ActionFragment : Fragment() {
 
@@ -43,6 +45,8 @@ class ActionFragment : Fragment() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
+
+    private lateinit var actionBar: ProgressBar
 
     lateinit var nameAsuna: TextView
     lateinit var textAsana: TextView
@@ -121,6 +125,8 @@ class ActionFragment : Fragment() {
         timeCur = rootView.timeCur
         startPauseAction = rootView.startPauseAction
 
+        actionBar = rootView.actionBar
+
         if (isStart) {
             startPauseAction.tag = "active"
             startPauseAction.text = activity?.resources?.getString(R.string.stop_action)
@@ -160,7 +166,10 @@ class ActionFragment : Fragment() {
 
         timeCur.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val sec = SystemClock.elapsedRealtime() - it.base
+            Log.d("q", kotlin.math.abs(sec / 1000).toString())
+            setProgress(kotlin.math.abs(sec / 1000))
 
+            Log.d("1", it.text.split(":")[1])
             if (sec > 0) {
                 timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
                 position += 1
@@ -188,10 +197,13 @@ class ActionFragment : Fragment() {
 
         startPauseAction.setOnClickListener {
             if (startPauseAction.tag == "pause") {
-                if (curSec != 0)
+                if (curSec != 0) {
                     timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
-                else
+                    setProgress(curSec.toLong())
+                } else {
                     timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
+                    setProgress(x.toLong())
+                }
                 timeCur.start()
 
                 isStart = true
@@ -227,8 +239,11 @@ class ActionFragment : Fragment() {
         timeCur.isCountDown = true
         timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
 
+        setProgress(x.toLong())
+
         if (curSec != 0) {
             timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
+            setProgress(curSec.toLong())
             if (isStart)
                 timeCur.start()
         }
@@ -239,14 +254,13 @@ class ActionFragment : Fragment() {
     }
 
     private fun addAsuna(asuna: String) {
-        val documentRef: DocumentReference
-        if (asuna.contains("open")) {
-            documentRef = db.collection("openAsunaRU").document(asuna)
+        val documentRef: DocumentReference = if (asuna.contains("open")) {
+            db.collection("openAsunaRU").document(asuna)
         } else {
             if (asuna.contains("dyh")) {
-                documentRef = db.collection("dyh").document(asuna)
+                db.collection("dyh").document(asuna)
             } else {
-                documentRef = db.collection("asunaRU").document(asuna)
+                db.collection("asunaRU").document(asuna)
             }
         }
         documentRef
@@ -330,4 +344,8 @@ class ActionFragment : Fragment() {
 
         textView.startAnimation(fadeIn)
     }
+
+    private fun setProgress(sec: Long) {
+        actionBar.progress = ((sec * 100) / x).toInt()
+   }
 }

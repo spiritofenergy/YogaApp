@@ -2,17 +2,21 @@ package com.simon.yoga_statica.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -49,8 +53,6 @@ class ProfileFragment : Fragment() {
     private lateinit var countAsuns: TextView
     private lateinit var phoneUser: TextView
     private lateinit var addAvatar: ImageButton
-    private lateinit var errorDyh: TextView
-    private lateinit var errorShava: TextView
 
     private lateinit var imageAvatar: ImageView
 
@@ -71,6 +73,7 @@ class ProfileFragment : Fragment() {
     private lateinit var radioOrange: RadioButton
     private lateinit var dyh1: RadioButton
     private lateinit var dyh2: RadioButton
+    private lateinit var dyh3: RadioButton
     private lateinit var music1: RadioButton
     private lateinit var music2: RadioButton
 
@@ -88,6 +91,7 @@ class ProfileFragment : Fragment() {
     private val APP_PREFERENCES_MUSIC = "music"
     private val RESULT_IMAGE = 3214
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -116,8 +120,6 @@ class ProfileFragment : Fragment() {
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
-        errorDyh = rootView.errorDyh
-        errorShava = rootView.errorShava
 
         radio30 = rootView.findViewById(R.id.radio30)
         radio60 = rootView.findViewById(R.id.radio60)
@@ -134,6 +136,7 @@ class ProfileFragment : Fragment() {
 
         dyh1 = rootView.dyh1
         dyh2 = rootView.dyh2
+        dyh3 = rootView.dyh3
         music1 = rootView.music1
         music2 = rootView.music2
 
@@ -158,6 +161,10 @@ class ProfileFragment : Fragment() {
                     switchDyhSwitch.isChecked = true
                     dyh2.isChecked = true
                 }
+                "dyh3" -> {
+                    switchDyhSwitch.isChecked = true
+                    dyh3.isChecked = true
+                }
             }
 
         }
@@ -180,6 +187,15 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        dyh3.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                prefs
+                    .edit()
+                    .putString(APP_PREFERENCES_DYH, "dyh3")
+                    .apply()
+            }
+        }
+
         openDialog = rootView.openDialog
         openDialog.setOnClickListener {
             val dialog = EditDialogFragment()
@@ -190,38 +206,45 @@ class ProfileFragment : Fragment() {
 
         if (switchDyhSwitch.isChecked) {
             chooseDyh.visibility = View.VISIBLE
-            errorDyh.visibility = View.GONE
         } else {
             chooseDyh.visibility = View.GONE
-            errorDyh.visibility = View.VISIBLE
         }
         if (simpleSwitchMusic.isChecked) {
             chooseMusic.visibility = View.VISIBLE
         } else {
             chooseMusic.visibility = View.GONE
         }
-        if (simpleSwitchShava.isChecked) {
-            errorShava.visibility = View.GONE
-        } else {
-            errorShava.visibility = View.VISIBLE
-        }
 
         switchDyhSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 chooseDyh.visibility = View.VISIBLE
-                errorDyh.visibility = View.GONE
+
                 prefs
                     .edit()
                     .putString(APP_PREFERENCES_DYH, "dyh1")
                     .apply()
                 dyh1.isChecked = true
             } else {
-                chooseDyh.visibility = View.GONE
-                errorDyh.visibility = View.VISIBLE
-                prefs
-                    .edit()
-                    .putString(APP_PREFERENCES_DYH, "off")
-                    .apply()
+
+
+                AlertDialog.Builder(activity)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Отключение")
+                    .setMessage("Вы уверены, что хотите отключить дыхание? Вы потеряете 1 уровень!")
+                    .setPositiveButton("Подтверждаю!") { dialog, which ->
+                        chooseDyh.visibility = View.GONE
+                        prefs
+                            .edit()
+                            .putString(APP_PREFERENCES_DYH, "off")
+                            .apply()
+                    }
+                    .setNegativeButton("Отменить") { dialogInterface: DialogInterface, i: Int ->
+                        switchDyhSwitch.isChecked = true
+                    }
+                    .setOnCancelListener {
+                        switchDyhSwitch.isChecked = true
+                    }
+                    .show()
             }
         }
 
@@ -244,17 +267,28 @@ class ProfileFragment : Fragment() {
 
         simpleSwitchShava.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                errorShava.visibility = View.GONE
                 prefs
                     .edit()
                     .putBoolean(APP_PREFERENCES_SHAVA, true)
                     .apply()
             } else {
-                errorShava.visibility = View.VISIBLE
-                prefs
-                    .edit()
-                    .putBoolean(APP_PREFERENCES_SHAVA, false)
-                    .apply()
+                AlertDialog.Builder(activity)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Отключение")
+                    .setMessage("Вы уверены, что хотите отключить закрывающую асану? Вы потеряете 1 уровень!")
+                    .setPositiveButton("Подтверждаю!") { dialog, which ->
+                        prefs
+                            .edit()
+                            .putBoolean(APP_PREFERENCES_SHAVA, false)
+                            .apply()
+                    }
+                    .setNegativeButton("Отменить") { dialogInterface: DialogInterface, i: Int ->
+                        simpleSwitchShava.isChecked = true
+                    }
+                    .setOnCancelListener {
+                        simpleSwitchShava.isChecked = true
+                    }
+                    .show()
             }
         }
 
@@ -406,7 +440,14 @@ class ProfileFragment : Fragment() {
                     }
 
                     when (user.status) {
-                        2 -> radio60.visibility = View.VISIBLE
+                        1 -> {
+                            radio60.visibility = View.GONE
+                            radio90.visibility = View.GONE
+                        }
+                        2 -> {
+                            radio60.visibility = View.VISIBLE
+                            radio90.visibility = View.GONE
+                        }
                         3 -> {
                             radio60.visibility = View.VISIBLE
                             radio90.visibility = View.VISIBLE
