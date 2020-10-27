@@ -54,6 +54,7 @@ class ProfileFragment : Fragment() {
 
     private lateinit var imageAvatar: ImageView
 
+
     private lateinit var setTheme: RadioGroup
     private lateinit var setSecond: RadioGroup
     private lateinit var chooseDyh: RadioGroup
@@ -140,7 +141,7 @@ class ProfileFragment : Fragment() {
         simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
 
-        simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
+          simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)
 
         if (!prefs.contains(APP_PREFERENCES_DYH)) {
             switchDyhSwitch.isChecked = true
