@@ -13,86 +13,93 @@
 
         <LinearLayout
             android:id="@+id/avatarI"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageAvatar"
-                 android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
                 android:layout_weight="1"
-                tools:srcCompat="@tools:sample/avatars[0]"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="30dp" />
+                tools:srcCompat="@tools:sample/avatars[0]" />
+
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
                 android:layout_marginLeft="@dimen/gnt_text_size_large"
+                android:layout_marginTop="30dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/nameUser"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="@string/User"
                     android:textSize="20sp" />
+
                 <TextView
                     android:id="@+id/idUser"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/ID"
-                    android:textSize="16sp">
-                </TextView>
+                    android:textSize="16sp"></TextView>
+
                 <TextView
                     android:id="@+id/phoneUser"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/phone"
                     android:textSize="16sp"
-                    android:visibility="gone">
-                </TextView>
+                    android:visibility="gone"></TextView>
+
                 <TextView
                     android:id="@+id/emailUser"
-                    android:layout_width="200dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="gone"
                     android:text="@string/email"
-                    android:textSize="16sp">
-                </TextView>
+                    android:textSize="16sp"
+                    android:visibility="gone"></TextView>
+
                 <TextView
                     android:id="@+id/status"
-                    android:layout_width="200dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/status"
-                    android:textSize="16sp">
-                </TextView>
+                    android:textSize="16sp"></TextView>
+
                 <Button
-                    style="@style/AppTheme.Button"
                     android:id="@+id/openDialog"
+                    style="@style/AppTheme.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/status"
                     android:text="@string/add" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/radio_goup_seconds"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/gnt_text_size_large"
                 android:layout_marginTop="30dp"
                 android:layout_weight="1"
-                android:layout_marginLeft="@dimen/gnt_text_size_large"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/statistica"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/statistic"
                     android:textSize="20sp" />
+
                 <RadioGroup
                     android:id="@+id/setSecond"
                     android:layout_width="match_parent"
@@ -108,22 +115,23 @@
 
                     <RadioButton
                         android:id="@+id/radio60"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
 
                         android:text="60 сек"
-                        android:visibility="visible" />
+                        android:visibility="invisible" />
 
                     <RadioButton
                         android:id="@+id/radio90"
-                        android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:checked="false"
                         android:text="90  сек"
-                        android:visibility="visible" />
+                        android:visibility="invisible" />
                 </RadioGroup>
+
                 <LinearLayout
                     android:id="@+id/statisticaAsan"
                     android:layout_width="match_parent"
@@ -136,6 +144,7 @@
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:text="@string/all_count_asana" />
+
                     <TextView
                         android:id="@+id/countAsuns"
                         android:layout_width="30dp"
@@ -414,6 +423,7 @@
                 android:layout_height="wrap_content"
                 android:text=" Музыка 2" />
         </RadioGroup>
+
 
         <RelativeLayout
             android:id="@+id/switchShava"
