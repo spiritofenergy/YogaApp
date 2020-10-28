@@ -201,7 +201,7 @@ class ActionFragment : Fragment() {
                     timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
                     setProgress(curSec.toLong())
                 } else {
-                    timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
+                    timeCur.base = SystemClock.elapsedRealtime() + 1000 * x + 300
                     setProgress(x.toLong())
                 }
                 timeCur.start()
@@ -237,7 +237,7 @@ class ActionFragment : Fragment() {
         time.start()
 
         timeCur.isCountDown = true
-        timeCur.base = SystemClock.elapsedRealtime() + 1000 * x
+        timeCur.base = SystemClock.elapsedRealtime() + 1000 * x + 300
 
         setProgress(x.toLong())
 
