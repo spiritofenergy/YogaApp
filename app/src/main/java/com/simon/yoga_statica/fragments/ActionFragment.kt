@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.icu.text.MessageFormat.format
@@ -27,6 +28,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
+import kotlinx.android.synthetic.main.fragment_action.*
 import kotlinx.android.synthetic.main.fragment_action.view.*
 import org.w3c.dom.Document
 import java.lang.Math.abs
@@ -47,6 +49,7 @@ class ActionFragment : Fragment() {
     private val thumbnails: StorageReference = storage.reference.child("thumbnails")
 
     private lateinit var actionBar: ProgressBar
+    private lateinit var actionBarAll: ProgressBar
 
     lateinit var nameAsuna: TextView
     lateinit var textAsana: TextView
@@ -69,6 +72,8 @@ class ActionFragment : Fragment() {
     var dyhExist = ""
     var isDyh = false
 
+    private var allTimeSec = 0
+
     private val IS_START = "isStart"
     private val CURRENT_SECOND = "currentSecond"
     private val CURRENT_POSITION = "currentPosition"
@@ -80,9 +85,12 @@ class ActionFragment : Fragment() {
     private val APP_PREFERENCES_FRAGMENT = "fragment"
     private val APP_PREFERENCES_SHAVA = "shava"
     private val APP_PREFERENCES_DYH = "dyh"
+    private val APP_PREFERENCES_THEME = "theme"
 
     private lateinit var rootView: View
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -104,12 +112,26 @@ class ActionFragment : Fragment() {
             }
         }
 
+        auth = Firebase.auth
+
+        val theme = if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
+            "default"
+        } else {
+            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
+
+                "default" -> "default"
+                "red"    -> "red"
+                "orange" -> "orange"
+                "lime"  -> "lime"
+                "coffee" -> "coffee"
+                else     -> "default"
+            }
+        }
+
         Log.d("all", allSec.toString())
         Log.d("is", isStart.toString())
         Log.d("curSec", curSec.toString())
         Log.d("list", list.toString())
-
-        auth = Firebase.auth
 
         simplePlayer = MediaPlayer.create(activity, R.raw.beeps_m)
         doublePlayer = MediaPlayer.create(activity, R.raw.beeps)
@@ -126,6 +148,18 @@ class ActionFragment : Fragment() {
         startPauseAction = rootView.startPauseAction
 
         actionBar = rootView.actionBar
+        actionBarAll = rootView.actionBarAll
+
+        actionBar.progressDrawable = resources.getDrawable(resources.getIdentifier(
+            "action_bar_$theme",
+            "drawable",
+            context?.packageName
+        ), context?.theme)
+        actionBarAll.progressDrawable = resources.getDrawable(resources.getIdentifier(
+            "action_bar_$theme",
+            "drawable",
+            context?.packageName
+        ), context?.theme)
 
         if (isStart) {
             startPauseAction.tag = "active"
@@ -164,10 +198,18 @@ class ActionFragment : Fragment() {
         countAll = list.size
         if (closeExist) countAll++
 
+        allTimeSec = countAll * x
+
+        time.onChronometerTickListener = Chronometer.OnChronometerTickListener {
+            val sec = SystemClock.elapsedRealtime() - it.base
+
+            setProgress(actionBarAll, sec / 1000, allTimeSec, true)
+        }
+
         timeCur.onChronometerTickListener = Chronometer.OnChronometerTickListener {
             val sec = SystemClock.elapsedRealtime() - it.base
             Log.d("q", kotlin.math.abs(sec / 1000).toString())
-            setProgress(kotlin.math.abs(sec / 1000))
+            setProgress(actionBar, kotlin.math.abs(sec / 1000), x)
 
             Log.d("1", it.text.split(":")[1])
             if (sec > 0) {
@@ -199,10 +241,10 @@ class ActionFragment : Fragment() {
             if (startPauseAction.tag == "pause") {
                 if (curSec != 0) {
                     timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
-                    setProgress(curSec.toLong())
+                    setProgress(actionBar, curSec.toLong(), x)
                 } else {
                     timeCur.base = SystemClock.elapsedRealtime() + 1000 * x + 300
-                    setProgress(x.toLong())
+                    setProgress(actionBar, x.toLong(), x)
                 }
                 timeCur.start()
 
@@ -239,11 +281,11 @@ class ActionFragment : Fragment() {
         timeCur.isCountDown = true
         timeCur.base = SystemClock.elapsedRealtime() + 1000 * x + 300
 
-        setProgress(x.toLong())
+        setProgress(actionBar, x.toLong(), x)
 
         if (curSec != 0) {
             timeCur.base = SystemClock.elapsedRealtime() + 1000 * curSec
-            setProgress(curSec.toLong())
+            setProgress(actionBar ,curSec.toLong(), x)
             if (isStart)
                 timeCur.start()
         }
@@ -345,7 +387,11 @@ class ActionFragment : Fragment() {
         textView.startAnimation(fadeIn)
     }
 
-    private fun setProgress(sec: Long) {
-        actionBar.progress = ((sec * 100) / x).toInt()
-   }
+    private fun setProgress(actionBar: ProgressBar, sec: Long, limit: Int, notInverce: Boolean = false) {
+        var progress = (((sec * 100) / limit).toInt())
+        if (!notInverce) {
+            progress = 100 - progress
+        }
+        actionBar.progress = progress
+    }
 }
