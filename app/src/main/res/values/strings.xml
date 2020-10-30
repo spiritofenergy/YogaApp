@@ -39,4 +39,8 @@
     <string name="shava_id">asuna09</string>
     <string name="edit_profile">Редактирование</string>
     <string name="save_edit">Сохранить</string>
+    <string name="open_asana_title">Разогревающие асаны</string>
+    <string name="long_description">Полное описание</string>
+    <string name="short_description">Краткое описание</string>
+    <string name="title_placeholder">TItle</string>
 </resources>

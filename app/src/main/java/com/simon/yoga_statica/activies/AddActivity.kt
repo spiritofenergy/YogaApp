@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.activies
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
@@ -11,7 +12,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -49,6 +52,8 @@ class AddActivity : AppCompatActivity() {
     private lateinit var addLongAsuns: EditText
     private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
+    private lateinit var addNewAsuna: Button
+    private lateinit var layoutParent: LinearLayout
 
     private lateinit var addedImage: ViewPager2
 
@@ -62,25 +67,13 @@ class AddActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTitle("Добавление асуны")
+        title = "Добавление асуны"
 
         auth = Firebase.auth
 
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-        val theme = if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
-            "default"
-        } else {
-            when (prefs.getString(APP_PREFERENCES_THEME, "default")) {
-
-                "default" -> "default"
-                "red"    -> "red"
-                "orange" -> "orange"
-                "lime"  -> "lime"
-                "coffee" -> "coffee"
-                else     -> "default"
-            }
-        }
+        val theme = prefs.getString(APP_PREFERENCES_THEME, "default")
 
         when (theme) {
             "default" -> setTheme(R.style.AppTheme)
@@ -97,7 +90,9 @@ class AddActivity : AppCompatActivity() {
         addLongAsuns = findViewById(R.id.addLongAsuns)
         addImage = findViewById(R.id.addImage)
         addAsuns = findViewById(R.id.addAsuns)
+        addNewAsuna = findViewById(R.id.addNewAsuna)
         addedImage = findViewById(R.id.addedImage)
+        layoutParent = findViewById(R.id.layoutParent)
         addAsuns.background = ContextCompat.getDrawable(
             this,
             resources.getIdentifier(
@@ -130,7 +125,7 @@ class AddActivity : AppCompatActivity() {
         addImage.setOnClickListener {
             edit = true
 
-            getImage()
+            getImage(R.id.addedImage)
         }
 
         addAsuns.setOnClickListener {
@@ -150,6 +145,11 @@ class AddActivity : AppCompatActivity() {
                 .setNegativeButton("Нет") { _, _ ->
                 }
                 .show()
+        }
+
+        addNewAsuna.setOnClickListener {
+            edit = true
+            addNew()
         }
 
     }
@@ -186,6 +186,22 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @SuppressLint("InflateParams")
+    private fun addNew() {
+        val inflater =
+            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val rowView: View = inflater.inflate(R.layout.add_new_item, null)
+        layoutParent.addView(rowView, layoutParent.childCount)
+
+        rowView.tag = "Open"
+        rowView.findViewById<ImageButton>(R.id.addImageOpen).setOnClickListener {
+            edit = true
+            val added = rowView.findViewById<ViewPager2>(R.id.addedImageOpen).id
+            getImage(added)
+        }
+    }
+
     private fun getCountAsuns() {
         db.collection("asunaRU")
             .get()
@@ -195,11 +211,12 @@ class AddActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private fun getImage() {
+    private fun getImage(pager2: Int) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
+        addedImage = findViewById(pager2)
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
 
@@ -209,6 +226,8 @@ class AddActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 RESULT_IMAGE -> {
+                    Log.d("pager", data?.getIntExtra("pager", 0).toString())
+
                     for (item in images) {
                         avatars.child("thumbnails/$item.jpeg").delete()
                     }
@@ -218,7 +237,7 @@ class AddActivity : AppCompatActivity() {
                     Log.d("images", images.toString())
 
                     if (selectedImageUri != null) {
-                        val nameImg = getRandomString(28)
+                        val nameImg = getRandomString()
                         val upload: UploadTask = avatars
                             .child("thumbnails/$nameImg.jpeg")
                             .putFile(selectedImageUri)
@@ -257,7 +276,7 @@ class AddActivity : AppCompatActivity() {
                             Log.d("imagesNoNe", "true")
 
                             for (i in 0 until clipData.itemCount) {
-                                val nameImg = getRandomString(28)
+                                val nameImg = getRandomString()
                                 val upload: UploadTask = avatars
                                     .child("thumbnails/$nameImg.jpeg")
                                     .putFile(clipData.getItemAt(i).uri)
@@ -292,38 +311,9 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-//    private fun openAvatar(downloadUri: Uri) {
-//        Glide.with(this)
-//            .load(downloadUri)
-//            .listener( object : RequestListener<Drawable> {
-//                override fun onLoadFailed(
-//                    e: GlideException?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return false
-//                }
-//
-//                override fun onResourceReady(
-//                    resource: Drawable?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    dataSource: DataSource?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    addImage.scaleType = ImageView.ScaleType.FIT_CENTER
-//
-//                    return false
-//                }
-//
-//            })
-//            .into(addImage)
-//    }
-
-    private fun getRandomString(length: Int) : String {
+    private fun getRandomString() : String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-        return (1..length)
+        return (1..28)
             .map { allowedChars.random() }
             .joinToString("")
     }
