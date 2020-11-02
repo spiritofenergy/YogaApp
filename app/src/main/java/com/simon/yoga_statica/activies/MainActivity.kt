@@ -174,8 +174,8 @@ class MainActivity : AppCompatActivity() {
                         SplashActivity::class.java
                     )
                     intent.putExtra("auth", true)
-                    finish()
                     startActivity(intent)
+                    finish()
                 }
 
                 true
@@ -184,9 +184,8 @@ class MainActivity : AppCompatActivity() {
                 Firebase.auth.signOut()
                 mGoogleSignInClient.revokeAccess()
                 val intent = intent
-                finish()
                 startActivity(intent)
-
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)

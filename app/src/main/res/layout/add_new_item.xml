@@ -30,19 +30,10 @@
         app:srcCompat="@drawable/ic_baseline_add_24" />
 
     <EditText
-        android:id="@+id/addShortAsunsOpen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/short_description"
-        android:inputType="textMultiLine" />
-
-    <EditText
         android:id="@+id/addLongAsunsOpen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/long_description"
