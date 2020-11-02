@@ -175,7 +175,7 @@ class AuthPhoneFragment : Fragment() {
             activity,
             MainActivity::class.java
         )
-        activity?.finish()
         startActivity(intent)
+        activity?.finish()
     }
 }

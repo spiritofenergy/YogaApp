@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.view.marginLeft
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.simon.yoga_statica.adapters.OpenAsanaAdapter
 import com.simon.yoga_statica.adapters.SliderAdapter
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 import java.text.FieldPosition
@@ -48,6 +50,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
     private var lane: TextView = itemView.findViewById(R.id.lane)
+    private var openAsans: GridView = itemView.findViewById(R.id.openAsans)
 
     var addAsuna: FrameLayout = itemView.findViewById(R.id.addAsuna)
 
@@ -90,6 +93,11 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         publish.text = card.likesCount.toString()
         nameTwo.text = card.shortDesc
         isLiked.text = "0"
+        val opensList = card.openAsans.split(" ")
+        Log.d("c", opensList.toString())
+        if (opensList[0] != "null") {
+            openAsans.adapter = OpenAsanaAdapter(opensList, parent.context)
+        }
 
         var id = auth.currentUser?.uid
 

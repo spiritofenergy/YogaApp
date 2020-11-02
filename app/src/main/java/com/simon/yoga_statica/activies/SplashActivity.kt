@@ -86,13 +86,12 @@ class SplashActivity : AppCompatActivity() {
             } finally {
                 if (isOnline()) {
                     if (auth.currentUser != null) {
-                        finish()
-                        startActivity(
-                            Intent(
-                                this,
-                                MainActivity::class.java
-                            )
+                        val intent = Intent(
+                            this,
+                            MainActivity::class.java
                         )
+                        startActivity(intent)
+                        finish()
                     } else {
                         if (container.tag != "land-x") {
                             Log.d("auth", "NONE")

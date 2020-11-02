@@ -112,7 +112,7 @@ class SignUpFragment : Fragment() {
             activity,
             MainActivity::class.java
         )
-        activity?.finish()
         startActivity(intent)
+        activity?.finish()
     }
 }

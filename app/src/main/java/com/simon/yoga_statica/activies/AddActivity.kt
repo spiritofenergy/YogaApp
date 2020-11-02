@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
@@ -41,11 +42,19 @@ class AddActivity : AppCompatActivity() {
     private val avatars: StorageReference = storage.reference
 
     private var edit = false
-    private var photo = false
     private var count = 0
 
-    private var images: MutableList<String> = mutableListOf()
+    private var images: MutableList< MutableList<String> > = mutableListOf()
+    private var elems: MutableList< HashMap< String, EditText > > = mutableListOf()
     private var imagesStr = ""
+    private var imagesArray: MutableList<String> = mutableListOf("")
+    private var curAsana = 0
+    private var titles: MutableList<String> = mutableListOf()
+    private var totalAll: HashMap<String, HashMap<String, Any>> = hashMapOf()
+    private var imagesPreviewIDs: MutableList<ViewPager2> = mutableListOf()
+
+    private var countOpen = 0
+
 
     private lateinit var addTitle: EditText
     private lateinit var addShortAsuns: EditText
@@ -102,6 +111,13 @@ class AddActivity : AppCompatActivity() {
             )
         )
 
+        elems.add(hashMapOf(
+            "title" to addTitle,
+            "shortDescription" to addShortAsuns,
+            "description" to addLongAsuns
+        ))
+        images.add(mutableListOf())
+
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -124,8 +140,8 @@ class AddActivity : AppCompatActivity() {
 
         addImage.setOnClickListener {
             edit = true
-
-            getImage(R.id.addedImage)
+            curAsana = 0
+            getImage(addedImage)
         }
 
         addAsuns.setOnClickListener {
@@ -134,13 +150,19 @@ class AddActivity : AppCompatActivity() {
                 .setTitle("Добавление асaны")
                 .setMessage("Вы уверены, что хотите завершить редактирование?")
                 .setPositiveButton("Завершить") { _, _ ->
-                    if (edit && addTitle.text.isNotEmpty() && addLongAsuns.text.isNotEmpty() && addShortAsuns.text.isNotEmpty())
-                        addAsunaInFire()
-                    else
+                    totalAll = getMapOfData()
+
+                    Log.d("map", totalAll.toString())
+
+                    if (totalAll.isEmpty()) {
                         Toast.makeText(
                             this, "Заполните все поля",
                             Toast.LENGTH_SHORT
                         ).show()
+                    } else {
+                        addAsunaInFire()
+                    }
+
                 }
                 .setNegativeButton("Нет") { _, _ ->
                 }
@@ -149,6 +171,9 @@ class AddActivity : AppCompatActivity() {
 
         addNewAsuna.setOnClickListener {
             edit = true
+            imagesArray.add("")
+            images.add(mutableListOf())
+            countOpen++
             addNew()
         }
 
@@ -196,10 +221,23 @@ class AddActivity : AppCompatActivity() {
 
         rowView.tag = "Open"
         rowView.findViewById<ImageButton>(R.id.addImageOpen).setOnClickListener {
+            curAsana = it.tag as Int
+
             edit = true
-            val added = rowView.findViewById<ViewPager2>(R.id.addedImageOpen).id
-            getImage(added)
+            getImage(imagesPreviewIDs[curAsana - 1])
         }
+
+        titles.add("open_asana${count}_$countOpen")
+        rowView.findViewById<ImageButton>(R.id.addImageOpen).tag = countOpen
+
+        imagesPreviewIDs.add(rowView.findViewById(R.id.addedImageOpen))
+        Log.d("prew", imagesPreviewIDs.toString())
+        elems.add(hashMapOf(
+            "title" to rowView.findViewById(R.id.addTitleOpen),
+            "description" to rowView.findViewById(R.id.addLongAsunsOpen)
+        ))
+
+        Log.d("elems", elems.toString())
     }
 
     private fun getCountAsuns() {
@@ -207,16 +245,17 @@ class AddActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 count = result.size() + 1
+                titles.add("asuna${count}")
             }
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private fun getImage(pager2: Int) {
+    private fun getImage(pager2: ViewPager2) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        addedImage = findViewById(pager2)
+        addedImage = pager2
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
 
@@ -226,12 +265,11 @@ class AddActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 RESULT_IMAGE -> {
-                    Log.d("pager", data?.getIntExtra("pager", 0).toString())
-
-                    for (item in images) {
+                    for (item in images[curAsana]) {
                         avatars.child("thumbnails/$item.jpeg").delete()
                     }
-                    images.clear()
+                    images[curAsana].clear()
+                    imagesArray[curAsana] = ""
                     val selectedImageUri: Uri? = data?.data
 
                     Log.d("images", images.toString())
@@ -242,8 +280,12 @@ class AddActivity : AppCompatActivity() {
                             .child("thumbnails/$nameImg.jpeg")
                             .putFile(selectedImageUri)
 
-                        images.add(nameImg)
-                        imagesStr = images.joinToString(separator = " ")
+                        images[curAsana].add(nameImg)
+                        imagesStr = images[curAsana].joinToString(" ")
+
+                        imagesArray[curAsana] = imagesStr
+
+                        Log.d("as", imagesArray.toString())
 
                         Log.d("imagesOne", "true")
                         val urlTask = upload.continueWithTask { task ->
@@ -256,11 +298,8 @@ class AddActivity : AppCompatActivity() {
                         }.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
-                                photo = true
 
-                                Log.d("urls", images.joinToString())
-
-                                addedImage.adapter = SliderAdapter(images)
+                                addedImage.adapter = SliderAdapter(images[curAsana])
                             } else {
                                 Toast.makeText(
                                     this, "Upload image failed. ${task.exception}",
@@ -281,8 +320,9 @@ class AddActivity : AppCompatActivity() {
                                     .child("thumbnails/$nameImg.jpeg")
                                     .putFile(clipData.getItemAt(i).uri)
 
-                                images.add(nameImg)
-                                imagesStr = images.joinToString(separator = " ")
+                                images[curAsana].add(nameImg)
+
+                                Log.d("as", imagesArray.toString())
 
                                 val urlTask = upload.continueWithTask { task ->
                                     if (!task.isSuccessful) {
@@ -294,8 +334,8 @@ class AddActivity : AppCompatActivity() {
                                 }.addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         val downloadUri = task.result
-                                        photo = true
-                                        addedImage.adapter = SliderAdapter(images)
+
+                                        addedImage.adapter = SliderAdapter(images[curAsana])
                                     } else {
                                         Toast.makeText(
                                             this, "Upload image failed. ${task.exception?.message}",
@@ -304,6 +344,8 @@ class AddActivity : AppCompatActivity() {
                                     }
                                 }
                             }
+                            imagesStr = images[curAsana].joinToString(" ")
+                            imagesArray[curAsana] = imagesStr
                         }
                     }
                 }
@@ -318,24 +360,72 @@ class AddActivity : AppCompatActivity() {
             .joinToString("")
     }
 
-    private fun addAsunaInFire() {
-        db.collection("asunaRU")
-            .document("asuna${count}")
-            .set(hashMapOf(
-                "comments" to 0,
-                "likes" to 0,
-                "thumbPath" to imagesStr,
-                "title" to addTitle.text.toString(),
-                "shortDescription" to addShortAsuns.text.toString(),
-                "description" to addLongAsuns.text.toString()
-            ))
-            .addOnSuccessListener {
-                val intent = Intent(
-                    this,
-                    MainActivity::class.java
-                )
-                startActivity(intent)
+    private fun getMapOfData() : HashMap<String, HashMap<String, Any>> {
+        val hashMap: HashMap<String, HashMap<String, Any>> = hashMapOf()
+        val iterator = titles.iterator()
+        for ((index, title) in iterator.withIndex()) {
+
+            val titleAsana = elems[index]["title"]
+                ?.text
+                .toString()
+            var shortDescription = ""
+            if (index == 0) {
+                shortDescription = elems[index]["shortDescription"]
+                    ?.text
+                    .toString()
             }
+            val description = elems[index]["description"]
+                ?.text
+                .toString()
+
+            if (titleAsana == "" || (shortDescription == "" && index == 0) || description == "" || imagesArray[index] == "") {
+                hashMap.clear()
+                return hashMap
+            }
+
+            val opens = titles.drop(1).joinToString(" ")
+
+            if (index == 0) {
+                hashMap[title] = hashMapOf(
+                    "comments" to 0,
+                    "likes" to 0,
+                    "thumbPath" to imagesArray[index],
+                    "title" to titleAsana,
+                    "shortDescription" to shortDescription,
+                    "description" to description,
+                    "openAsans" to opens
+                )
+            } else {
+                hashMap[title] = hashMapOf(
+                    "thumbPath" to imagesArray[index],
+                    "title" to titleAsana,
+                    "description" to description
+                )
+            }
+        }
+
+        return hashMap
+    }
+
+    private fun addAsunaInFire() {
+        for ((title, asuna) in totalAll) {
+            val ref: CollectionReference
+            if (title.indexOf("open") != -1) {
+                ref = db.collection("openAsunaRU")
+            } else {
+                ref = db.collection("asunaRU")
+            }
+            ref
+                .document(title)
+                .set(asuna)
+                .addOnSuccessListener {
+                    val intent = Intent(
+                        this,
+                        MainActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+        }
     }
 
 }
