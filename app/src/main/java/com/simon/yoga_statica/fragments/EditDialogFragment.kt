@@ -1,5 +1,7 @@
 package com.simon.yoga_statica.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -25,6 +28,8 @@ class EditDialogFragment : DialogFragment() {
     private lateinit var emailEdit: EditText
 
     private lateinit var saveEditProfile: Button
+
+    var activityOver: FragmentActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,9 +55,24 @@ class EditDialogFragment : DialogFragment() {
             val profileUpdates = userProfileChangeRequest {
                 displayName = nameEdit.text.toString()
             }
-            auth.currentUser!!.updateProfile(profileUpdates)
+            auth.currentUser!!
+                .updateProfile(profileUpdates)
+                .addOnCompleteListener {
+                    dismiss()
 
-            dismiss()
+                    val intent = activityOver?.intent
+                    intent?.addFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                                or Intent.FLAG_ACTIVITY_NO_ANIMATION
+                    )
+
+                    intent?.putExtra("profile", true)
+
+                    activityOver?.overridePendingTransition(0, 0)
+                    startActivity(intent)
+
+                    activityOver?.finish()
+                }
         }
 
 

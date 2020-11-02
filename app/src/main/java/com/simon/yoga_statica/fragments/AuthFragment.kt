@@ -175,7 +175,7 @@ class AuthFragment : Fragment() {
             activity,
             MainActivity::class.java
         )
-        activity?.finish()
         startActivity(intent)
+        activity?.finish()
     }
 }

@@ -45,7 +45,14 @@ class AddActivity : AppCompatActivity() {
     private var count = 0
 
     private var images: MutableList<String> = mutableListOf()
+    private var elems: MutableList<HashMap<String, Int>> = mutableListOf()
     private var imagesStr = ""
+    private var imagesArray: MutableList<String> = mutableListOf()
+    private var curAsana = 0
+    private var openNames: MutableList<String> = mutableListOf()
+
+    private var countOpen = 0
+
 
     private lateinit var addTitle: EditText
     private lateinit var addShortAsuns: EditText
@@ -124,7 +131,7 @@ class AddActivity : AppCompatActivity() {
 
         addImage.setOnClickListener {
             edit = true
-
+            curAsana = 0
             getImage(R.id.addedImage)
         }
 
@@ -196,10 +203,14 @@ class AddActivity : AppCompatActivity() {
 
         rowView.tag = "Open"
         rowView.findViewById<ImageButton>(R.id.addImageOpen).setOnClickListener {
+            curAsana = it.tag as Int
+
             edit = true
             val added = rowView.findViewById<ViewPager2>(R.id.addedImageOpen).id
             getImage(added)
         }
+        countOpen++
+        rowView.findViewById<ImageButton>(R.id.addImageOpen).tag = countOpen
     }
 
     private fun getCountAsuns() {
@@ -245,6 +256,15 @@ class AddActivity : AppCompatActivity() {
                         images.add(nameImg)
                         imagesStr = images.joinToString(separator = " ")
 
+                        if (imagesArray.size > curAsana) {
+                            imagesArray[curAsana] = imagesStr
+                        } else {
+                            imagesArray.add(imagesStr)
+                        }
+
+
+                        Log.d("as", imagesArray.toString())
+
                         Log.d("imagesOne", "true")
                         val urlTask = upload.continueWithTask { task ->
                             if (!task.isSuccessful) {
@@ -283,6 +303,14 @@ class AddActivity : AppCompatActivity() {
 
                                 images.add(nameImg)
                                 imagesStr = images.joinToString(separator = " ")
+
+                                if (imagesArray.size > curAsana) {
+                                    imagesArray[curAsana] = imagesStr
+                                } else {
+                                    imagesArray.add(imagesStr)
+                                }
+
+                                Log.d("as", imagesArray.toString())
 
                                 val urlTask = upload.continueWithTask { task ->
                                     if (!task.isSuccessful) {

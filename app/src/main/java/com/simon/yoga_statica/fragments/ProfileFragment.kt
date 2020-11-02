@@ -199,6 +199,7 @@ class ProfileFragment : Fragment() {
         openDialog = rootView.openDialog
         openDialog.setOnClickListener {
             val dialog = EditDialogFragment()
+            dialog.activityOver = activity
             dialog.show(fragmentManager!!, "edit_profile")
         }
 
@@ -342,13 +343,13 @@ class ProfileFragment : Fragment() {
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                             or Intent.FLAG_ACTIVITY_NO_ANIMATION
                 )
-                activity?.overridePendingTransition(0, 0)
-                activity?.finish()
 
                 intent?.putExtra("profile", true)
 
                 activity?.overridePendingTransition(0, 0)
                 startActivity(intent)
+
+                activity?.finish()
             }
         }
 
