@@ -33,9 +33,7 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
-import kotlinx.android.synthetic.main.fraagment_profile.*
 import kotlinx.android.synthetic.main.fraagment_profile.view.*
-import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
@@ -131,17 +129,17 @@ class ProfileFragment : Fragment() {
         radioGreen = rootView.findViewById(R.id.radioLime)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
-        chooseDyh = rootView.findViewById(R.id.ChooseDyh)
-        chooseMusic = rootView.findViewById(R.id.ChooseMusic)
+        chooseDyh = rootView.findViewById(R.id.Choose_general_attitude)
+        chooseMusic = rootView.findViewById(R.id.Choose_warm_up)
 
-        dyh1 = rootView.dyh1
-        dyh2 = rootView.dyh2
-        dyh3 = rootView.dyh3
-        music1 = rootView.music1
-        music2 = rootView.music2
+        dyh1 = rootView.dyh_bhastrica
+        dyh2 = rootView.dyh_capalaphaty
+        dyh3 = rootView.dyh_udjay
+        music1 = rootView.five_warm_up
+        music2 = rootView.six_warm_up
 
-        switchDyhSwitch = rootView.findViewById(R.id.switchDyhSwitch)
-        simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
+        switchDyhSwitch = rootView.findViewById(R.id.simple_Chose_dyh)
+        simpleSwitchMusic = rootView.findViewById(R.id.switch_warm_up)
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
 
           simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)

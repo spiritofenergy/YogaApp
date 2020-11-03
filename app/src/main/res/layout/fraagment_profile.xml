@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:gravity="center_horizontal">
 
         <LinearLayout
@@ -19,9 +19,9 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageAvatar"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_marginLeft="30dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="30dp"
                 android:layout_weight="1"
                 tools:srcCompat="@tools:sample/avatars[0]" />
@@ -47,7 +47,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/ID"
-                    android:textSize="16sp"></TextView>
+                    android:textSize="16sp">
+                </TextView>
 
                 <TextView
                     android:id="@+id/phoneUser"
@@ -56,7 +57,8 @@
                     android:layout_weight="1"
                     android:text="@string/phone"
                     android:textSize="16sp"
-                    android:visibility="gone"></TextView>
+                    android:visibility="gone">
+                </TextView>
 
                 <TextView
                     android:id="@+id/emailUser"
@@ -65,7 +67,8 @@
                     android:layout_weight="1"
                     android:text="@string/email"
                     android:textSize="16sp"
-                    android:visibility="gone"></TextView>
+                    android:visibility="gone">
+                </TextView>
 
                 <TextView
                     android:id="@+id/status"
@@ -73,7 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/status"
-                    android:textSize="16sp"></TextView>
+                    android:textSize="16sp">
+                </TextView>
 
                 <Button
                     android:id="@+id/openDialog"
@@ -87,7 +91,7 @@
             <LinearLayout
                 android:id="@+id/radio_goup_seconds"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/gnt_text_size_large"
                 android:layout_marginTop="30dp"
                 android:layout_weight="1"
@@ -118,9 +122,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-
                         android:text="60 сек"
-                        android:visibility="invisible" />
+                        android:visibility="visible" />
 
                     <RadioButton
                         android:id="@+id/radio90"
@@ -129,7 +132,7 @@
                         android:layout_weight="1"
                         android:checked="false"
                         android:text="90  сек"
-                        android:visibility="invisible" />
+                        android:visibility="visible" />
                 </RadioGroup>
 
                 <LinearLayout
@@ -275,7 +278,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/switchDyh"
+            android:id="@+id/general_attitude"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@+id/settingTheme"
@@ -286,23 +289,19 @@
             tools:ignore="UseSwitchCompatOrMaterialXml">
 
             <TextView
-                android:layout_width="134dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="28dp"
-                android:layout_marginLeft="28dp"
-                android:layout_marginEnd="55dp"
-                android:layout_marginRight="55dp"
-                android:layout_toStartOf="@+id/switchDyhSwitch"
-                android:layout_toLeftOf="@+id/switchDyhSwitch"
-                android:text="@string/dyh"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"
+                android:text="@string/general_attitude"
                 android:textSize="25sp">
 
             </TextView>
 
             <Switch
-                android:id="@+id/switchDyhSwitch"
+                android:id="@+id/switch_general_attitude"
                 android:layout_width="109dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -315,49 +314,192 @@
         </RelativeLayout>
 
         <RadioGroup
-            android:id="@+id/ChooseDyh"
+            android:id="@+id/Choose_general_attitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/switchDyh"
+            android:layout_below="@id/general_attitude"
             android:layout_marginLeft="30dp"
             android:orientation="horizontal">
 
 
             <RadioButton
-                android:id="@+id/dyh1"
+                android:id="@+id/five_attitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Капалапхати"
-                android:textSize="18sp" />
+                android:checked="true"
+                android:text="5 мин" />
 
             <RadioButton
-                android:id="@+id/dyh2"
+                android:id="@+id/six_attitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="Пхастрика"
-                android:textSize="18sp" />
+                android:text="10 мин" />
 
             <RadioButton
-                android:id="@+id/dyh3"
+                android:id="@+id/seven_attitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="false"
-                android:text="Уджаи"
-                android:textSize="18sp" />
+                android:text="15 мин" />
 
         </RadioGroup>
+
+        <RelativeLayout
+            android:id="@+id/warm_up"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/Choose_general_attitude"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginRight="28dp"
+                android:layout_toStartOf="@+id/switch_warm_up"
+                android:layout_toLeftOf="@+id/switch_warm_up"
+                android:text="Разминка"
+                android:textSize="20sp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/switch_warm_up"
+                android:layout_width="139dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginRight="25dp"
+                android:checked="true"
+                android:textSize="25sp" />
+
+
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/Choose_warm_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/warm_up"
+            android:layout_marginLeft="30dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/five_warm_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_weight="1"
+                 android:text="5 мин" />
+
+            <RadioButton
+                android:id="@+id/six_warm_up"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10 мин" />
+
+            <RadioButton
+                android:id="@+id/seven_warm_up"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="15 мин" />
+        </RadioGroup>
+
+
+        <RelativeLayout
+            android:id="@+id/duh"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/Choose_warm_up"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            tools:ignore="UseSwitchCompatOrMaterialXml">
+
+            <TextView
+                android:layout_width="138dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="28dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginEnd="28dp"
+                android:layout_marginRight="28dp"
+                android:text="Дыхание"
+                android:textSize="20sp">
+
+            </TextView>
+
+            <Switch
+                android:id="@+id/simple_Chose_dyh"
+                android:layout_width="139dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginRight="25dp"
+                android:checked="true"
+                android:textSize="25sp" />
+
+
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/Choose_duh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/duh"
+            android:layout_marginLeft="30dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/dyh_bhastrica"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_weight="1"
+                android:text="Бхастрика"
+                />
+
+            <RadioButton
+                android:id="@+id/dyh_capalaphaty"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Капалапхати"/>
+            <RadioButton
+                android:id="@+id/dyh_udjay"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Уджаи"/>
+        </RadioGroup>
+
 
         <RelativeLayout
             android:id="@+id/switchMusic"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/ChooseDyh"
+            android:layout_below="@id/Choose_duh"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="30dp"
             android:orientation="horizontal"
             tools:ignore="UseSwitchCompatOrMaterialXml">
@@ -374,7 +516,7 @@
                 android:layout_toStartOf="@+id/simpleSwitchMusic"
                 android:layout_toLeftOf="@+id/simpleSwitchMusic"
                 android:text="Музыка"
-                android:textSize="25sp">
+                android:textSize="20sp">
 
             </TextView>
 
@@ -407,7 +549,7 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:layout_weight="1"
-                 android:text=" Музыка 1" />
+                android:text=" Музыка 1" />
 
             <RadioButton
                 android:id="@+id/music2"
@@ -424,7 +566,6 @@
                 android:text=" Музыка 2" />
         </RadioGroup>
 
-
         <RelativeLayout
             android:id="@+id/switchShava"
             android:layout_width="match_parent"
@@ -432,7 +573,7 @@
             android:layout_below="@id/ChooseMusic"
             android:orientation="horizontal"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="30dp"
             tools:ignore="UseSwitchCompatOrMaterialXml">
 
@@ -448,7 +589,7 @@
                 android:layout_toStartOf="@+id/simpleSwitchShava"
                 android:layout_toLeftOf="@+id/simpleSwitchShava"
                 android:text="Шавасана"
-                android:textSize="25sp">
+                android:textSize="20sp">
 
             </TextView>
 
@@ -464,6 +605,20 @@
                 android:checked="true"
                 android:textSize="25sp" />
         </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     </RelativeLayout>
 </ScrollView>

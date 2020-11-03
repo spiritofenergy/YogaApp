@@ -43,4 +43,5 @@
     <string name="long_description">Полное описание</string>
     <string name="short_description">Краткое описание</string>
     <string name="title_placeholder">TItle</string>
+    <string name="general_attitude">Общий настрой</string>
 </resources>
