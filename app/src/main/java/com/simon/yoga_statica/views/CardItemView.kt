@@ -50,7 +50,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
     private var lane: TextView = itemView.findViewById(R.id.lane)
-    private var openAsans: GridView = itemView.findViewById(R.id.openAsans)
+    private var openAsans: LinearLayout = itemView.findViewById(R.id.openAsans)
 
     var addAsuna: FrameLayout = itemView.findViewById(R.id.addAsuna)
 
@@ -64,6 +64,7 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
 
+    @SuppressLint("InflateParams")
     fun bind(card: Card, fragmentManager: FragmentManager, listener: OnRecyclerItemClickListener?) {
 
         this.fragmentManager = fragmentManager
@@ -94,10 +95,46 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         nameTwo.text = card.shortDesc
         isLiked.text = "0"
         val opensList = card.openAsans.split(" ")
-        Log.d("c", opensList.toString())
-        if (opensList[0] != "null") {
-            openAsans.adapter = OpenAsanaAdapter(opensList, parent.context)
+        openAsans.removeAllViews()
+        for (openID in opensList) {
+            if (openID != "null") {
+
+                Log.d("asdOPEN", card.id + " " + openID)
+
+                val inflater =
+                    parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val rowView: View = inflater.inflate(R.layout.open_photo, null)
+                openAsans.addView(rowView, openAsans.childCount)
+
+                Log.d("asd", openID)
+                db.collection("openAsunaRU")
+                    .document(openID)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if (document != null) {
+                            thumbnails.child(
+                                "${
+                                    document.data?.get("thumbPath").toString().split(" ")[0]
+                                }.jpeg"
+                            )
+                                .downloadUrl
+                                .addOnSuccessListener {
+                                    Glide.with(parent.context)
+                                        .load(it)
+                                        .into(rowView.findViewById(R.id.openAsanaImage))
+                                }.addOnFailureListener { exception ->
+                                    Log.d("log", "get failed with $openID ", exception)
+                                }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.w("gets", "Error getting documents.", exception)
+                    }
+//
+            }
         }
+
+
 
         var id = auth.currentUser?.uid
 
