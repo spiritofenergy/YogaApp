@@ -94,7 +94,9 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         publish.text = card.likesCount.toString()
         nameTwo.text = card.shortDesc
         isLiked.text = "0"
+
         val opensList = card.openAsans.split(" ")
+
         openAsans.removeAllViews()
         for (openID in opensList) {
             if (openID != "null") {
@@ -130,7 +132,6 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
                     .addOnFailureListener { exception ->
                         Log.w("gets", "Error getting documents.", exception)
                     }
-//
             }
         }
 
