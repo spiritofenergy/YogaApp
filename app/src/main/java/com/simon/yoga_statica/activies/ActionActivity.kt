@@ -49,7 +49,7 @@ class ActionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        title = "Тренировка"
+        title = getString(R.string.workout_title)
 
         auth = Firebase.auth
 
@@ -110,13 +110,13 @@ class ActionActivity : AppCompatActivity() {
 
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Завершение тренировки")
-                .setMessage("Вы уверены, что хотите завершить тренировку? Статистика не сохранится!")
-                .setPositiveButton("Завершить") { dialog, which ->
+                .setTitle(getString(R.string.end_workout))
+                .setMessage(getString(R.string.confirm_workout_end))
+                .setPositiveButton(getString(R.string.ending)) { dialog, which ->
                     showAdv()
                     super.onBackPressed()
                 }
-                .setNegativeButton("Нет") { dialogInterface: DialogInterface, i: Int ->
+                .setNegativeButton(getString(R.string.no)) { dialogInterface: DialogInterface, i: Int ->
                     fragment.onStart()
                 }
                 .show()

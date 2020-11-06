@@ -119,7 +119,7 @@ class AuthFragment : Fragment() {
                 "signInResult:failed code=" + e.statusCode
             )
             Toast.makeText(
-                activity, "Authentication failed.",
+                activity, getString(R.string.auth_fail),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -141,7 +141,7 @@ class AuthFragment : Fragment() {
                     // If sign in fails, display a message to the user.
                     Log.w("login", "signInWithEmail:failure", task.exception)
                     Toast.makeText(
-                        activity, "Authentication failed.",
+                        activity, getString(R.string.auth_fail),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

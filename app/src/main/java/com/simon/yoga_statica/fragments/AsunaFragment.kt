@@ -172,7 +172,7 @@ class AsunaFragment : Fragment() {
                     }
 
             } else {
-                Toast.makeText(activity, "Заполните пустые поля",
+                Toast.makeText(activity, getString(R.string.put_all_fields),
                     Toast.LENGTH_SHORT).show()
             }
         }

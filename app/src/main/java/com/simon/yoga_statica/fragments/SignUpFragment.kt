@@ -54,7 +54,7 @@ class SignUpFragment : Fragment() {
             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseNewAuthWithEmail(email.toString(), password.toString())
             } else {
-                Toast.makeText(activity, "Заполните все поля",
+                Toast.makeText(activity, getString(R.string.put_all_fields),
                     Toast.LENGTH_SHORT).show()
             }
         }

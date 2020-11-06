@@ -55,13 +55,13 @@ class SplashActivity : AppCompatActivity() {
         if (!isOnline()) {
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Соединение отсутствует")
-                .setMessage("Включите интернет и попробуйте снова!")
-                .setPositiveButton("Включить") { _, _ ->
+                .setTitle(getString(R.string.error_connection))
+                .setMessage(getString(R.string.internet_on))
+                .setPositiveButton(getString(R.string.do_on)) { _, _ ->
                     val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
                     startActivityForResult(intent, 5478)
                 }
-                .setNegativeButton("Обновить") { _, _ ->
+                .setNegativeButton(getString(R.string.reload)) { _, _ ->
                     finish()
                     startActivity(intent)
                 }

@@ -2,6 +2,7 @@
     <string name="app_name">Yoga Workout</string>
     <string name="ads_native_uid">ca-app-pub-8270459186680862/9658546795</string>
     <string name="ads_inter_uid">ca-app-pub-8270459186680862/2371578556</string>
+    <string name="ads_banner_uid">ca-app-pub-8270459186680862/4961055207</string>
     <string name="add">Add to</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">BRAVO!</string>
@@ -43,4 +44,38 @@
     <string name="short_description">Краткое описание</string>
     <string name="title_placeholder">TItle</string>
     <string name="general_attitude">Общий настрой</string>
+    <string name="workout_title">Тренировка</string>
+    <string name="end_workout">Завершение тренировки</string>
+    <string name="confirm_workout_end">Вы уверены, что хотите завершить тренировку? Статистика не сохранится!</string>
+    <string name="ending">Завершить</string>
+    <string name="no">Нет</string>
+    <string name="additional_asana_title">Добавление асaны</string>
+    <string name="confirm_adational_asana">Вы уверены, что хотите завершить редактирование?</string>
+    <string name="put_all_fields">Заполните все поля</string>
+    <string name="confirm_end_addition">Вы уверены, что хотите завершить добавление?</string>
+    <string name="end_adidition">Завершение добавления асуны</string>
+    <string name="open">Open</string>
+    <string name="error_upload">Upload image failed.</string>
+    <string name="error_connection">Соединение отсутствует</string>
+    <string name="internet_on">Включите интернет и попробуйте снова!</string>
+    <string name="do_on">Включить</string>
+    <string name="reload">Обновить</string>
+    <string name="main">Основное</string>
+    <string name="breath">Дыхание</string>
+    <string name="end_action">Заключение</string>
+    <string name="delete_asana">Асана удалена</string>
+    <string name="asuna_addition">Асана добавлена</string>
+    <string name="auth_fail">Authentication failed.</string>
+    <string name="favorite_asana">Любимые асуны</string>
+    <string name="all_additional">Все асуны добавлены в список выполняемых асун</string>
+    <string name="setting_profile">Настройки профиля</string>
+    <string name="off_title">Отключение</string>
+    <string name="confirm_off_breath">Вы уверены, что хотите отключить дыхание? Вы потеряете 1 уровень!</string>
+    <string name="confirm_title">Подтверждаю!</string>
+    <string name="cancel_title">Отменить</string>
+    <string name="confirm_end_asana_off">Вы уверены, что хотите отключить закрывающую асану? Вы потеряете 1 уровень!</string>
+    <string name="newer">Новичок</string>
+    <string name="middle">Средний</string>
+    <string name="profi">Проффесионал</string>
+    <string name="choose_image">Выберите изображения</string>
 </resources>

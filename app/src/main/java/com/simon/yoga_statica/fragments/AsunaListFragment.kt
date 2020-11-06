@@ -142,7 +142,7 @@ class AsunaListFragment : Fragment() {
                     }
                     Log.d("list", addsAsuna.toString())
                     Toast.makeText(
-                        activity, "Асана удалена",
+                        activity, getString(R.string.delete_asana),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -150,7 +150,7 @@ class AsunaListFragment : Fragment() {
 
                     Log.d("list", addsAsuna.toString())
                     Toast.makeText(
-                        activity, "Асана добавлена",
+                        activity, getString(R.string.asuna_addition),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

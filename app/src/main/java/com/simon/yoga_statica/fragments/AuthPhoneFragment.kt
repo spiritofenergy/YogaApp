@@ -65,7 +65,7 @@ class AuthPhoneFragment : Fragment() {
             if (phone.isNotEmpty()) {
                 checkPhone(phone.toString())
             } else {
-                Toast.makeText(activity, "Заполните все поля",
+                Toast.makeText(activity, getString(R.string.put_all_fields),
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -77,7 +77,7 @@ class AuthPhoneFragment : Fragment() {
                 if (code.isNotEmpty()) {
                     verifyPhoneNumberWithCode(storedVerificationId, code.toString())
                 } else {
-                    Toast.makeText(activity, "Заполните все поля",
+                    Toast.makeText(activity, getString(R.string.put_all_fields),
                         Toast.LENGTH_SHORT).show()
                 }
         }

@@ -147,16 +147,16 @@ class AddActivity : AppCompatActivity() {
         addAsuns.setOnClickListener {
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Добавление асaны")
-                .setMessage("Вы уверены, что хотите завершить редактирование?")
-                .setPositiveButton("Завершить") { _, _ ->
+                .setTitle(getString(R.string.additional_asana_title))
+                .setMessage(getString(R.string.confirm_adational_asana))
+                .setPositiveButton(getString(R.string.ending)) { _, _ ->
                     totalAll = getMapOfData()
 
                     Log.d("map", totalAll.toString())
 
                     if (totalAll.isEmpty()) {
                         Toast.makeText(
-                            this, "Заполните все поля",
+                            this, getString(R.string.put_all_fields),
                             Toast.LENGTH_SHORT
                         ).show()
                     } else {
@@ -164,7 +164,7 @@ class AddActivity : AppCompatActivity() {
                     }
 
                 }
-                .setNegativeButton("Нет") { _, _ ->
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
                 }
                 .show()
         }
@@ -195,15 +195,15 @@ class AddActivity : AppCompatActivity() {
         if (edit) {
             AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Завершение добавления асуны")
-                .setMessage("Вы уверены, что хотите завершить добавление?")
-                .setPositiveButton("Завершить") { _, _ ->
+                .setTitle(getString(R.string.end_adidition))
+                .setMessage(getString(R.string.confirm_end_addition))
+                .setPositiveButton(getString(R.string.ending)) { _, _ ->
                     for (item in images) {
                         avatars.child("thumbnails/$item.jpeg").delete()
                     }
                     super.onBackPressed()
                 }
-                .setNegativeButton("Нет") { _, _ ->
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
                 }
                 .show()
         } else {
@@ -219,7 +219,7 @@ class AddActivity : AppCompatActivity() {
         val rowView: View = inflater.inflate(R.layout.add_new_item, null)
         layoutParent.addView(rowView, layoutParent.childCount)
 
-        rowView.tag = "Open"
+        rowView.tag = getString(R.string.open)
         rowView.findViewById<ImageButton>(R.id.addImageOpen).setOnClickListener {
             curAsana = it.tag as Int
 
@@ -302,7 +302,7 @@ class AddActivity : AppCompatActivity() {
                                 addedImage.adapter = SliderAdapter(images[curAsana])
                             } else {
                                 Toast.makeText(
-                                    this, "Upload image failed. ${task.exception}",
+                                    this, getString(R.string.error_upload) + task.exception,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -338,7 +338,7 @@ class AddActivity : AppCompatActivity() {
                                         addedImage.adapter = SliderAdapter(images[curAsana])
                                     } else {
                                         Toast.makeText(
-                                            this, "Upload image failed. ${task.exception?.message}",
+                                            this, getString(R.string.error_upload) + task.exception,
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }

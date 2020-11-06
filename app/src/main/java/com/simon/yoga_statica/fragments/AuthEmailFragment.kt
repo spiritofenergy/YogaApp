@@ -44,7 +44,7 @@ class AuthEmailFragment : Fragment() {
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 firebaseAuthWithEmail(email.toString(), password.toString())
             } else {
-                Toast.makeText(activity, "Заполните все поля",
+                Toast.makeText(activity, getString(R.string.put_all_fields),
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -62,7 +62,7 @@ class AuthEmailFragment : Fragment() {
                     openMain()
                 } else {
                     Log.w("auth", "signInWithEmail:failure", task.exception)
-                    Toast.makeText(activity, "Authentication failed.",
+                    Toast.makeText(activity, getString(R.string.auth_fail),
                         Toast.LENGTH_SHORT).show()
                 }
             }

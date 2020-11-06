@@ -52,7 +52,7 @@ class FavoriteListFragment : Fragment() {
     ): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_favorite, container, false)
 
-        activity?.setTitle("Любимые асуны")
+        activity?.title = getString(R.string.favorite_asana)
 
         auth = Firebase.auth
 
@@ -78,7 +78,7 @@ class FavoriteListFragment : Fragment() {
             fab.visibility = View.VISIBLE
 
             Toast.makeText(
-                activity, "Все асуны добавлены в список выполняемых асун",
+                activity, getString(R.string.all_additional),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -155,7 +155,7 @@ class FavoriteListFragment : Fragment() {
                                         }
                                         Log.d("list", addsAsuna.toString())
                                         Toast.makeText(
-                                            activity, "Асуна удалена из списка выполняемых асун",
+                                            activity, getString(R.string.delete_asana),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     } else {
@@ -163,7 +163,7 @@ class FavoriteListFragment : Fragment() {
 
                                         Log.d("list", addsAsuna.toString())
                                         Toast.makeText(
-                                            activity, "Асуна добавлена в список выполняемых асун",
+                                            activity, getString(R.string.asuna_addition),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }

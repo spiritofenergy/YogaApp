@@ -97,7 +97,7 @@ class ProfileFragment : Fragment() {
     ): View? {
           val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
-        activity?.title = "Настройки профиля"
+        activity?.title = getString(R.string.setting_profile)
 
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
@@ -228,16 +228,16 @@ class ProfileFragment : Fragment() {
 
                 AlertDialog.Builder(activity)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Отключение")
-                    .setMessage("Вы уверены, что хотите отключить дыхание? Вы потеряете 1 уровень!")
-                    .setPositiveButton("Подтверждаю!") { dialog, which ->
+                    .setTitle(getString(R.string.off_title))
+                    .setMessage(getString(R.string.confirm_off_breath))
+                    .setPositiveButton(getString(R.string.confirm_title)) { dialog, which ->
                         chooseDyh.visibility = View.GONE
                         prefs
                             .edit()
                             .putString(APP_PREFERENCES_DYH, "off")
                             .apply()
                     }
-                    .setNegativeButton("Отменить") { dialogInterface: DialogInterface, i: Int ->
+                    .setNegativeButton(getString(R.string.cancel_title)) { dialogInterface: DialogInterface, i: Int ->
                         switchDyhSwitch.isChecked = true
                     }
                     .setOnCancelListener {
@@ -273,15 +273,15 @@ class ProfileFragment : Fragment() {
             } else {
                 AlertDialog.Builder(activity)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Отключение")
-                    .setMessage("Вы уверены, что хотите отключить закрывающую асану? Вы потеряете 1 уровень!")
-                    .setPositiveButton("Подтверждаю!") { dialog, which ->
+                    .setTitle(getString(R.string.off_title))
+                    .setMessage(getString(R.string.confirm_end_asana_off))
+                    .setPositiveButton(getString(R.string.confirm_title)) { dialog, which ->
                         prefs
                             .edit()
                             .putBoolean(APP_PREFERENCES_SHAVA, false)
                             .apply()
                     }
-                    .setNegativeButton("Отменить") { dialogInterface: DialogInterface, i: Int ->
+                    .setNegativeButton(getString(R.string.cancel_title)) { dialogInterface: DialogInterface, i: Int ->
                         simpleSwitchShava.isChecked = true
                     }
                     .setOnCancelListener {
@@ -432,10 +432,10 @@ class ProfileFragment : Fragment() {
                     countAsuns.text = user.countAsuns.toString()
 
                     status.text = when (user.status) {
-                        1 -> "Новичок"
-                        2 -> "Средний"
-                        3 -> "Проффесионал"
-                        else -> "Новичок"
+                        1 -> getString(R.string.newer)
+                        2 -> getString(R.string.middle)
+                        3 -> getString(R.string.profi)
+                        else -> getString(R.string.newer)
                     }
 
                     when (user.status) {
@@ -495,7 +495,7 @@ class ProfileFragment : Fragment() {
                                 auth.currentUser!!.updateProfile(profileUpdates)
                             } else {
                                 Toast.makeText(
-                                    activity, "Upload image failed.",
+                                    activity, getString(R.string.error_upload),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -510,7 +510,7 @@ class ProfileFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        startActivityForResult(Intent.createChooser(intent, "Выберите изображения"), RESULT_IMAGE)
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_image)), RESULT_IMAGE)
     }
 
     private fun openAvatar(downloadUri: Uri) {

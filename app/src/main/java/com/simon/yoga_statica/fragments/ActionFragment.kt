@@ -138,7 +138,8 @@ class ActionFragment : Fragment() {
 
         partAction = rootView.partAction
 
-        partAction.text = "Основное"
+        partAction.text = getString(R.string.main)
+
 
         nameAsuna = rootView.findViewById(R.id.nameAsuna)
         textAsana = rootView.descAsana
@@ -192,7 +193,7 @@ class ActionFragment : Fragment() {
         if (dyhExist != "" || dyhExist != "off") {
             isDyh = true
             list.add(0, dyhExist)
-            partAction.text = "Дыхание"
+            partAction.text = getString(R.string.breath)
         }
 
         countAll = list.size
@@ -218,7 +219,7 @@ class ActionFragment : Fragment() {
                 if (position < list.size) {
                     if (isDyh) {
                         isDyh = false
-                        partAction.text = "Основное"
+                        partAction.text = getString(R.string.main)
                         setUpFadeAnimation(partAction)
                     }
                     addAsuna(list[position])
@@ -229,7 +230,7 @@ class ActionFragment : Fragment() {
                         openCongratulations()
                     } else {
                         closeExist = false
-                        partAction.text = "Заключение"
+                        partAction.text = getString(R.string.end_action)
                         setUpFadeAnimation(partAction)
                         addAsuna(activity?.resources?.getString(R.string.shava_id)!!)
                     }
