@@ -32,12 +32,14 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_THEME = "theme"
+    private val APP_PREFERENCES_AUTH = "authWithin"
+
+    private var authWithin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         prefs = getSharedPreferences("settings", Context.MODE_PRIVATE)
-
 
         if (!prefs.contains(APP_PREFERENCES_THEME) || auth.currentUser == null) {
             setTheme(R.style.AsunaTheme)
@@ -50,6 +52,8 @@ class SplashActivity : AppCompatActivity() {
                 "coffee" -> setTheme(R.style.CoffeeAppThemeMin)
             }
         }
+
+        authWithin = prefs.getBoolean(APP_PREFERENCES_AUTH, false)
 
         window.setFlags(
             WindowManager.LayoutParams.FLAGS_CHANGED,
@@ -90,7 +94,7 @@ class SplashActivity : AppCompatActivity() {
                 e.printStackTrace()
             } finally {
                 if (isOnline()) {
-                    if (auth.currentUser != null) {
+                    if (auth.currentUser != null || authWithin) {
                         val intent = Intent(
                             this,
                             MainActivity::class.java

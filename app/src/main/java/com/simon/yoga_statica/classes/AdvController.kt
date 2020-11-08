@@ -1,6 +1,7 @@
 package com.simon.yoga_statica.classes
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -9,7 +10,7 @@ import com.google.android.gms.ads.MobileAds
 class AdvController(private val ctx: Context) {
     fun init() {
         MobileAds.initialize(ctx) {
-
+            Log.d("adsstatus", it.toString())
         }
     }
 

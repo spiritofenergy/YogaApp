@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.ads.nativetemplates.NativeTemplateStyle
 import com.google.android.ads.nativetemplates.TemplateView
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.AdUnifiedListening
@@ -42,6 +43,10 @@ class AdItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Recy
                     } else {
                         Log.d("LOADDDD", "AAAAA")
                     }
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError?) {
+                    Log.d("errorAds", error?.message.toString())
                 }
             })
     }

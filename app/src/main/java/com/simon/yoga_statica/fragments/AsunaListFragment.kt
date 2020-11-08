@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.ktx.firestore
@@ -81,6 +82,10 @@ class AsunaListFragment : Fragment() {
                 startActivity(intent)
 
                 fab.visibility = View.GONE
+            }
+
+            override fun onAdFailedToLoad(error: LoadAdError?) {
+                Log.d("bannerError", error?.message.toString())
             }
         }
     }

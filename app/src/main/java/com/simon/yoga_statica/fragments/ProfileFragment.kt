@@ -129,8 +129,8 @@ class ProfileFragment : Fragment() {
         radioGreen = rootView.findViewById(R.id.radioLime)
         radioCoffee = rootView.findViewById(R.id.radioCoffee)
 
-        chooseDyh = rootView.findViewById(R.id.Choose_general_attitude)
-        chooseMusic = rootView.findViewById(R.id.Choose_warm_up)
+        chooseDyh = rootView.findViewById(R.id.Choose_duh)
+        chooseMusic = rootView.findViewById(R.id.ChooseMusic)
 
         dyh1 = rootView.dyh_bhastrica
         dyh2 = rootView.dyh_capalaphaty
@@ -139,7 +139,7 @@ class ProfileFragment : Fragment() {
         music2 = rootView.six_warm_up
 
         switchDyhSwitch = rootView.findViewById(R.id.simple_Chose_dyh)
-        simpleSwitchMusic = rootView.findViewById(R.id.switch_warm_up)
+        simpleSwitchMusic = rootView.findViewById(R.id.simpleSwitchMusic)
         simpleSwitchShava = rootView.findViewById(R.id.simpleSwitchShava)
 
           simpleSwitchShava.isChecked = prefs.getBoolean(APP_PREFERENCES_SHAVA, true)

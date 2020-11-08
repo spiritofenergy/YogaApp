@@ -1,6 +1,8 @@
 package com.simon.yoga_statica.fragments
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,12 +48,17 @@ class AuthFragment : Fragment() {
     private lateinit var tabLayout: TabLayout
     private lateinit var tabsItems: ViewPager2
 
+    private lateinit var prefs: SharedPreferences
+    private val APP_PREFERENCES_AUTH = "authWithin"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
+
+        prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -96,6 +103,10 @@ class AuthFragment : Fragment() {
 
         openWithoutAuth = rootView.findViewById(R.id.openWithoutAuth)
         openWithoutAuth.setOnClickListener {
+            prefs
+                .edit()
+                .putBoolean(APP_PREFERENCES_AUTH, true)
+                .apply()
             openMain()
         }
         instagramAuth.setOnClickListener {
