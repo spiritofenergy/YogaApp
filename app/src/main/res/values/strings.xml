@@ -3,6 +3,10 @@
     <string name="ads_native_uid">ca-app-pub-8270459186680862/9658546795</string>
     <string name="ads_inter_uid">ca-app-pub-8270459186680862/2371578556</string>
     <string name="ads_banner_uid">ca-app-pub-8270459186680862/4961055207</string>
+    <string name="facebook_app_id">377535383591585</string>
+    <string name="fb_login_protocol_scheme">fb377535383591585</string>
+    <string name="instagram_app_id">364423328163324</string>
+    <string name="instagram_secure_id">6c129322518270cadbb2701e279fcc16</string>
     <string name="add">Add to</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">BRAVO!</string>
@@ -78,4 +82,5 @@
     <string name="middle">Средний</string>
     <string name="profi">Проффесионал</string>
     <string name="choose_image">Выберите изображения</string>
+    <string name="reload_web">Переадресация....</string>
 </resources>

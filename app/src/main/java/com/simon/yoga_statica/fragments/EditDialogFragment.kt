@@ -55,6 +55,9 @@ class EditDialogFragment : DialogFragment() {
             val profileUpdates = userProfileChangeRequest {
                 displayName = nameEdit.text.toString()
             }
+            if (emailEdit.text.toString() != "")
+                auth.currentUser!!
+                    .updateEmail(emailEdit.text.toString())
             auth.currentUser!!
                 .updateProfile(profileUpdates)
                 .addOnCompleteListener {

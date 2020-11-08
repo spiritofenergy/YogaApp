@@ -8,11 +8,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="300dp"
@@ -52,26 +56,27 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView">
 
                 <Button
-                    android:id="@+id/instagram"
+                    android:id="@+id/google_signIn_auth"
                     style="@style/AppTheme.Button"
                     android:layout_width="160dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="Instagram"
+                    android:text="Google"
                     tools:ignore="MissingConstraints" />
 
                 <Button
-                    android:id="@+id/google_signIn_auth"
+                    android:id="@+id/instagramAuth"
                     style="@style/AppTheme.Button"
                     android:layout_width="160dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="20dp"
-                    android:text="Google"
+                    android:text="Instagram"
                     tools:ignore="MissingConstraints" />
+
             </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout

@@ -4,11 +4,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -20,6 +22,9 @@ import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.fragments.AuthFragment
 import com.simon.yoga_statica.fragments.SplashFragment
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
+
 
 class SplashActivity : AppCompatActivity() {
     private val auth = Firebase.auth
@@ -69,7 +74,7 @@ class SplashActivity : AppCompatActivity() {
         }
         container = findViewById(R.id.splashFragment)
         val authR = intent.getBooleanExtra("auth", false)
-
+        printHashKey()
         if (authR)
             addAuthFragment()
         else
@@ -154,6 +159,25 @@ class SplashActivity : AppCompatActivity() {
         }
 
         return result
+    }
+
+    private fun printHashKey() {
+        try {
+            val info = packageManager.getPackageInfo(
+                packageName,
+                PackageManager.GET_SIGNATURES
+            )
+            for (signature in info.signatures) {
+                val md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                val hashKey: String = String(Base64.encode(md.digest(), 0))
+                Log.i("hash", "printHashKey() Hash Key: $hashKey")
+            }
+        } catch (e: NoSuchAlgorithmException) {
+            Log.e("hash", "printHashKey()", e)
+        } catch (e: java.lang.Exception) {
+            Log.e("hash", "printHashKey()", e)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

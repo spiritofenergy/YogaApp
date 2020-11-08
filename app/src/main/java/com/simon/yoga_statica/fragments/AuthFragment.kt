@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager2.widget.ViewPager2
+import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -26,16 +27,19 @@ import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.MainActivity
 import com.simon.yoga_statica.adapters.AuthAdapter
-import kotlin.math.sign
 
 class AuthFragment : Fragment() {
     private val db = Firebase.firestore
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var callbackManager: CallbackManager
+
+
 
     private val auth = Firebase.auth
 
     private lateinit var signInGoogle: Button
+    private lateinit var instagramAuth: Button
     private lateinit var signUpOpen: Button
     private lateinit var openWithoutAuth: Button
 
@@ -55,6 +59,8 @@ class AuthFragment : Fragment() {
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
 
+        callbackManager = CallbackManager.Factory.create()
+
         tabLayout = rootView.findViewById(R.id.tabs)
         tabsItems = rootView.findViewById(R.id.tabs_items)
         tabsItems.adapter = AuthAdapter(this, tabLayout.tabCount)
@@ -71,6 +77,7 @@ class AuthFragment : Fragment() {
         }.attach()
 
         signInGoogle = rootView.findViewById(R.id.google_signIn_auth)
+        instagramAuth = rootView.findViewById(R.id.instagramAuth)
         signInGoogle.setOnClickListener {
             val signInIntent: Intent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, 123)
@@ -91,13 +98,22 @@ class AuthFragment : Fragment() {
         openWithoutAuth.setOnClickListener {
             openMain()
         }
+        instagramAuth.setOnClickListener {
+            val listFragment = WebViewInstFragment()
+            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
+            if (transaction != null)
+                with (transaction) {
+                    replace(R.id.splashFragment, listFragment)
+                    commit()
+                }
+        }
 
         return rootView
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        callbackManager.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 123) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
