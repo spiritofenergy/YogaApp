@@ -1,6 +1,7 @@
 package com.simon.yoga_statica.adapters
 
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -41,11 +42,12 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("LISTINA", list.toString())
         val viewType = getItemViewType(position)
 
         if (viewType == TYPE_AD) {
             holder as AdItemView
-            holder.bind()
+            holder.bind(list[position] as Ad)
 
             return
         }

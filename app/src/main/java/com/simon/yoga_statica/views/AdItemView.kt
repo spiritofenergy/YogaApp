@@ -11,6 +11,7 @@ import com.google.android.ads.nativetemplates.TemplateView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.classes.Ad
 import com.simon.yoga_statica.classes.AdUnifiedListening
 import com.simon.yoga_statica.classes.AdvController
 
@@ -21,7 +22,7 @@ class AdItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Recy
 
     private lateinit var advController: AdvController
 
-    fun bind() {
+    fun bind(ad: Ad) {
         val style: NativeTemplateStyle = NativeTemplateStyle
             .Builder()
             .withMainBackgroundColor(
@@ -29,25 +30,8 @@ class AdItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Recy
             )
             .build()
         templateView.setStyles(style)
-
-        advController = AdvController(parent.context)
-        advController.init()
-
-        advController.createUnifiedAd(
-            R.string.ads_native_uid,
-            object : AdUnifiedListening() {
-                override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
-
-                    if (!Adloader.isLoading) {
-                        templateView.setNativeAd(ads)
-                    } else {
-                        Log.d("LOADDDD", "AAAAA")
-                    }
-                }
-
-                override fun onAdFailedToLoad(error: LoadAdError?) {
-                    Log.d("errorAds", error?.message.toString())
-                }
-            })
+        Log.d("FROMAD", ad.id.toString())
+        if (ad.id != null)
+            templateView.setNativeAd(ad.id)
     }
 }

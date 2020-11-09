@@ -44,4 +44,12 @@ class AdvController(private val ctx: Context) {
 
         listening.Adloader = adLoad
     }
+
+    fun destroyUnifiedAd(unitid: Int) {
+        AdLoader.Builder(ctx, ctx.getString(unitid))
+            .forUnifiedNativeAd {
+                it.destroy()
+                return@forUnifiedNativeAd
+            }.build()
+    }
 }

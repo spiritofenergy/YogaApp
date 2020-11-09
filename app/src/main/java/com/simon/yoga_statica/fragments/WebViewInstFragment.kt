@@ -42,15 +42,17 @@ class WebViewInstFragment : Fragment() {
         // All functions And Auth Algorithm In MyWebViewClient Class
         val web = MyWebViewClient(
             activity,
-            rootView.reloadText,
-            getString(R.string.auth_fail),
-            getString(R.string.instagram_app_id),
-            getString(R.string.instagram_secure_id)
+            rootView.reloadText
         )
 
         webInst.webViewClient = web
         webInst.loadUrl(initialUrl)
 
         return rootView
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        webInst.destroy()
     }
 }

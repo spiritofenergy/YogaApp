@@ -1,5 +1,7 @@
 package com.simon.yoga_statica.classes
 
+import com.google.android.gms.ads.formats.UnifiedNativeAd
+
 class Ad {
-    public lateinit var ad: String
+    var id: UnifiedNativeAd? = null
 }

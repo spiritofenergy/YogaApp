@@ -28,7 +28,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class MyWebViewClient(private val activity: Activity?, private val text: TextView, private val error: String, private val id: String, private val secure: String) : WebViewClient() {
+class MyWebViewClient(private val activity: Activity?, private val text: TextView) : WebViewClient() {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
@@ -80,7 +80,25 @@ class MyWebViewClient(private val activity: Activity?, private val text: TextVie
         if (url.contains("code=(.+)#".toRegex())) {
             val match = Regex("code=(.+)#").find(url)!!
             val code = match.destructured.component1()
-            Log.d("code", code)
+            Thread {
+                val json = getTokenAndUserID(code)
+                val obj = JSON.Response(json)
+                val token = obj["access_token"] as String
+                val idUser = obj["user_id"] as Long
+
+                val userJSON = getUser(
+                    idUser,
+                    token
+                )
+                val user = JSON.Response(userJSON)
+
+                val jsonToken = getFirebaseToken(user["id"] as String)
+                val tokenFirebase = JSON.Response(jsonToken)["customToken"] as String
+
+                if (tokenFirebase != "")
+                    firebaseAuthWithGoogle(tokenFirebase, user["username"] as String)
+
+            }.start()
         }
 
         view.loadUrl(url)
@@ -89,8 +107,8 @@ class MyWebViewClient(private val activity: Activity?, private val text: TextVie
 
     private fun getTokenAndUserID(code: String) : String {
         val response = StringBuffer()
-        var reqParam = URLEncoder.encode("client_id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8")
-        reqParam += "&" + URLEncoder.encode("client_secret", "UTF-8") + "=" + URLEncoder.encode(secure, "UTF-8")
+        var reqParam = URLEncoder.encode("client_id", "UTF-8") + "=" + URLEncoder.encode(activity?.getString(R.string.instagram_app_id), "UTF-8")
+        reqParam += "&" + URLEncoder.encode("client_secret", "UTF-8") + "=" + URLEncoder.encode(activity?.getString(R.string.instagram_secure_id), "UTF-8")
         reqParam += "&" + URLEncoder.encode("grant_type", "UTF-8") + "=" + URLEncoder.encode("authorization_code", "UTF-8")
         reqParam += "&" + URLEncoder.encode("redirect_uri", "UTF-8") + "=" + URLEncoder.encode(redirectUrl, "UTF-8")
         reqParam += "&" + URLEncoder.encode("code", "UTF-8") + "=" + URLEncoder.encode(code, "UTF-8")
@@ -98,6 +116,8 @@ class MyWebViewClient(private val activity: Activity?, private val text: TextVie
 
         with(mURL.openConnection() as HttpURLConnection) {
             requestMethod = "POST"
+
+            setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
 
             val wr = OutputStreamWriter(outputStream);
             wr.write(reqParam);
@@ -176,27 +196,21 @@ class MyWebViewClient(private val activity: Activity?, private val text: TextVie
 
                     val user = auth.currentUser
 
-                    val profileUpdates = userProfileChangeRequest {
-                        displayName = name
-                    }
-
-                    user!!.updateProfile(profileUpdates)
-
-                    addUserToDatabase(user)
+                    addUserToDatabase(user, name)
 
                     openMain()
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("login", "signInWithInstagram:failure", task.exception)
                     Toast.makeText(
-                        activity, error,
+                        activity, activity?.getString(R.string.auth_fail),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
     }
 
-    private fun addUserToDatabase(currentUser: FirebaseUser?) {
+    private fun addUserToDatabase(currentUser: FirebaseUser?, name: String) {
         val user = hashMapOf(
             "id" to currentUser?.uid.toString().trim(),
             "root" to "user",
@@ -204,8 +218,14 @@ class MyWebViewClient(private val activity: Activity?, private val text: TextVie
             "status" to 1
         )
 
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+
+        currentUser!!.updateProfile(profileUpdates)
+
         db.collection("users")
-            .whereEqualTo("id", currentUser?.uid)
+            .whereEqualTo("id", currentUser.uid)
             .get()
             .addOnSuccessListener { documents ->
                 if (documents.isEmpty)

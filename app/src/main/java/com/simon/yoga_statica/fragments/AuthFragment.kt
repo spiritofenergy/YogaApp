@@ -115,6 +115,7 @@ class AuthFragment : Fragment() {
             if (transaction != null)
                 with (transaction) {
                     replace(R.id.splashFragment, listFragment)
+                    addToBackStack(null)
                     commit()
                 }
         }

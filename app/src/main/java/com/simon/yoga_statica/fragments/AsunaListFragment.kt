@@ -26,6 +26,7 @@ import com.simon.yoga_statica.classes.AdUnifiedListening
 import com.simon.yoga_statica.classes.AdvController
 import com.simon.yoga_statica.classes.Card
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
+import kotlin.math.ceil
 
 
 class AsunaListFragment : Fragment() {
@@ -116,10 +117,36 @@ class AsunaListFragment : Fragment() {
                 for (counter in 0 until indexAdv) {
                     index += 3
                     val ad = Ad()
-                    ad.ad = "Ad"
                     cardsArr.add(index, ad)
 
                     index += 1
+                }
+                index = 0
+                for (counterAds in 0 until ceil( indexAdv / 5f ).toInt()) {
+                    Log.d("counte", counterAds.toString())
+                    val countAd = indexAdv % 5
+                    indexAdv -= countAd
+                    Log.d("indexes", "$countAd $indexAdv")
+                    advController.createUnifiedAds(
+                        countAd,
+                        R.string.ads_native_uid,
+                        object : AdUnifiedListening() {
+                            override fun onUnifiedNativeAdLoaded(ads: UnifiedNativeAd?) {
+                                if (!Adloader.isLoading) {
+                                    index += 3
+                                    (cardsArr[index] as Ad).id = ads
+                                    index += 1
+                                    Log.d("adsin", ads.toString())
+                                } else {
+                                    Log.d("LOADDDD", "AAAAA")
+                                }
+                            }
+
+                            override fun onAdFailedToLoad(p0: LoadAdError?) {
+                                Log.d("loadSome", p0?.message.toString())
+                            }
+                        }
+                    )
                 }
 
                 getAdapter()
@@ -217,5 +244,11 @@ class AsunaListFragment : Fragment() {
             fab.visibility = View.GONE
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        advController.destroyUnifiedAd(R.string.ads_native_uid)
     }
 }
