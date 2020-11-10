@@ -3,24 +3,15 @@ package com.simon.yoga_statica.views
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.core.view.marginLeft
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.Card
 import com.google.firebase.auth.FirebaseAuth
@@ -29,23 +20,21 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.simon.yoga_statica.adapters.OpenAsanaAdapter
 import com.simon.yoga_statica.adapters.SliderAdapter
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
-import java.text.FieldPosition
 
 class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.item_view, parent, false)) {
     private var counterTwo: TextView = itemView.findViewById(R.id.counterTwo)
     private var counterFirst: TextView = itemView.findViewById(R.id.counterFirst)
     var titleCard: TextView = itemView.findViewById(R.id.asanaTitle)
-    private var nameTwo: TextView = itemView.findViewById(R.id.nameTwo)
+    private var nameTwo: TextView = itemView.findViewById(R.id.ddLongDescription)
     private var socialAll: TextView = itemView.findViewById(R.id.socialAll)
     private var publish: TextView = itemView.findViewById(R.id.publish)
     private var layoutDate1: FrameLayout = itemView.findViewById(R.id.layoutDate1)
     var social: FrameLayout = itemView.findViewById(R.id.social)
     private var likeImg: ImageView = itemView.findViewById(R.id.likeImg)
     private var yogaIconGrand: ImageView = itemView.findViewById(R.id.yogaIconGrand)
-    var image: ViewPager2 = itemView.findViewById(R.id.image)
+    var image: ViewPager2 = itemView.findViewById(R.id.addedImage)
     var imgFrame: FrameLayout = itemView.findViewById(R.id.imgFrame)
     private var buttonSettings: ImageView = itemView.findViewById(R.id.buttonSettings)
     private var commentImg: ImageView = itemView.findViewById(R.id.commentImg)
@@ -95,7 +84,10 @@ class CardItemView(inflater: LayoutInflater, private val parent: ViewGroup) : Re
         nameTwo.text = card.shortDesc
         isLiked.text = "0"
 
-        val opensList = card.openAsans.split(" ")
+        var opensList: List<String> = mutableListOf()
+        if (card.openAsans != "") {
+            opensList = card.openAsans.split(" ")
+        }
 
         openAsans.removeAllViews()
         for (openID in opensList) {

@@ -11,99 +11,290 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/layoutParent"
+
+        <FrameLayout
+            android:id="@+id/card"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="400dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <EditText
-                    android:id="@+id/addTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:ems="10"
-                    android:hint="@string/title_placeholder"
-                    android:inputType="textPersonName" />
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/addedImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginBottom="20dp">
-
-                </androidx.viewpager2.widget.ViewPager2>
-
-                <ImageButton
-                    android:id="@+id/addImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="0"
-                    app:srcCompat="@drawable/ic_baseline_add_24" />
-
-                <EditText
-                    android:id="@+id/addShortAsuns"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="@string/short_description"
-                    android:inputType="textMultiLine" />
-
-                <EditText
-                    android:id="@+id/addLongAsuns"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="@string/long_description"
-                    android:inputType="textMultiLine" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView4"
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/open_asana_title"
-                android:textSize="18sp" />
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginRight="11dp"
+                android:layout_marginBottom="7dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="@dimen/cardview_default_elevation"
+                tools:ignore="PrivateResource">
 
-        </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/asunaCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/addNewAsuna"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:text="@string/add"
-            app:layout_constraintBottom_toTopOf="@+id/addAsuns"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
+
+                    <ImageView
+                        android:id="@+id/addYogaIconGrand"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp" />
+
+                    <TextView
+                        android:id="@+id/addAsanaTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="46dp"
+                        android:clickable="true"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Добавить заголовок"
+                        android:textColor="@color/colorTextTitle"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:id="@+id/openAsans"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginLeft="100dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginRight="15dp"
+                        android:gravity="right|end"
+                        android:orientation="horizontal"
+                        tools:ignore="RtlHardcoded" >
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            app:srcCompat="@drawable/ic_baseline_add_24" />
+                    </LinearLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/frameButtonImageAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="100dp">
+
+                        <ImageButton
+                            android:id="@+id/addPhoto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_baseline_add_24" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/imgFrame"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="100dp">
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/addedImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:scaleType="fitCenter"
+                            android:transitionName="img"
+                            android:visibility="gone"
+                            tools:ignore="UnusedAttribute">
+
+                        </androidx.viewpager2.widget.ViewPager2>
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/addAsuna"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ddLongDescription"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/round_white"
+                        android:clickable="true"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/addedAsana"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="27dp"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/add"
+                            android:textColor="#606060"
+                            android:textStyle="bold" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/layoutDate1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ddLongDescription"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="135dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/round_white"
+                        android:clickable="true"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/likeImg"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/ic_favorite_border_black_24dp_default" />
+
+                        <TextView
+                            android:id="@+id/publish"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="27dp"
+                            android:layout_marginRight="10dp"
+                            android:text="0"
+                            android:textColor="#606060" />
+
+                        <TextView
+                            android:id="@+id/isLiked"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/social"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ddLongDescription"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="200dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/round_white"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:id="@+id/commentImg"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp_default" />
+
+                        <TextView
+                            android:id="@+id/socialAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="27dp"
+                            android:layout_marginRight="10dp"
+                            android:text="0"
+                            android:textColor="#606060" />
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/counter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ddLongDescription"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/round_white"
+                        android:padding="5dp">
+
+
+                        <TextView
+                            android:id="@+id/counterFirst"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="27dp"
+                            android:layout_marginRight="5dp"
+                            android:text="1"
+                            android:textColor="#606060" />
+
+                        <TextView
+                            android:id="@+id/lane"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="21dp"
+                            android:text="/"
+                            android:textColor="@color/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/counterTwo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:text="1"
+                            android:textColor="#606060" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/addShortDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imgFrame"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Добавить краткое описание" />
+
+                    <TextView
+                        android:id="@+id/ddLongDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/addShortDescription"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Добавить полное описание" />
+
+                    <ImageView
+                        android:id="@+id/buttonSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_more_horiz_black_24dp_default"
+                        android:contentDescription="ADD" />
+
+
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+        </FrameLayout>
+
 
         <Button
             android:id="@+id/addAsuns"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:padding="20dp"
             android:text="@string/save_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addNewAsuna" />
+            app:layout_constraintTop_toBottomOf="@+id/card" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

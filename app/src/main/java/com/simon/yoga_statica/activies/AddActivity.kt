@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
-import android.graphics.drawable.Drawable
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,13 +17,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
@@ -42,23 +39,28 @@ class AddActivity : AppCompatActivity() {
     private val avatars: StorageReference = storage.reference
 
     private var edit = false
+    private var titleAsuna = ""
+    private var shortDesc = ""
+    private var longDesc = ""
     private var count = 0
 
-    private var images: MutableList< MutableList<String> > = mutableListOf()
-    private var elems: MutableList< HashMap< String, EditText > > = mutableListOf()
+    private var images: MutableList<MutableList<String>> = mutableListOf()
+    private var elems: MutableList<HashMap<String, String>> = mutableListOf()
     private var imagesStr = ""
     private var imagesArray: MutableList<String> = mutableListOf("")
     private var curAsana = 0
     private var titles: MutableList<String> = mutableListOf()
     private var totalAll: HashMap<String, HashMap<String, Any>> = hashMapOf()
-    private var imagesPreviewIDs: MutableList<ViewPager2> = mutableListOf()
+    private lateinit var frameButtonImageAdd: FrameLayout
+    private lateinit var addYogaIconGrand: ImageView
 
     private var countOpen = 0
+    private lateinit var newEdit: EditText
 
 
-    private lateinit var addTitle: EditText
-    private lateinit var addShortAsuns: EditText
-    private lateinit var addLongAsuns: EditText
+    private lateinit var addTitle: TextView
+    private lateinit var addShortAsuns: TextView
+    private lateinit var addLongAsuns: TextView
     private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
     private lateinit var addNewAsuna: Button
@@ -94,14 +96,18 @@ class AddActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        addTitle = findViewById(R.id.addTitle)
-        addShortAsuns = findViewById(R.id.addShortAsuns)
-        addLongAsuns = findViewById(R.id.addLongAsuns)
-        addImage = findViewById(R.id.addImage)
+        addTitle = findViewById(R.id.addAsanaTitle)
         addAsuns = findViewById(R.id.addAsuns)
-        addNewAsuna = findViewById(R.id.addNewAsuna)
+        addImage = findViewById(R.id.addPhoto)
         addedImage = findViewById(R.id.addedImage)
-        layoutParent = findViewById(R.id.layoutParent)
+        frameButtonImageAdd = findViewById(R.id.frameButtonImageAdd)
+
+        addShortAsuns = findViewById(R.id.addShortDescription)
+        addLongAsuns = findViewById(R.id.ddLongDescription)
+        addYogaIconGrand = findViewById(R.id.addYogaIconGrand)
+
+        images.add(mutableListOf())
+
         addAsuns.background = ContextCompat.getDrawable(
             this,
             resources.getIdentifier(
@@ -111,37 +117,86 @@ class AddActivity : AppCompatActivity() {
             )
         )
 
-        elems.add(hashMapOf(
-            "title" to addTitle,
-            "shortDescription" to addShortAsuns,
-            "description" to addLongAsuns
-        ))
-        images.add(mutableListOf())
+        addTitle.setOnClickListener {
+            openDialog("Add Title", "Please, add title",
+                { _, _ ->
+                    if (newEdit.text.toString() != "") {
+                        titleAsuna = newEdit.text.toString()
+                        addTitle.text = titleAsuna
+                        elems[0]["title"] = titleAsuna
+                        edit = true
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                edit = true
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
+                        if (Build.VERSION.SDK_INT >= 23)
+                            addTitle.setTextColor(getColor(R.color.colorTextTitle))
+                        else
+                            addTitle.setTextColor(resources.getColor(R.color.colorTextTitle))
+                    } else
+                        if (titleAsuna == "")
+                            addTitle.setTextColor(Color.RED)
+                }, { _, _ ->
+                    if (titleAsuna == "")
+                        addTitle.setTextColor(Color.RED)
+                }, {
+                    if (titleAsuna == "")
+                        addTitle.setTextColor(Color.RED)
+                }, default = titleAsuna)
         }
 
-        addTitle.addTextChangedListener(textWatcher)
-        addShortAsuns.addTextChangedListener(textWatcher)
-        addLongAsuns.addTextChangedListener(textWatcher)
+        addShortAsuns.setOnClickListener {
+            openDialog("Add Short Description", "Please, add short description",
+                { _, _ ->
+                    if (newEdit.text.toString() != "") {
+                        shortDesc = newEdit.text.toString()
+                        addShortAsuns.text = shortDesc
+                        elems[0]["shortDescription"] = shortDesc
+                        edit = true
+
+                        if (Build.VERSION.SDK_INT >= 23)
+                            addShortAsuns.setTextColor(getColor(R.color.colorTextTitle))
+                        else
+                            addShortAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
+                    } else
+                        if (shortDesc == "")
+                            addShortAsuns.setTextColor(Color.RED)
+                }, { _, _ ->
+                    if (shortDesc == "")
+                        addShortAsuns.setTextColor(Color.RED)
+                }, {
+                    if (shortDesc == "")
+                        addShortAsuns.setTextColor(Color.RED)
+                }, true, shortDesc)
+        }
+
+        addLongAsuns.setOnClickListener {
+            openDialog("Add Long Description", "Please, add long description",
+                { _, _ ->
+                    if (newEdit.text.toString() != "") {
+                        longDesc = newEdit.text.toString()
+                        addLongAsuns.text = longDesc
+                        elems[0]["description"] = longDesc
+                        edit = true
+
+                        if (Build.VERSION.SDK_INT >= 23)
+                            addLongAsuns.setTextColor(getColor(R.color.colorTextTitle))
+                        else
+                            addLongAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
+                    } else
+                        if (longDesc == "")
+                            addLongAsuns.setTextColor(Color.RED)
+                }, { _, _ ->
+                    if (longDesc == "")
+                        addLongAsuns.setTextColor(Color.RED)
+                }, {
+                    if (longDesc == "")
+                        addLongAsuns.setTextColor(Color.RED)
+                }, true, longDesc)
+        }
 
         getCountAsuns()
 
         addImage.setOnClickListener {
             edit = true
-            curAsana = 0
-            getImage(addedImage)
+            getImage()
         }
 
         addAsuns.setOnClickListener {
@@ -168,14 +223,14 @@ class AddActivity : AppCompatActivity() {
                 }
                 .show()
         }
-
-        addNewAsuna.setOnClickListener {
-            edit = true
-            imagesArray.add("")
-            images.add(mutableListOf())
-            countOpen++
-            addNew()
-        }
+//
+//        addNewAsuna.setOnClickListener {
+//            edit = true
+//            imagesArray.add("")
+//            images.add(mutableListOf())
+//            countOpen++
+//            addNew()
+//        }
 
     }
 
@@ -198,8 +253,11 @@ class AddActivity : AppCompatActivity() {
                 .setTitle(getString(R.string.end_adidition))
                 .setMessage(getString(R.string.confirm_end_addition))
                 .setPositiveButton(getString(R.string.ending)) { _, _ ->
-                    for (item in images) {
-                        avatars.child("thumbnails/$item.jpeg").delete()
+                    for (indexing in 0 until curAsana + 1) {
+                        for (item in images[indexing]) {
+                            Log.d("testDel", item)
+                            avatars.child("thumbnails/$item.jpeg").delete()
+                        }
                     }
                     super.onBackPressed()
                 }
@@ -224,18 +282,18 @@ class AddActivity : AppCompatActivity() {
             curAsana = it.tag as Int
 
             edit = true
-            getImage(imagesPreviewIDs[curAsana - 1])
+            getImage()
         }
 
         titles.add("open_asana${count}_$countOpen")
         rowView.findViewById<ImageButton>(R.id.addImageOpen).tag = countOpen
 
-        imagesPreviewIDs.add(rowView.findViewById(R.id.addedImageOpen))
-        Log.d("prew", imagesPreviewIDs.toString())
-        elems.add(hashMapOf(
-            "title" to rowView.findViewById(R.id.addTitleOpen),
-            "description" to rowView.findViewById(R.id.addLongAsunsOpen)
-        ))
+        elems.add(
+            hashMapOf(
+                "title" to rowView.findViewById(R.id.addTitleOpen),
+                "description" to rowView.findViewById(R.id.addLongAsunsOpen)
+            )
+        )
 
         Log.d("elems", elems.toString())
     }
@@ -246,16 +304,16 @@ class AddActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 count = result.size() + 1
                 titles.add("asuna${count}")
+                elems.add(hashMapOf())
             }
     }
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private fun getImage(pager2: ViewPager2) {
+    private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        addedImage = pager2
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
 
@@ -299,7 +357,13 @@ class AddActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUri = task.result
 
+                                Glide.with(this)
+                                    .load(downloadUri)
+                                    .into(addYogaIconGrand)
+
                                 addedImage.adapter = SliderAdapter(images[curAsana])
+                                frameButtonImageAdd.visibility = View.GONE
+                                addedImage.visibility = View.VISIBLE
                             } else {
                                 Toast.makeText(
                                     this, getString(R.string.error_upload) + task.exception,
@@ -335,7 +399,15 @@ class AddActivity : AppCompatActivity() {
                                     if (task.isSuccessful) {
                                         val downloadUri = task.result
 
+                                        if (images[curAsana][0] == nameImg) {
+                                            Glide.with(this)
+                                                .load(downloadUri)
+                                                .into(addYogaIconGrand)
+                                        }
+
                                         addedImage.adapter = SliderAdapter(images[curAsana])
+                                        frameButtonImageAdd.visibility = View.GONE
+                                        addedImage.visibility = View.VISIBLE
                                     } else {
                                         Toast.makeText(
                                             this, getString(R.string.error_upload) + task.exception,
@@ -365,18 +437,13 @@ class AddActivity : AppCompatActivity() {
         val iterator = titles.iterator()
         for ((index, title) in iterator.withIndex()) {
 
-            val titleAsana = elems[index]["title"]
-                ?.text
-                .toString()
+            val titleAsana = elems[index]["title"].toString()
+
             var shortDescription = ""
             if (index == 0) {
-                shortDescription = elems[index]["shortDescription"]
-                    ?.text
-                    .toString()
+                shortDescription = elems[index]["shortDescription"].toString()
             }
-            val description = elems[index]["description"]
-                ?.text
-                .toString()
+            val description = elems[index]["description"].toString()
 
             if (titleAsana == "" || (shortDescription == "" && index == 0) || description == "" || imagesArray[index] == "") {
                 hashMap.clear()
@@ -392,9 +459,11 @@ class AddActivity : AppCompatActivity() {
                     "thumbPath" to imagesArray[index],
                     "title" to titleAsana,
                     "shortDescription" to shortDescription,
-                    "description" to description,
-                    "openAsans" to opens
+                    "description" to description
                 )
+                if (opens != "") {
+                    hashMap[title]?.set("openAsans", opens)
+                }
             } else {
                 hashMap[title] = hashMapOf(
                     "thumbPath" to imagesArray[index],
@@ -426,6 +495,38 @@ class AddActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private fun openDialog(
+        title: String,
+        message: String,
+        listener: DialogInterface.OnClickListener,
+        listenerNegative: DialogInterface.OnClickListener,
+        onCancel: DialogInterface.OnCancelListener,
+        multiline: Boolean = false,
+        default: String? = null
+    ) {
+        val alert = AlertDialog.Builder(this)
+
+        alert.setTitle(title)
+        alert.setMessage(message)
+
+        newEdit = EditText(this)
+        newEdit.isSingleLine = false
+        if (multiline)
+            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        if (default != null)
+            newEdit.append(default)
+        alert.setView(newEdit)
+
+        alert.setPositiveButton("Ok", listener)
+
+        alert.setNegativeButton("Cancel", listenerNegative)
+
+        alert.setOnCancelListener(onCancel)
+
+        alert.show()
     }
 
 }
