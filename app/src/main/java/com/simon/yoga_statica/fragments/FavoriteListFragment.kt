@@ -141,7 +141,7 @@ class FavoriteListFragment : Fragment() {
                             }
                             val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
                             cardAdapter?.setOnClickAdd(object : OnRecyclerItemClickListener {
-                                override fun onItemClicked(asuna: String, position: Int) {
+                                override fun onItemClicked(position: Int, asuna: String) {
                                     var isExist = false
                                     val asunaList = asuna.split(" ")
                                     for (asunaOne in asunaList) {
@@ -181,7 +181,7 @@ class FavoriteListFragment : Fragment() {
                             })
 
                             cardAdapter?.setOnClickOpen(object : OnRecyclerItemClickListener {
-                                override fun onItemClicked(asuna: String, position: Int) {
+                                override fun onItemClicked(position: Int, asuna: String) {
                                     val listFragment = AsunaFragment()
                                     listFragment.setAsuna(asuna)
                                     fragmentManager?.beginTransaction()

@@ -8,16 +8,15 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -31,6 +30,8 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.SliderAdapter
+import com.simon.yoga_statica.fragments.AddOpenFragment
+import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
 class AddActivity : AppCompatActivity() {
 
@@ -39,10 +40,11 @@ class AddActivity : AppCompatActivity() {
     private val avatars: StorageReference = storage.reference
 
     private var edit = false
-    private var titleAsuna = ""
-    private var shortDesc = ""
-    private var longDesc = ""
+    private var titleAsuna: String? = null
+    private var shortDesc: String? = null
+    private var longDesc: String? = null
     private var count = 0
+    private lateinit var newEdit: EditText
 
     private var images: MutableList<MutableList<String>> = mutableListOf()
     private var elems: MutableList<HashMap<String, String>> = mutableListOf()
@@ -55,7 +57,7 @@ class AddActivity : AppCompatActivity() {
     private lateinit var addYogaIconGrand: ImageView
 
     private var countOpen = 0
-    private lateinit var newEdit: EditText
+
 
 
     private lateinit var addTitle: TextView
@@ -63,8 +65,7 @@ class AddActivity : AppCompatActivity() {
     private lateinit var addLongAsuns: TextView
     private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
-    private lateinit var addNewAsuna: Button
-    private lateinit var layoutParent: LinearLayout
+    private lateinit var addNewAsuna: ImageView
 
     private lateinit var addedImage: ViewPager2
 
@@ -101,12 +102,14 @@ class AddActivity : AppCompatActivity() {
         addImage = findViewById(R.id.addPhoto)
         addedImage = findViewById(R.id.addedImage)
         frameButtonImageAdd = findViewById(R.id.frameButtonImageAdd)
+        addNewAsuna = findViewById(R.id.addNewOpen)
 
         addShortAsuns = findViewById(R.id.addShortDescription)
         addLongAsuns = findViewById(R.id.ddLongDescription)
         addYogaIconGrand = findViewById(R.id.addYogaIconGrand)
 
         images.add(mutableListOf())
+        imagesArray.add("")
 
         addAsuns.background = ContextCompat.getDrawable(
             this,
@@ -118,12 +121,19 @@ class AddActivity : AppCompatActivity() {
         )
 
         addTitle.setOnClickListener {
-            openDialog("Add Title", "Please, add title",
+            newEdit = EditText(this)
+            newEdit.isSingleLine = false
+            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            if (longDesc != null)
+                newEdit.append(longDesc)
+            openDialog(
+                newEdit,
+                "Add Title", "Please, add title",
                 { _, _ ->
                     if (newEdit.text.toString() != "") {
                         titleAsuna = newEdit.text.toString()
                         addTitle.text = titleAsuna
-                        elems[0]["title"] = titleAsuna
+                        elems[0]["title"] = titleAsuna!!
                         edit = true
 
                         if (Build.VERSION.SDK_INT >= 23)
@@ -131,24 +141,32 @@ class AddActivity : AppCompatActivity() {
                         else
                             addTitle.setTextColor(resources.getColor(R.color.colorTextTitle))
                     } else
-                        if (titleAsuna == "")
+                        if (titleAsuna == null)
                             addTitle.setTextColor(Color.RED)
                 }, { _, _ ->
-                    if (titleAsuna == "")
+                    if (titleAsuna == null)
                         addTitle.setTextColor(Color.RED)
                 }, {
-                    if (titleAsuna == "")
+                    if (titleAsuna == null)
                         addTitle.setTextColor(Color.RED)
-                }, default = titleAsuna)
+                }
+            )
         }
 
         addShortAsuns.setOnClickListener {
-            openDialog("Add Short Description", "Please, add short description",
+            newEdit = EditText(this)
+            newEdit.isSingleLine = false
+            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            if (longDesc != null)
+                newEdit.append(longDesc)
+            openDialog(
+                newEdit,
+                "Add Short Description", "Please, add short description",
                 { _, _ ->
                     if (newEdit.text.toString() != "") {
                         shortDesc = newEdit.text.toString()
                         addShortAsuns.text = shortDesc
-                        elems[0]["shortDescription"] = shortDesc
+                        elems[0]["shortDescription"] = shortDesc!!
                         edit = true
 
                         if (Build.VERSION.SDK_INT >= 23)
@@ -156,24 +174,32 @@ class AddActivity : AppCompatActivity() {
                         else
                             addShortAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
                     } else
-                        if (shortDesc == "")
+                        if (shortDesc == null)
                             addShortAsuns.setTextColor(Color.RED)
                 }, { _, _ ->
-                    if (shortDesc == "")
+                    if (shortDesc == null)
                         addShortAsuns.setTextColor(Color.RED)
                 }, {
-                    if (shortDesc == "")
+                    if (shortDesc == null)
                         addShortAsuns.setTextColor(Color.RED)
-                }, true, shortDesc)
+                }
+            )
         }
 
         addLongAsuns.setOnClickListener {
-            openDialog("Add Long Description", "Please, add long description",
+            newEdit = EditText(this)
+            newEdit.isSingleLine = false
+            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            if (longDesc != null)
+                newEdit.append(longDesc)
+            openDialog(
+                newEdit,
+                "Add Long Description", "Please, add long description",
                 { _, _ ->
                     if (newEdit.text.toString() != "") {
                         longDesc = newEdit.text.toString()
                         addLongAsuns.text = longDesc
-                        elems[0]["description"] = longDesc
+                        elems[0]["description"] = longDesc!!
                         edit = true
 
                         if (Build.VERSION.SDK_INT >= 23)
@@ -181,15 +207,16 @@ class AddActivity : AppCompatActivity() {
                         else
                             addLongAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
                     } else
-                        if (longDesc == "")
+                        if (longDesc == null)
                             addLongAsuns.setTextColor(Color.RED)
                 }, { _, _ ->
-                    if (longDesc == "")
+                    if (longDesc == null)
                         addLongAsuns.setTextColor(Color.RED)
                 }, {
-                    if (longDesc == "")
+                    if (longDesc == null)
                         addLongAsuns.setTextColor(Color.RED)
-                }, true, longDesc)
+                }
+            )
         }
 
         getCountAsuns()
@@ -200,37 +227,35 @@ class AddActivity : AppCompatActivity() {
         }
 
         addAsuns.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(getString(R.string.additional_asana_title))
-                .setMessage(getString(R.string.confirm_adational_asana))
-                .setPositiveButton(getString(R.string.ending)) { _, _ ->
-                    totalAll = getMapOfData()
+            totalAll = getMapOfData()
+            Log.d("map", totalAll.toString())
+            if (totalAll.isEmpty()) {
+                Toast.makeText(
+                    this, getString(R.string.put_all_fields),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(getString(R.string.additional_asana_title))
+                    .setMessage(getString(R.string.confirm_adational_asana))
+                    .setPositiveButton(getString(R.string.ending)) { _, _ ->
+                        Log.d("map", totalAll.toString())
 
-                    Log.d("map", totalAll.toString())
-
-                    if (totalAll.isEmpty()) {
-                        Toast.makeText(
-                            this, getString(R.string.put_all_fields),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
                         addAsunaInFire()
                     }
-
-                }
-                .setNegativeButton(getString(R.string.no)) { _, _ ->
-                }
-                .show()
+                    .setNegativeButton(getString(R.string.no)) { _, _ ->
+                    }
+                    .show()
+            }
         }
-//
-//        addNewAsuna.setOnClickListener {
-//            edit = true
-//            imagesArray.add("")
-//            images.add(mutableListOf())
-//            countOpen++
-//            addNew()
-//        }
+
+        addNewAsuna.setOnClickListener {
+            imagesArray.add("")
+            images.add(mutableListOf())
+            countOpen++
+            addNew()
+        }
 
     }
 
@@ -269,33 +294,21 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @SuppressLint("InflateParams")
     private fun addNew() {
-        val inflater =
-            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView: View = inflater.inflate(R.layout.add_new_item, null)
-        layoutParent.addView(rowView, layoutParent.childCount)
+        val view = View.inflate(this, R.layout.fragment_add_open, null)
+        openDialog(
+            view,
+            "Add Open Asana", "Please, put all values in field",
+            { _, _ ->
 
-        rowView.tag = getString(R.string.open)
-        rowView.findViewById<ImageButton>(R.id.addImageOpen).setOnClickListener {
-            curAsana = it.tag as Int
+            }, { _, _ ->
 
-            edit = true
-            getImage()
-        }
+            }, {
 
-        titles.add("open_asana${count}_$countOpen")
-        rowView.findViewById<ImageButton>(R.id.addImageOpen).tag = countOpen
-
-        elems.add(
-            hashMapOf(
-                "title" to rowView.findViewById(R.id.addTitleOpen),
-                "description" to rowView.findViewById(R.id.addLongAsunsOpen)
-            )
+            }
         )
 
-        Log.d("elems", elems.toString())
     }
 
     private fun getCountAsuns() {
@@ -308,11 +321,12 @@ class AddActivity : AppCompatActivity() {
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
@@ -361,7 +375,18 @@ class AddActivity : AppCompatActivity() {
                                     .load(downloadUri)
                                     .into(addYogaIconGrand)
 
-                                addedImage.adapter = SliderAdapter(images[curAsana])
+                                val adapter = SliderAdapter(images[curAsana])
+                                adapter.setOnClickOpenListener(object :
+                                    OnRecyclerItemClickListener {
+                                    override fun onItemClicked(position: Int, asuna: String) {
+                                        curAsana = 0
+                                        getImage()
+                                    }
+
+                                    override fun onItemLongClicked(position: Int) {}
+                                })
+
+                                addedImage.adapter = adapter
                                 frameButtonImageAdd.visibility = View.GONE
                                 addedImage.visibility = View.VISIBLE
                             } else {
@@ -405,7 +430,21 @@ class AddActivity : AppCompatActivity() {
                                                 .into(addYogaIconGrand)
                                         }
 
-                                        addedImage.adapter = SliderAdapter(images[curAsana])
+                                        val adapter = SliderAdapter(images[curAsana])
+                                        adapter.setOnClickOpenListener(object :
+                                            OnRecyclerItemClickListener {
+                                            override fun onItemClicked(
+                                                position: Int,
+                                                asuna: String
+                                            ) {
+                                                curAsana = 0
+                                                getImage()
+                                            }
+
+                                            override fun onItemLongClicked(position: Int) {}
+                                        })
+
+                                        addedImage.adapter = adapter
                                         frameButtonImageAdd.visibility = View.GONE
                                         addedImage.visibility = View.VISIBLE
                                     } else {
@@ -445,7 +484,7 @@ class AddActivity : AppCompatActivity() {
             }
             val description = elems[index]["description"].toString()
 
-            if (titleAsana == "" || (shortDescription == "" && index == 0) || description == "" || imagesArray[index] == "") {
+            if (titleAsana == "null" || (shortDescription == "null" && index == 0) || description == "null" || imagesArray[index] == "") {
                 hashMap.clear()
                 return hashMap
             }
@@ -497,28 +536,20 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private fun openDialog(
+        view: View,
         title: String,
         message: String,
         listener: DialogInterface.OnClickListener,
         listenerNegative: DialogInterface.OnClickListener,
         onCancel: DialogInterface.OnCancelListener,
-        multiline: Boolean = false,
-        default: String? = null
     ) {
         val alert = AlertDialog.Builder(this)
 
         alert.setTitle(title)
         alert.setMessage(message)
 
-        newEdit = EditText(this)
-        newEdit.isSingleLine = false
-        if (multiline)
-            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-        if (default != null)
-            newEdit.append(default)
-        alert.setView(newEdit)
+        alert.setView(view)
 
         alert.setPositiveButton("Ok", listener)
 

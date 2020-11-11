@@ -15,9 +15,9 @@ import com.simon.yoga_statica.views.SliderView
 class SliderAdapter(private val images: List<String>) : RecyclerView.Adapter<SliderView>()  {
 
     private var clickListener: OnRecyclerItemClickListener? = null
-    private lateinit var idAsuna: String
+    private var idAsuna: String? = null
 
-    fun setOnClickOpenListener(listener: OnRecyclerItemClickListener, id: String) {
+    fun setOnClickOpenListener(listener: OnRecyclerItemClickListener, id: String? = null) {
         clickListener = listener
         idAsuna = id
     }
@@ -33,7 +33,10 @@ class SliderAdapter(private val images: List<String>) : RecyclerView.Adapter<Sli
 
         if (clickListener != null) {
             holder.image.setOnClickListener {
-                clickListener?.onItemClicked(idAsuna, position)
+                if (idAsuna != null)
+                    clickListener?.onItemClicked(position, idAsuna.toString())
+                else
+                    clickListener?.onItemClicked(position)
             }
         }
     }

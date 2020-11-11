@@ -65,19 +65,19 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
             if (card.openAsans != "null") {
                 opens = card.openAsans + " "
             }
-            addListener?.onItemClicked( opens + card.id, position)
+            addListener?.onItemClicked(position, opens + card.id)
         }
 
         holder.titleCard.setOnClickListener {
-            openListener?.onItemClicked(card.id, position)
+            openListener?.onItemClicked(position, card.id)
         }
 
         holder.imgFrame.setOnClickListener {
-            openListener?.onItemClicked(card.id, position)
+            openListener?.onItemClicked(position, card.id)
         }
 
         holder.social.setOnClickListener {
-            openListener?.onItemClicked(card.id, position)
+            openListener?.onItemClicked(position, card.id)
         }
 
     }
