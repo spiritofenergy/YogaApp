@@ -12,11 +12,9 @@ import android.text.InputType
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -30,7 +28,6 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.SliderAdapter
-import com.simon.yoga_statica.fragments.AddOpenFragment
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
 class AddActivity : AppCompatActivity() {
@@ -57,8 +54,6 @@ class AddActivity : AppCompatActivity() {
     private lateinit var addYogaIconGrand: ImageView
 
     private var countOpen = 0
-
-
 
     private lateinit var addTitle: TextView
     private lateinit var addShortAsuns: TextView
@@ -100,16 +95,16 @@ class AddActivity : AppCompatActivity() {
         addTitle = findViewById(R.id.addAsanaTitle)
         addAsuns = findViewById(R.id.addAsuns)
         addImage = findViewById(R.id.addPhoto)
-        addedImage = findViewById(R.id.addedImage)
-        frameButtonImageAdd = findViewById(R.id.frameButtonImageAdd)
         addNewAsuna = findViewById(R.id.addNewOpen)
 
         addShortAsuns = findViewById(R.id.addShortDescription)
         addLongAsuns = findViewById(R.id.ddLongDescription)
+
+        addedImage = findViewById(R.id.addedImage)
+        frameButtonImageAdd = findViewById(R.id.frameButtonImageAdd)
         addYogaIconGrand = findViewById(R.id.addYogaIconGrand)
 
         images.add(mutableListOf())
-        imagesArray.add("")
 
         addAsuns.background = ContextCompat.getDrawable(
             this,
@@ -254,6 +249,14 @@ class AddActivity : AppCompatActivity() {
             imagesArray.add("")
             images.add(mutableListOf())
             countOpen++
+            curAsana = countOpen
+            Log.d("CUR", curAsana.toString())
+            addedImage = findViewById(R.id.addedImage)
+            frameButtonImageAdd = findViewById(R.id.frameButtonImageAdd)
+            addYogaIconGrand = findViewById(R.id.addYogaIconGrand)
+
+            Log.d("NEW", countOpen.toString())
+
             addNew()
         }
 
@@ -296,18 +299,155 @@ class AddActivity : AppCompatActivity() {
 
     @SuppressLint("InflateParams")
     private fun addNew() {
-        val view = View.inflate(this, R.layout.fragment_add_open, null)
-        openDialog(
-            view,
-            "Add Open Asana", "Please, put all values in field",
-            { _, _ ->
 
-            }, { _, _ ->
+        db.collection("openAsunaRU")
+            .get()
+            .addOnSuccessListener { result ->
+                val opensTitles: MutableList<String> = mutableListOf()
+                for (document in result) {
+                    opensTitles.add(document.data["title"].toString())
 
-            }, {
+                }
+                val view = Spinner(this)
+                val adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, opensTitles)
+                view.adapter = adapter
 
+                openDialog(
+                    view,
+                    "Add Open Asana", "Please, choose open asana",
+                    { _, _ ->
+
+                    }, { _, _ ->
+                        for (item in images[curAsana]) {
+                            avatars.child("thumbnails/$item.jpeg").delete()
+                        }
+                        images[curAsana].clear()
+                        imagesArray[curAsana] = ""
+                        countOpen--
+                        curAsana = 0
+                    }, {
+
+                    },
+                    { dialog, _ ->
+                        val newView = View.inflate(this, R.layout.fragment_add_open, null)
+                        dialog.dismiss()
+
+                        var newEditOpen: EditText
+
+                        var titleAsunaOpen: String? = null
+                        val titleTextOpen: TextView = newView.findViewById(R.id.addAsanaTitleOpen)
+                        titleTextOpen.setOnClickListener {
+
+                            newEditOpen = EditText(this)
+                            newEditOpen.isSingleLine = true
+                            newEditOpen.inputType = InputType.TYPE_CLASS_TEXT
+                            if (titleAsunaOpen != null)
+                                newEditOpen.append(titleAsunaOpen)
+
+                            openDialog(
+                                newEditOpen,
+                                "Add Title", "Please, add title",
+                                { _, _ ->
+                                    if (newEditOpen.text.toString() != "") {
+                                        titleAsunaOpen = newEditOpen.text.toString()
+                                        titleTextOpen.text = titleAsunaOpen
+
+                                        edit = true
+
+                                        if (Build.VERSION.SDK_INT >= 23)
+                                            titleTextOpen.setTextColor(getColor(R.color.colorTextTitle))
+                                        else
+                                            titleTextOpen.setTextColor(resources.getColor(R.color.colorTextTitle))
+                                    } else
+                                        if (titleAsunaOpen == null)
+                                            titleTextOpen.setTextColor(Color.RED)
+                                }, { _, _ ->
+                                    if (titleAsunaOpen == null)
+                                        titleTextOpen.setTextColor(Color.RED)
+                                }, {
+                                    if (titleAsunaOpen == null)
+                                        titleTextOpen.setTextColor(Color.RED)
+                                }
+                            )
+                        }
+
+                        var longDescriptionOpen: String? = null
+                        val longTextOpen: TextView = newView.findViewById(R.id.addLongDescriptionOpen)
+                        longTextOpen.setOnClickListener {
+
+                            newEditOpen = EditText(this)
+                            if (longDescriptionOpen != null)
+                                newEditOpen.append(longDescriptionOpen)
+
+                            openDialog(
+                                newEditOpen,
+                                "Add Title", "Please, add title",
+                                { _, _ ->
+                                    if (newEditOpen.text.toString() != "") {
+                                        longDescriptionOpen = newEditOpen.text.toString()
+                                        longTextOpen.text = longDescriptionOpen
+
+                                        edit = true
+
+                                        if (Build.VERSION.SDK_INT >= 23)
+                                            longTextOpen.setTextColor(getColor(R.color.colorTextTitle))
+                                        else
+                                            longTextOpen.setTextColor(resources.getColor(R.color.colorTextTitle))
+                                    } else
+                                        if (longDescriptionOpen == null)
+                                            longTextOpen.setTextColor(Color.RED)
+                                }, { _, _ ->
+                                    if (longDescriptionOpen == null)
+                                        longTextOpen.setTextColor(Color.RED)
+                                }, {
+                                    if (longDescriptionOpen == null)
+                                        longTextOpen.setTextColor(Color.RED)
+                                }
+                            )
+                        }
+
+                        val addPhotoOpen: ImageButton = newView.findViewById(R.id.addPhotoOpen)
+                        addPhotoOpen.setOnClickListener {
+                            addedImage = newView.findViewById(R.id.addedImageOpen)
+                            frameButtonImageAdd = newView.findViewById(R.id.frameButtonImageAddOpen)
+                            addYogaIconGrand = newView.findViewById(R.id.addYogaIconGrandOpen)
+                            getImage()
+                        }
+
+
+                        openDialog(
+                            newView,
+                            "Add Open Asana", "Please, put all values in field",
+                            { _, _ ->
+                                if (titleAsunaOpen == null || longDescriptionOpen == null || images[curAsana].isEmpty()) {
+                                    titleTextOpen.setTextColor(Color.RED)
+                                    longTextOpen.setTextColor(Color.RED)
+                                    addPhotoOpen.setBackgroundColor(Color.RED)
+                                } else {
+                                    elems[curAsana]["title"] = titleAsunaOpen.toString()
+                                    elems[curAsana]["description"] = longDescriptionOpen.toString()
+                                }
+                            }, { _, _ ->
+                                for (item in images[curAsana]) {
+                                    avatars.child("thumbnails/$item.jpeg").delete()
+                                }
+                                images[curAsana].clear()
+                                imagesArray[curAsana] = ""
+                                countOpen--
+                                curAsana = 0
+                            }, {
+
+                            }
+                        )
+                    }
+                )
             }
-        )
+            .addOnCanceledListener {
+                Toast.makeText(
+                    this, "Ошибка загрузки",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
     }
 
@@ -343,7 +483,7 @@ class AddActivity : AppCompatActivity() {
                     images[curAsana].clear()
                     imagesArray[curAsana] = ""
                     val selectedImageUri: Uri? = data?.data
-
+                    Log.d("CUR", curAsana.toString())
                     Log.d("images", images.toString())
 
                     if (selectedImageUri != null) {
@@ -543,6 +683,7 @@ class AddActivity : AppCompatActivity() {
         listener: DialogInterface.OnClickListener,
         listenerNegative: DialogInterface.OnClickListener,
         onCancel: DialogInterface.OnCancelListener,
+        newListener: DialogInterface.OnClickListener? = null
     ) {
         val alert = AlertDialog.Builder(this)
 
@@ -552,6 +693,8 @@ class AddActivity : AppCompatActivity() {
         alert.setView(view)
 
         alert.setPositiveButton("Ok", listener)
+        if (newListener != null)
+            alert.setNeutralButton("Добавить новую", newListener)
 
         alert.setNegativeButton("Cancel", listenerNegative)
 
