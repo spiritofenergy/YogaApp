@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -35,8 +36,10 @@ class AddActivity : AppCompatActivity() {
     private val db = Firebase.firestore
     private val storage = Firebase.storage
     private val avatars: StorageReference = storage.reference
+    private val thumbnails: StorageReference = storage.reference.child("thumbnails")
 
     private var edit = false
+    private var isExist = false
     private var titleAsuna: String? = null
     private var shortDesc: String? = null
     private var longDesc: String? = null
@@ -61,6 +64,7 @@ class AddActivity : AppCompatActivity() {
     private lateinit var addImage: ImageButton
     private lateinit var addAsuns: Button
     private lateinit var addNewAsuna: ImageView
+    private lateinit var openAsansOpen: LinearLayout
 
     private lateinit var addedImage: ViewPager2
 
@@ -96,6 +100,7 @@ class AddActivity : AppCompatActivity() {
         addAsuns = findViewById(R.id.addAsuns)
         addImage = findViewById(R.id.addPhoto)
         addNewAsuna = findViewById(R.id.addNewOpen)
+        openAsansOpen = findViewById(R.id.openAsansOpen)
 
         addShortAsuns = findViewById(R.id.addShortDescription)
         addLongAsuns = findViewById(R.id.ddLongDescription)
@@ -119,8 +124,8 @@ class AddActivity : AppCompatActivity() {
             newEdit = EditText(this)
             newEdit.isSingleLine = false
             newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            if (longDesc != null)
-                newEdit.append(longDesc)
+            if (titleAsuna != null)
+                newEdit.append(titleAsuna)
             openDialog(
                 newEdit,
                 "Add Title", "Please, add title",
@@ -152,8 +157,8 @@ class AddActivity : AppCompatActivity() {
             newEdit = EditText(this)
             newEdit.isSingleLine = false
             newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            if (longDesc != null)
-                newEdit.append(longDesc)
+            if (shortDesc != null)
+                newEdit.append(shortDesc)
             openDialog(
                 newEdit,
                 "Add Short Description", "Please, add short description",
@@ -247,6 +252,7 @@ class AddActivity : AppCompatActivity() {
 
         addNewAsuna.setOnClickListener {
             imagesArray.add("")
+            elems.add(hashMapOf())
             images.add(mutableListOf())
             countOpen++
             curAsana = countOpen
@@ -304,9 +310,14 @@ class AddActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { result ->
                 val opensTitles: MutableList<String> = mutableListOf()
+                val opensElems: HashMap<String, HashMap<String, String>> = hashMapOf()
                 for (document in result) {
-                    opensTitles.add(document.data["title"].toString())
-
+                    val title = document.data["title"].toString()
+                    opensTitles.add(title)
+                    opensElems[title] = hashMapOf(
+                        "id" to document.id,
+                        "thumbPath" to document.data["thumbPath"].toString()
+                    )
                 }
                 val view = Spinner(this)
                 val adapter = ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, opensTitles)
@@ -316,17 +327,44 @@ class AddActivity : AppCompatActivity() {
                     view,
                     "Add Open Asana", "Please, choose open asana",
                     { _, _ ->
+                        val titleCur = view.selectedItem.toString()
+                        val cur = opensElems[titleCur]!!
 
-                    }, { _, _ ->
-                        for (item in images[curAsana]) {
-                            avatars.child("thumbnails/$item.jpeg").delete()
+                        val imageCur = cur["thumbPath"]?.split(" ")?.get(0)
+                        Log.d("image", imageCur.toString())
+
+                        val inflater =
+                            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val rowView: View = inflater.inflate(R.layout.open_photo, null)
+                        openAsansOpen.addView(rowView, openAsansOpen.childCount - 1)
+
+                        thumbnails.child("${imageCur}.jpeg")
+                            .downloadUrl
+                            .addOnSuccessListener {
+                                Glide.with(this)
+                                    .load(it)
+                                    .into(rowView.findViewById(R.id.openAsanaImage))
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.w("gets", "Error getting documents.", exception)
+                            }
+
+                        rowView.tag = "$curAsana old"
+                        rowView.setOnClickListener {
+                            Log.d("asd", it.tag.toString().split(" ").toString())
                         }
+
+                        Log.d("testing", elems.toString())
+                        Log.d("testing", imageCur.toString())
+
+                        curAsana = 0
+                    }, { _, _ ->
                         images[curAsana].clear()
                         imagesArray[curAsana] = ""
                         countOpen--
                         curAsana = 0
                     }, {
-
+//                        TODO("ADD CANCEL")
                     },
                     { dialog, _ ->
                         val newView = View.inflate(this, R.layout.fragment_add_open, null)
@@ -436,7 +474,7 @@ class AddActivity : AppCompatActivity() {
                                 countOpen--
                                 curAsana = 0
                             }, {
-
+//                                TODO("ADD CANCEL")
                             }
                         )
                     }
@@ -612,6 +650,9 @@ class AddActivity : AppCompatActivity() {
     }
 
     private fun getMapOfData() : HashMap<String, HashMap<String, Any>> {
+        Log.d("ADD", elems.toString())
+        Log.d("ADD", imagesArray.toString())
+
         val hashMap: HashMap<String, HashMap<String, Any>> = hashMapOf()
         val iterator = titles.iterator()
         for ((index, title) in iterator.withIndex()) {
