@@ -2,13 +2,6 @@
 <resources>
 
     <string name="app_name">YOGA WORKOUT</string>
-    <string name="ads_native_uid">ca-app-pub-8270459186680862/9658546795</string>
-    <string name="ads_inter_uid">ca-app-pub-8270459186680862/2371578556</string>
-    <string name="ads_banner_uid">ca-app-pub-8270459186680862/4961055207</string>
-    <string name="facebook_app_id">377535383591585</string>
-    <string name="fb_login_protocol_scheme">fb377535383591585</string>
-    <string name="instagram_app_id">364423328163324</string>
-    <string name="instagram_secure_id">6c129322518270cadbb2701e279fcc16</string>
     <string name="add">Add to</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">BRAVO!</string>
@@ -19,7 +12,7 @@
     <string name="coffee">Coffee</string>
     <string name="start_action">Start</string>
     <string name="stop_action">Stop</string>
-    <string name="congratulation">BRAVO!\n Workout is over</string>
+    <string name="congratulation">BRAVO!  Workout is over</string>
     <string name="User">Name</string>
     <string name="ID">id</string>
     <string name="email">email</string>
@@ -33,7 +26,7 @@
     <string name="or_sign_in">or login with</string>
     <string name="without_sign_in">Login without registration</string>
     <string name="c_google">Login with Google</string>
-    <string name="or">или</string>
+    <string name="or">or</string>
     <string name="e_mail_sign_in">Registration via E-Mail</string>
     <string name="add_dyh">You must turn on breathing</string>
     <string name="setting_theme">Settings theme</string>
@@ -42,7 +35,6 @@
     <string name="all_count_asana">Asanas:</string>
     <string name="dyh">Breath</string>
     <string name="add_shava">It is necessary to add the final asana. </string>
-    <string name="shava_id">asuna09</string>
     <string name="edit_profile">Editing</string>
     <string name="save_edit">Save</string>
     <string name="open_asana_title">Warming up asanas</string>

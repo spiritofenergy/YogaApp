@@ -3,7 +3,6 @@
     <string name="app_name">Yoga</string>
     <string name="add">添加到列表</string>
     <string name="end" translatable="false">太棒了！</string>
-    <string name="ads_banner_uid">ca-app-pub-3940256099942544/6300978111</string>
     <string name="yoga_workout" translatable="false">瑜伽鍛煉</string>
     <string name="general_attitude">Общий настрой</string>
 

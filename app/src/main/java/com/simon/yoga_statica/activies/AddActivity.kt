@@ -12,13 +12,17 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.MarginLayoutParamsCompat
+import androidx.core.view.get
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -290,7 +294,7 @@ class AddActivity : AppCompatActivity() {
                 .setTitle(getString(R.string.end_adidition))
                 .setMessage(getString(R.string.confirm_end_addition))
                 .setPositiveButton(getString(R.string.ending)) { _, _ ->
-                    for (indexing in 0 until curAsana + 1) {
+                    for (indexing in 0 until images.size) {
                         for (item in images[indexing]) {
                             Log.d("testDel", item)
                             avatars.child("thumbnails/$item.jpeg").delete()
@@ -480,6 +484,8 @@ class AddActivity : AppCompatActivity() {
         Log.d("ADD", elems.toString())
         Log.d("ADD", imagesArray.toString())
 
+        var isFilledOut = true
+
         val hashMap: HashMap<String, HashMap<String, Any>> = hashMapOf()
         val iterator = titles.iterator()
         for ((index, title) in iterator.withIndex()) {
@@ -493,8 +499,24 @@ class AddActivity : AppCompatActivity() {
                 val description = elems[index]["description"].toString()
 
                 if (titleAsana == "null" || (shortDescription == "null" && index == 0) || description == "null" || imagesArray[index] == "") {
-                    hashMap.clear()
-                    return hashMap
+                    isFilledOut = false
+
+                    if (index == 0) {
+                        if (titleAsana == "null") {
+                            addTitle.setTextColor(Color.RED)
+                        }
+                        if (shortDescription == "null") {
+                            addShortAsuns.setTextColor(Color.RED)
+                        }
+                        if (description == "null") {
+                            addLongAsuns.setTextColor(Color.RED)
+                        }
+                        if (imagesArray[index] == "") {
+                            addImage.setBackgroundColor(Color.parseColor("#55FF0000"))
+                        }
+                    } else {
+                        openAsansOpen[index - 1].setBackgroundColor(Color.parseColor("#55FF0000"))
+                    }
                 }
 
                 val opens = titles.drop(1).joinToString(" ")
@@ -521,6 +543,8 @@ class AddActivity : AppCompatActivity() {
             }
         }
 
+        if (!isFilledOut)
+            hashMap.clear()
         return hashMap
     }
 
@@ -595,7 +619,6 @@ class AddActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 val opensTitles: MutableList<String> = mutableListOf()
                 val opensElems: HashMap<String, HashMap<String, String>> = hashMapOf()
-                var selectedIndex = 0
                 val iter = result.iterator()
                 for ((index, document) in iter.withIndex()) {
                     val title = document.data["title"].toString()
@@ -653,7 +676,7 @@ class AddActivity : AppCompatActivity() {
         var titleAsunaOpen: String? = null
         val titleTextOpen: TextView = newView.findViewById(R.id.addAsanaTitleOpen)
 
-        if (elems[curAsana].containsKey("title")) {
+        if (elems[curAsana].containsKey("title") && elems[curAsana]["title"] != "null") {
             titleAsunaOpen = elems[curAsana]["title"]
             titleTextOpen.text = titleAsunaOpen
         } else {
@@ -699,7 +722,7 @@ class AddActivity : AppCompatActivity() {
         var longDescriptionOpen: String? = null
         val longTextOpen: TextView = newView.findViewById(R.id.addLongDescriptionOpen)
 
-        if (elems[curAsana].containsKey("description")) {
+        if (elems[curAsana].containsKey("description") && elems[curAsana]["description"] != "null") {
             longDescriptionOpen = elems[curAsana]["description"]
             longTextOpen.text = longDescriptionOpen
         } else {
@@ -779,6 +802,9 @@ class AddActivity : AppCompatActivity() {
             frameButtonImageAdd.visibility = View.GONE
             addedImage.visibility = View.VISIBLE
 
+        } else {
+            if (elem != null)
+                addPhotoOpen.setBackgroundColor(Color.parseColor("#55FF0000"))
         }
 
         addPhotoOpen.setOnClickListener {
@@ -801,8 +827,11 @@ class AddActivity : AppCompatActivity() {
                     if (images[curAsana].isNotEmpty()) {
                         imageCur = images[curAsana][0]
                     }
-
-                    getPreview(imageCur, titleOpenNew, "new")
+                    var isNull = false
+                    if (titleAsunaOpen.isNullOrEmpty() || longDescriptionOpen.isNullOrEmpty() || images[curAsana].isEmpty()) {
+                        isNull = true
+                    }
+                    getPreview(imageCur, titleOpenNew, "new", isNull)
                 } else {
                     elems[curAsana]["title"] = titleAsunaOpen.toString()
                     elems[curAsana]["description"] = longDescriptionOpen.toString()
@@ -826,6 +855,12 @@ class AddActivity : AppCompatActivity() {
                                     .setImageDrawable(getDrawable(R.drawable.ic_baseline_report_problem_24))
                             }
                         }
+
+                    if (titleAsunaOpen.isNullOrEmpty() || longDescriptionOpen.isNullOrEmpty() || images[curAsana].isEmpty()) {
+                        elem.setBackgroundColor(Color.parseColor("#55FF0000"))
+                    } else {
+                        elem.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                    }
                 }
                 curAsana = 0
             }, { _, _ ->
@@ -851,6 +886,11 @@ class AddActivity : AppCompatActivity() {
                         imageCur = images[curAsana][0]
                     }
 
+                    var isNull = false
+                    if (titleAsunaOpen.isNullOrEmpty() || longDescriptionOpen.isNullOrEmpty() || images[curAsana].isEmpty()) {
+                        isNull = true
+                    }
+
                     getPreview(imageCur, titleOpenNew, "new")
                 } else {
                     elems[curAsana]["title"] = titleAsunaOpen.toString()
@@ -875,6 +915,12 @@ class AddActivity : AppCompatActivity() {
                                     .setImageDrawable(getDrawable(R.drawable.ic_baseline_report_problem_24))
                             }
                         }
+
+                    if (titleAsunaOpen.isNullOrEmpty() || longDescriptionOpen.isNullOrEmpty() || images[curAsana].isEmpty()) {
+                        elem.setBackgroundColor(Color.parseColor("#55FF0000"))
+                    } else {
+                        elem.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+                    }
                 }
                 curAsana = 0
             },
@@ -884,10 +930,14 @@ class AddActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun getPreview(imageCur: String?, idA: String, curType: String) {
+    private fun getPreview(imageCur: String?, idA: String, curType: String, isNull: Boolean = false) {
         val inflater =
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView: View = inflater.inflate(R.layout.open_photo, null)
+
+        if (isNull) {
+            rowView.setBackgroundColor(Color.parseColor("#55FF0000"))
+        }
 
         openAsansOpen.addView(rowView, openAsansOpen.childCount - 1)
 
@@ -922,9 +972,11 @@ class AddActivity : AppCompatActivity() {
                     "Удалить",
                     name
                 ) { _, _ ->
+                    images.removeAt(curAsana)
+                    imagesArray.removeAt(curAsana)
                     titles.remove(name)
                     openAsansOpen.removeView(it)
-                    elems[curAsana].clear()
+                    elems.removeAt(curAsana)
                     curAsana = 0
                 }
             }
@@ -936,11 +988,11 @@ class AddActivity : AppCompatActivity() {
                     for (item in images[curAsana]) {
                         avatars.child("thumbnails/$item.jpeg").delete()
                     }
-                    images[curAsana].clear()
-                    imagesArray[curAsana] = ""
+                    images.removeAt(curAsana)
+                    imagesArray.removeAt(curAsana)
                     countOpenNew--
                     titles.remove(name)
-                    elems[curAsana].clear()
+                    elems.removeAt(curAsana)
                     openAsansOpen.removeView(it)
                     curAsana = 0
                 }

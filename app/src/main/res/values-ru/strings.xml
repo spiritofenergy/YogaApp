@@ -2,13 +2,6 @@
 <resources>
 
     <string name="app_name">Yoga Workout</string>
-    <string name="ads_native_uid">ca-app-pub-8270459186680862/9658546795</string>
-    <string name="ads_inter_uid">ca-app-pub-8270459186680862/2371578556</string>
-    <string name="ads_banner_uid">ca-app-pub-8270459186680862/4961055207</string>
-    <string name="facebook_app_id">377535383591585</string>
-    <string name="fb_login_protocol_scheme">fb377535383591585</string>
-    <string name="instagram_app_id">364423328163324</string>
-    <string name="instagram_secure_id">6c129322518270cadbb2701e279fcc16</string>
     <string name="add">Add to</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">BRAVO!</string>
@@ -42,13 +35,12 @@
     <string name="all_count_asana">Асаны:</string>
     <string name="dyh">Дыхание</string>
     <string name="add_shava">Желательно добавить заключительную асану</string>
-    <string name="shava_id">asuna09</string>
     <string name="edit_profile">Редактирование</string>
     <string name="save_edit">Сохранить</string>
     <string name="open_asana_title">Разогревающие асаны</string>
     <string name="long_description">Полное описание</string>
     <string name="short_description">Краткое описание</string>
-    <string name="title_placeholder">TItle</string>
+    <string name="title_placeholder">Заголовок</string>
     <string name="general_attitude">Общий настрой</string>
     <string name="workout_title">Тренировка</string>
     <string name="end_workout">Завершение тренировки</string>
@@ -60,8 +52,7 @@
     <string name="put_all_fields">Заполните все поля</string>
     <string name="confirm_end_addition">Вы уверены, что хотите завершить добавление?</string>
     <string name="end_adidition">Завершение добавления асуны</string>
-    <string name="open">Open</string>
-    <string name="error_upload">Upload image failed.</string>
+    <string name="error_upload">Ошибка загрузки изображения.</string>
     <string name="error_connection">Соединение отсутствует</string>
     <string name="internet_on">Включите интернет и попробуйте снова!</string>
     <string name="do_on">Включить</string>
@@ -71,7 +62,7 @@
     <string name="end_action">Заключение</string>
     <string name="delete_asana">Асана удалена</string>
     <string name="asuna_addition">Асана добавлена</string>
-    <string name="auth_fail">Authentication failed.</string>
+    <string name="auth_fail">Ошибка аутентификации.</string>
     <string name="favorite_asana">Любимые асуны</string>
     <string name="all_additional">Все асуны добавлены в список выполняемых асун</string>
     <string name="setting_profile">Настройки профиля</string>
@@ -85,4 +76,5 @@
     <string name="profi">Проффесионал</string>
     <string name="choose_image">Выберите изображения</string>
     <string name="reload_web">Переадресация....</string>
+    <string name="open">Открытые</string>
 </resources>

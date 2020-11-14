@@ -63,7 +63,7 @@
                     <LinearLayout
                         android:id="@+id/openAsansOpen"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="60dp"
                         android:layout_marginStart="100dp"
                         android:layout_marginLeft="100dp"
                         android:layout_marginTop="40dp"
@@ -71,7 +71,7 @@
                         android:layout_marginRight="15dp"
                         android:gravity="right|end"
                         android:orientation="horizontal"
-                        tools:ignore="RtlHardcoded" >
+                        tools:ignore="RtlHardcoded">
 
                         <ImageView
                             android:id="@+id/addNewOpen"
