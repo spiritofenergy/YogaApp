@@ -40,6 +40,10 @@ import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.SliderAdapter
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
 
+/**
+ * Класс активити добавления новой асаны
+ *
+ */
 class AddActivity : AppCompatActivity() {
 
     private val db = Firebase.firestore
@@ -83,6 +87,11 @@ class AddActivity : AppCompatActivity() {
 
     private val RESULT_IMAGE = 3214
 
+    /**
+     * Метод создания активити
+     *
+     * @param savedInstanceState    Сохраненные данные при перезагрузке активити
+     */
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -275,6 +284,12 @@ class AddActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Обработка нажатий элементов меню
+     *
+     * @param item  ID нажатанного элемента
+     * @return  Логическая переменная, обработать или нет
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -286,6 +301,10 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод нажатия кнопки "Назад"
+     *
+     */
     override fun onBackPressed() {
 
         if (edit) {
@@ -310,6 +329,10 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод добавления открывающей асаны
+     *
+     */
     @SuppressLint("InflateParams")
     private fun addNew() {
 
@@ -321,6 +344,10 @@ class AddActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Метод получения количества существующих асан из БД
+     *
+     */
     private fun getCountAsuns() {
         db.collection("asunaRU")
             .get()
@@ -331,6 +358,10 @@ class AddActivity : AppCompatActivity() {
             }
     }
 
+    /**
+     * Метод открытия активити выбора локальных фото с результатом
+     *
+     */
     private fun getImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
@@ -341,6 +372,13 @@ class AddActivity : AppCompatActivity() {
         startActivityForResult(Intent.createChooser(intent, "Выберете изображение"), RESULT_IMAGE)
     }
 
+    /**
+     * Метод обработки результата, возвращенного активити
+     *
+     * @param requestCode   Код запроса
+     * @param resultCode    Код результата
+     * @param data          Возвращенные данные
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -473,6 +511,11 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод получения рандомной 28-ми символьной цифробуквенной строки
+     *
+     * @return Рандомная цифробуквенная строка
+     */
     private fun getRandomString() : String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..28)
@@ -480,6 +523,12 @@ class AddActivity : AppCompatActivity() {
             .joinToString("")
     }
 
+    /**
+     * Метод проверки и возврата данных. В методе происходит объединение нескольких листов
+     * в один словарь. Если данных не хватает, то возвращает пустой словарь, иначе словарь данных
+     *
+     * @return Словарь данных добавленных асан
+     */
     private fun getMapOfData() : HashMap<String, HashMap<String, Any>> {
         Log.d("ADD", elems.toString())
         Log.d("ADD", imagesArray.toString())
@@ -548,6 +597,10 @@ class AddActivity : AppCompatActivity() {
         return hashMap
     }
 
+    /**
+     * Метод добавления данных в БД
+     *
+     */
     private fun addAsunaInFire() {
         for ((title, asuna) in totalAll) {
             val ref: CollectionReference = if (title.indexOf("open") != -1) {
@@ -568,6 +621,14 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод добавления существующей в БД открывающей асаны
+     *
+     * @param titleCur      Заголовок асаны
+     * @param opensElems    Словарь данных асан из БД
+     * @param elem          [View] изображения открывающей асаны в карточке редактирования
+     * @see View
+     */
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun addOpen(titleCur: String, opensElems: HashMap<String, HashMap<String, String>>, elem: View? = null) {
         val cur = opensElems[titleCur]!!
@@ -610,8 +671,16 @@ class AddActivity : AppCompatActivity() {
         curAsana = 0
     }
 
-
-
+    /**
+     * Метод создания диалога для редактирования или добавления существующей в БД асаны
+     *
+     * @param elem          [View] элемент открывающей асаны в карточке редактирования асаны
+     *                      (для редактирования) или null
+     * @param titleDialog   Заголовок дополнительной кнопки диалога
+     * @param default       ID асаны по умолчанию (для редактирования) или null
+     * @param newListener   Объект слушателя нажатия на дополнительную кнопку
+     * @see View
+     */
     private fun getDialogOld(elem: View?, titleDialog: String, default: String? = null, newListener: DialogInterface.OnClickListener) {
 
         db.collection("openAsunaRU")
@@ -666,7 +735,15 @@ class AddActivity : AppCompatActivity() {
 
     }
 
-
+    /**
+     * Метод создания диалога для редактирования или добавления новой асаны
+     *
+     * @param elem          [View] элемент открывающей асаны в карточке редактирования асаны
+     *                      (для редактирования) или null
+     * @param titleDialog   Заголовок дополнительной кнопки диалога
+     * @param newListener   Объект слушателя нажатия на дополнительную кнопку
+     * @see View
+     */
     @SuppressLint("CutPasteId", "UseCompatLoadingForDrawables")
     private fun getDialogNew(elem: View?, titleDialog: String? = null, newListener: DialogInterface.OnClickListener? = null) {
         val newView = View.inflate(this, R.layout.fragment_add_open, null)
@@ -891,7 +968,7 @@ class AddActivity : AppCompatActivity() {
                         isNull = true
                     }
 
-                    getPreview(imageCur, titleOpenNew, "new")
+                    getPreview(imageCur, titleOpenNew, "new", isNull)
                 } else {
                     elems[curAsana]["title"] = titleAsunaOpen.toString()
                     elems[curAsana]["description"] = longDescriptionOpen.toString()
@@ -929,6 +1006,14 @@ class AddActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Метод создания превью открывающей асаны
+     *
+     * @param imageCur  Ссылка на фото в виде строки
+     * @param idA       ID добавленной асаны
+     * @param curType   Тип добавленной асаны (новая или старая)
+     * @param isNull    Все ли данные асаны добавлены. Если нет, то добавится красная рамка ошибки
+     */
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun getPreview(imageCur: String?, idA: String, curType: String, isNull: Boolean = false) {
         val inflater =
@@ -1000,6 +1085,19 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод создания диалога
+     *
+     * @param view              [View] элемент, добавляемый в диалог
+     * @param title             Заголовок диалога
+     * @param message           Сообщение диалога
+     * @param listener          Слушатель нажатия на положитильную кнопку
+     * @param listenerNegative  Слушатель нажатия на отрицательную кнопку
+     * @param onCancel          Событие закрытия окна
+     * @param titleAdd          Название дополнительной кнопки (опционально)
+     * @param newListener       Слушатель дополнительной кнопки (опционально)
+     * @see View
+     */
     private fun openDialog(
         view: View,
         title: String,

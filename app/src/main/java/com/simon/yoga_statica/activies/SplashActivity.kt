@@ -26,6 +26,10 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
+/**
+ * Активити сплеш окна приложения
+ *
+ */
 class SplashActivity : AppCompatActivity() {
     private val auth = Firebase.auth
     private lateinit var container: FrameLayout
@@ -36,6 +40,11 @@ class SplashActivity : AppCompatActivity() {
 
     private var authWithin: Boolean = false
 
+    /**
+     * Метод создания активити
+     *
+     * @param savedInstanceState    Сохраненные данные при перезагрузке активити
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,13 +87,17 @@ class SplashActivity : AppCompatActivity() {
         }
         container = findViewById(R.id.splashFragment)
         val authR = intent.getBooleanExtra("auth", false)
-        printHashKey()
+
         if (authR)
             addAuthFragment()
         else
             startThread()
     }
 
+    /**
+     * Запуск треда для задержки окна и закрытия его по времени
+     *
+     */
     private fun startThread() {
         Thread {
             try {
@@ -112,6 +125,10 @@ class SplashActivity : AppCompatActivity() {
         }.start()
     }
 
+    /**
+     * Создание сплеш фрагмента
+     *
+     */
     private fun addSplashFragment() {
         val listFragment = SplashFragment()
         var transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -136,6 +153,10 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Создание фрагмента аутентификации и добавление его в транзакции
+     *
+     */
     private fun addAuthFragment() {
         val listFragment = AuthFragment()
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -146,6 +167,11 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Метод проверки подключения к Интернету
+     *
+     * @return  Логическая переменная, подключен или нет
+     */
     private fun isOnline() : Boolean {
         var result = false
         val connectivityManager =
@@ -165,25 +191,13 @@ class SplashActivity : AppCompatActivity() {
         return result
     }
 
-    private fun printHashKey() {
-        try {
-            val info = packageManager.getPackageInfo(
-                packageName,
-                PackageManager.GET_SIGNATURES
-            )
-            for (signature in info.signatures) {
-                val md: MessageDigest = MessageDigest.getInstance("SHA")
-                md.update(signature.toByteArray())
-                val hashKey: String = String(Base64.encode(md.digest(), 0))
-                Log.i("hash", "printHashKey() Hash Key: $hashKey")
-            }
-        } catch (e: NoSuchAlgorithmException) {
-            Log.e("hash", "printHashKey()", e)
-        } catch (e: java.lang.Exception) {
-            Log.e("hash", "printHashKey()", e)
-        }
-    }
-
+    /**
+     * Метод обработки результата, возвращенного активити
+     *
+     * @param requestCode   Код запроса
+     * @param resultCode    Код результата
+     * @param data          Возвращенные данные
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
