@@ -22,7 +22,7 @@
     <string name="ID">id</string>
     <string name="email">email</string>
     <string name="status">status</string>
-    <string name="e_mail">E-Mail</string>
+    <string name="e_mail" translatable="false">E-Mail</string>
     <string name="password">Password</string>
     <string name="sign_in">To come in</string>
     <string name="code">The code</string>
