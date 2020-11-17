@@ -4,6 +4,7 @@
     <string name="add">添加到列表</string>
     <string name="end" translatable="false">太棒了！</string>
     <string name="general_attitude">Общий настрой</string>
+    <string name="congratulation">BRAVO!  Workout is over</string>
 
 
 </resources>

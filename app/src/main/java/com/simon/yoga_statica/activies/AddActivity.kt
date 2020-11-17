@@ -38,7 +38,9 @@ import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.adapters.SliderAdapter
+import com.simon.yoga_statica.classes.EditTextDialog
 import com.simon.yoga_statica.interfaces.OnRecyclerItemClickListener
+import com.simon.yoga_statica.interfaces.OnSubmitDialog
 
 /**
  * Класс активити добавления новой асаны
@@ -138,102 +140,72 @@ class AddActivity : AppCompatActivity() {
         )
 
         addTitle.setOnClickListener {
-            newEdit = EditText(this)
-            newEdit.isSingleLine = false
-            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            if (titleAsuna != null)
-                newEdit.append(titleAsuna)
-            openDialog(
-                newEdit,
+            EditTextDialog(
+                this,
+                addTitle,
                 "Add Title", "Please, add title",
-                { _, _ ->
-                    if (newEdit.text.toString() != "") {
-                        titleAsuna = newEdit.text.toString()
+                titleAsuna,
+                false,
+                object : OnSubmitDialog {
+                    override fun setOnClickPositive(
+                        view: EditText,
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
+                        titleAsuna = view.text.toString()
                         addTitle.text = titleAsuna
                         elems[0]["title"] = titleAsuna!!
                         edit = true
+                    }
 
-                        if (Build.VERSION.SDK_INT >= 23)
-                            addTitle.setTextColor(getColor(R.color.colorTextTitle))
-                        else
-                            addTitle.setTextColor(resources.getColor(R.color.colorTextTitle))
-                    } else
-                        if (titleAsuna == null)
-                            addTitle.setTextColor(Color.RED)
-                }, { _, _ ->
-                    if (titleAsuna == null)
-                        addTitle.setTextColor(Color.RED)
-                }, {
-                    if (titleAsuna == null)
-                        addTitle.setTextColor(Color.RED)
                 }
-            )
+            ).show()
         }
 
         addShortAsuns.setOnClickListener {
-            newEdit = EditText(this)
-            newEdit.isSingleLine = false
-            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            if (shortDesc != null)
-                newEdit.append(shortDesc)
-            openDialog(
-                newEdit,
+            EditTextDialog(
+                this,
+                addShortAsuns,
                 "Add Short Description", "Please, add short description",
-                { _, _ ->
-                    if (newEdit.text.toString() != "") {
+                shortDesc,
+                true,
+                object : OnSubmitDialog {
+                    override fun setOnClickPositive(
+                        view: EditText,
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
                         shortDesc = newEdit.text.toString()
                         addShortAsuns.text = shortDesc
                         elems[0]["shortDescription"] = shortDesc!!
                         edit = true
+                    }
 
-                        if (Build.VERSION.SDK_INT >= 23)
-                            addShortAsuns.setTextColor(getColor(R.color.colorTextTitle))
-                        else
-                            addShortAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
-                    } else
-                        if (shortDesc == null)
-                            addShortAsuns.setTextColor(Color.RED)
-                }, { _, _ ->
-                    if (shortDesc == null)
-                        addShortAsuns.setTextColor(Color.RED)
-                }, {
-                    if (shortDesc == null)
-                        addShortAsuns.setTextColor(Color.RED)
                 }
-            )
+            ).show()
         }
 
         addLongAsuns.setOnClickListener {
-            newEdit = EditText(this)
-            newEdit.isSingleLine = false
-            newEdit.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
-            if (longDesc != null)
-                newEdit.append(longDesc)
-            openDialog(
-                newEdit,
+            EditTextDialog(
+                this,
+                addLongAsuns,
                 "Add Long Description", "Please, add long description",
-                { _, _ ->
-                    if (newEdit.text.toString() != "") {
+                longDesc,
+                true,
+                object : OnSubmitDialog {
+                    override fun setOnClickPositive(
+                        view: EditText,
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
                         longDesc = newEdit.text.toString()
                         addLongAsuns.text = longDesc
                         elems[0]["description"] = longDesc!!
                         edit = true
+                    }
 
-                        if (Build.VERSION.SDK_INT >= 23)
-                            addLongAsuns.setTextColor(getColor(R.color.colorTextTitle))
-                        else
-                            addLongAsuns.setTextColor(resources.getColor(R.color.colorTextTitle))
-                    } else
-                        if (longDesc == null)
-                            addLongAsuns.setTextColor(Color.RED)
-                }, { _, _ ->
-                    if (longDesc == null)
-                        addLongAsuns.setTextColor(Color.RED)
-                }, {
-                    if (longDesc == null)
-                        addLongAsuns.setTextColor(Color.RED)
                 }
-            )
+            ).show()
         }
 
         getCountAsuns()
@@ -762,38 +734,26 @@ class AddActivity : AppCompatActivity() {
         }
 
         titleTextOpen.setOnClickListener {
-
-            newEditOpen = EditText(this)
-            newEditOpen.isSingleLine = true
-            newEditOpen.inputType = InputType.TYPE_CLASS_TEXT
-            if (titleAsunaOpen != null)
-                newEditOpen.append(titleAsunaOpen)
-
-            openDialog(
-                newEditOpen,
+            EditTextDialog(
+                this,
+                titleTextOpen,
                 "Add Title", "Please, add title",
-                { _, _ ->
-                    if (newEditOpen.text.toString() != "") {
-                        titleAsunaOpen = newEditOpen.text.toString()
+                titleAsunaOpen,
+                false,
+                object : OnSubmitDialog {
+                    override fun setOnClickPositive(
+                        view: EditText,
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
+                        titleAsunaOpen = view.text.toString()
                         titleTextOpen.text = titleAsunaOpen
 
                         edit = true
+                    }
 
-                        if (Build.VERSION.SDK_INT >= 23)
-                            titleTextOpen.setTextColor(getColor(R.color.colorTextTitle))
-                        else
-                            titleTextOpen.setTextColor(resources.getColor(R.color.colorTextTitle))
-                    } else
-                        if (titleAsunaOpen == null)
-                            titleTextOpen.setTextColor(Color.RED)
-                }, { _, _ ->
-                    if (titleAsunaOpen == null)
-                        titleTextOpen.setTextColor(Color.RED)
-                }, {
-                    if (titleAsunaOpen == null)
-                        titleTextOpen.setTextColor(Color.RED)
                 }
-            )
+            ).show()
         }
 
         var longDescriptionOpen: String? = null
@@ -808,36 +768,26 @@ class AddActivity : AppCompatActivity() {
         }
 
         longTextOpen.setOnClickListener {
-
-            newEditOpen = EditText(this)
-            if (longDescriptionOpen != null)
-                newEditOpen.append(longDescriptionOpen)
-
-            openDialog(
-                newEditOpen,
+            EditTextDialog(
+                this,
+                longTextOpen,
                 "Add Title", "Please, add title",
-                { _, _ ->
-                    if (newEditOpen.text.toString() != "") {
-                        longDescriptionOpen = newEditOpen.text.toString()
+                longDescriptionOpen,
+                true,
+                object : OnSubmitDialog {
+                    override fun setOnClickPositive(
+                        view: EditText,
+                        dialog: DialogInterface,
+                        which: Int
+                    ) {
+                        longDescriptionOpen = view.text.toString()
                         longTextOpen.text = longDescriptionOpen
 
                         edit = true
+                    }
 
-                        if (Build.VERSION.SDK_INT >= 23)
-                            longTextOpen.setTextColor(getColor(R.color.colorTextTitle))
-                        else
-                            longTextOpen.setTextColor(resources.getColor(R.color.colorTextTitle))
-                    } else
-                        if (longDescriptionOpen == null)
-                            longTextOpen.setTextColor(Color.RED)
-                }, { _, _ ->
-                    if (longDescriptionOpen == null)
-                        longTextOpen.setTextColor(Color.RED)
-                }, {
-                    if (longDescriptionOpen == null)
-                        longTextOpen.setTextColor(Color.RED)
                 }
-            )
+            ).show()
         }
 
         val addPhotoOpen: ImageButton = newView.findViewById(R.id.addPhotoOpen)
