@@ -3,16 +3,15 @@ package com.simon.yoga_statica.fragments
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
+import android.content.Context.CLIPBOARD_SERVICE
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -34,9 +33,15 @@ import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.User
 import kotlinx.android.synthetic.main.fraagment_profile.view.*
+import org.w3c.dom.Text
+import java.lang.Exception
+import java.lang.RuntimeException
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
+
+    private var isCopied = false
+
     private val db = Firebase.firestore
     private val storage = Firebase.storage
     private val avatars: StorageReference = storage.reference
@@ -51,9 +56,10 @@ class ProfileFragment : Fragment() {
     private lateinit var countAsuns: TextView
     private lateinit var phoneUser: TextView
     private lateinit var addAvatar: ImageButton
+    private lateinit var promocode: TextView
 
     private lateinit var imageAvatar: ImageView
-
+    private lateinit var copyPromocode: ImageView
 
     private lateinit var setTheme: RadioGroup
     private lateinit var setSecond: RadioGroup
@@ -89,12 +95,33 @@ class ProfileFragment : Fragment() {
     private val APP_PREFERENCES_MUSIC = "music"
     private val RESULT_IMAGE = 3214
 
+    private val onClickCopy = View.OnClickListener {
+        val clipboardManager: ClipboardManager = activity!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("promocode", promocode.text.toString())
+
+        clipboardManager.setPrimaryClip(clip)
+
+        Toast
+            .makeText(
+                context,
+                "Промокод скопирован",
+                Toast.LENGTH_SHORT
+            )
+            .show()
+
+        copyPromocode.isEnabled = false
+        copyPromocode.setImageResource(R.drawable.ic_baseline_check_24)
+        copyPromocode.setBackgroundResource(R.drawable.button_shadow_disable)
+
+        promocode.isEnabled = false
+    }
+
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
           val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
 
         activity?.title = getString(R.string.setting_profile)
@@ -118,6 +145,7 @@ class ProfileFragment : Fragment() {
         nameUser = rootView.findViewById(R.id.nameUser)
         status = rootView.findViewById(R.id.status)
         imageAvatar = rootView.findViewById(R.id.imageAvatar)
+        promocode = rootView.findViewById(R.id.promocode)
 
         radio30 = rootView.findViewById(R.id.radio30)
         radio60 = rootView.findViewById(R.id.radio60)
@@ -131,6 +159,7 @@ class ProfileFragment : Fragment() {
 
         chooseDyh = rootView.findViewById(R.id.Choose_duh)
         chooseMusic = rootView.findViewById(R.id.ChooseMusic)
+        copyPromocode = rootView.findViewById(R.id.copy_promocode_btn)
 
         dyh1 = rootView.dyh_bhastrica
         dyh2 = rootView.dyh_capalaphaty
@@ -457,6 +486,9 @@ class ProfileFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("home", "Error getting documents: ", exception)
             }
+
+        copyPromocode.setOnClickListener(onClickCopy)
+        promocode.setOnClickListener(onClickCopy)
 
         return rootView
     }

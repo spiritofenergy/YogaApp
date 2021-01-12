@@ -83,4 +83,5 @@
     <string name="profi">Professional</string>
     <string name="choose_image">Select images</string>
     <string name="reload_web">Call forwarding....</string>
+    <string name="promocode_title">Ваш личный код</string>
 </resources>
