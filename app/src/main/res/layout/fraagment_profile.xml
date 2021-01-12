@@ -186,7 +186,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="PROMOCODE"
+                    android:text="..."
                     android:textColor="@color/gnt_black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

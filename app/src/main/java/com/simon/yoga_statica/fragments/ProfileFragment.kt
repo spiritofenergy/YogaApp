@@ -11,12 +11,15 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -31,16 +34,13 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.classes.Promocode
 import com.simon.yoga_statica.classes.User
+import com.simon.yoga_statica.viewmodels.ProfileFragmentViewModel
 import kotlinx.android.synthetic.main.fraagment_profile.view.*
-import org.w3c.dom.Text
-import java.lang.Exception
-import java.lang.RuntimeException
 
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class ProfileFragment : Fragment() {
-
-    private var isCopied = false
 
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -95,6 +95,10 @@ class ProfileFragment : Fragment() {
     private val APP_PREFERENCES_MUSIC = "music"
     private val RESULT_IMAGE = 3214
 
+    private lateinit var viewModel: ProfileFragmentViewModel
+    private lateinit var checkPromocode: LiveData<Boolean>
+    private lateinit var promocodeLiveData: LiveData<String>
+
     private val onClickCopy = View.OnClickListener {
         val clipboardManager: ClipboardManager = activity!!.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
         val clip: ClipData = ClipData.newPlainText("promocode", promocode.text.toString())
@@ -122,7 +126,24 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-          val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
+        val rootView: View = inflater.inflate(R.layout.fraagment_profile, container, false)
+
+        viewModel = ViewModelProvider(this).get(ProfileFragmentViewModel::class.java)
+
+        checkPromocode = viewModel.promocodeIsExist()
+        checkPromocode.observe(viewLifecycleOwner, {
+            Log.d("isExistPromocode", it.toString())
+
+            if (it == false) {
+                promocode.text = Promocode().createAndSavePromocode()
+            } else {
+                promocodeLiveData = viewModel.getPromocode()
+                promocodeLiveData.observe(viewLifecycleOwner, { _promocode ->
+                    promocode.text = _promocode
+                })
+            }
+
+        })
 
         activity?.title = getString(R.string.setting_profile)
 
@@ -522,7 +543,7 @@ class ProfileFragment : Fragment() {
                                 }
 
                                 val profileUpdates = userProfileChangeRequest {
-                                  photoUri = downloadUri
+                                    photoUri = downloadUri
                                 }
                                 auth.currentUser!!.updateProfile(profileUpdates)
                             } else {
@@ -542,13 +563,16 @@ class ProfileFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true)
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_image)), RESULT_IMAGE)
+        startActivityForResult(
+            Intent.createChooser(intent, getString(R.string.choose_image)),
+            RESULT_IMAGE
+        )
     }
 
     private fun openAvatar(downloadUri: Uri) {
         Glide.with(activity!!)
             .load(downloadUri)
-            .listener( object : RequestListener<Drawable> {
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,

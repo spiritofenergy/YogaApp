@@ -10,4 +10,5 @@ class User {
     var countAsuns: Int = 0
     var status: Int = 1
     var photo: Uri? = null
+    var promocode: String? = null
 }

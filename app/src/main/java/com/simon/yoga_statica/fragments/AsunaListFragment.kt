@@ -158,8 +158,8 @@ class AsunaListFragment : Fragment() {
     }
 
     private fun getAdapter() {
-        val cardAdapter = fragmentManager?.let { CardAdapter(cardsArr, it) }
-        cardAdapter?.setOnClickAdd(object : OnRecyclerItemClickListener {
+        val cardAdapter = CardAdapter(cardsArr, childFragmentManager)
+        cardAdapter.setOnClickAdd(object : OnRecyclerItemClickListener {
             override fun onItemClicked(position: Int, asuna: String) {
                 var isExist = false
                 val asunaList = asuna.split(" ")
@@ -199,17 +199,17 @@ class AsunaListFragment : Fragment() {
 
         })
 
-        cardAdapter?.setOnClickOpen(object : OnRecyclerItemClickListener{
+        cardAdapter.setOnClickOpen(object : OnRecyclerItemClickListener{
             override fun onItemClicked(position: Int, asuna: String) {
                 val listFragment = AsunaFragment()
                 listFragment.setAsuna(asuna)
 
                 (activity as MainActivity).setDisplayBack(true)
 
-                fragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragmentContainer, listFragment)
-                    ?.addToBackStack(null)
-                    ?.commit()
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, listFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             override fun onItemLongClicked(position: Int) {
@@ -217,9 +217,9 @@ class AsunaListFragment : Fragment() {
 
         })
 
-        cardAdapter?.cardCount = count
-        cardAdapter?.indexAdv = 3
-        cardAdapter?.countAdv = indexAdv
+        cardAdapter.cardCount = count
+        cardAdapter.indexAdv = 3
+        cardAdapter.countAdv = indexAdv
 
         cardsRecyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
