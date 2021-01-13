@@ -84,4 +84,8 @@
     <string name="choose_image">Select images</string>
     <string name="reload_web">Call forwarding....</string>
     <string name="promocode_title">Ваш личный код</string>
+    <string name="pay_fragment_title">Покупки</string>
+    <string name="promo_title_before">Вы ещё не использовали промокод</string>
+    <string name="promo_title_after">Вы уже использовали промокод</string>
+    <string name="use_promo">Использовать</string>
 </resources>

@@ -26,17 +26,26 @@ class Promocode {
             .map { allowedChars.random() }
             .joinToString("")
 
-        db.collection("users")
-            .whereEqualTo("id", auth.currentUser?.uid)
-            .get()
-            .addOnSuccessListener {
-                if (!it.isEmpty) {
-                    for (doc in it) {
-                        db.collection("users")
-                            .document(doc.id)
-                            .update("promocode", promocode)
+        db.collection("promocodes")
+            .add(
+                hashMapOf(
+                    "promocode" to promocode
+                )
+            )
+            .addOnSuccessListener { promocodeRow ->
+
+                db.collection("users")
+                    .whereEqualTo("id", auth.currentUser?.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        if (!it.isEmpty) {
+                            for (doc in it) {
+                                db.collection("users")
+                                    .document(doc.id)
+                                    .update("promocode_id", promocodeRow.id)
+                            }
+                        }
                     }
-                }
             }
         Log.d("isExistPromocode", promocode)
         return promocode

@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManagerNonConfig
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.InterstitialAd
@@ -20,14 +19,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.AdvController
-import com.simon.yoga_statica.fragments.AsunaFragment
-import com.simon.yoga_statica.fragments.AsunaListFragment
-import com.simon.yoga_statica.fragments.FavoriteListFragment
-import com.simon.yoga_statica.fragments.ProfileFragment
+import com.simon.yoga_statica.fragments.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -117,6 +112,7 @@ class MainActivity : AppCompatActivity() {
             menu?.getItem(1)?.isVisible = true
             menu?.getItem(2)?.isVisible = true
             menu?.getItem(3)?.isVisible = true
+            menu?.getItem(4)?.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -163,7 +159,7 @@ class MainActivity : AppCompatActivity() {
 
                 true
             }
-            R.id.openProfile -> {
+            R.id.profileOpen -> {
                 if (auth.currentUser != null) {
                     if (getCurFragment() != "profile") {
                         openProfile()
@@ -176,6 +172,13 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra("auth", true)
                     startActivity(intent)
                     finish()
+                }
+
+                true
+            }
+            R.id.promocodeOpen -> {
+                if (getCurFragment() != "promocode") {
+                    openPromocode()
                 }
 
                 true
@@ -224,6 +227,27 @@ class MainActivity : AppCompatActivity() {
                     addToBackStack(null)
                     commit()
                 }
+            }
+        }
+    }
+
+    private fun openPromocode() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val listFragment = PromocodeFragment()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        if (container.tag == "usual_display") {
+            with (transaction) {
+                replace(R.id.fragmentContainer, listFragment)
+                addToBackStack(null)
+                commit()
+            }
+        } else {
+            findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.GONE
+            with (transaction) {
+                replace(R.id.list_frag, listFragment)
+                addToBackStack(null)
+                commit()
             }
         }
     }
@@ -279,6 +303,7 @@ class MainActivity : AppCompatActivity() {
             is FavoriteListFragment -> "favorite"
             is ProfileFragment -> "profile"
             is AsunaFragment -> "asana"
+            is PromocodeFragment -> "promocode"
             else -> ""
         }
     }

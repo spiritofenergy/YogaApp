@@ -35,7 +35,7 @@ class EditDialogFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
         auth = Firebase.auth

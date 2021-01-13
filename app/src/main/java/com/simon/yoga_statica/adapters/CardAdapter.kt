@@ -42,7 +42,6 @@ class CardAdapter(private val list: List<Any>,private val fragmentManager: Fragm
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("LISTINA", list.toString())
         val viewType = getItemViewType(position)
 
         if (viewType == TYPE_AD) {

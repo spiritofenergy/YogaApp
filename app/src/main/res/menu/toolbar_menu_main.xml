@@ -3,8 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/openProfile"
+        android:id="@+id/profileOpen"
         android:icon="@drawable/ic_baseline_account_box_24"
+        android:title="Профиль"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/promocodeOpen"
+        android:icon="@drawable/ic_baseline_people_24"
         android:title="Профиль"
         app:showAsAction="always" />
     <item
