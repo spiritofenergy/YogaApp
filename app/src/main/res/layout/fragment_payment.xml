@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Видеокурс по йоге"
+            android:text="@string/title_item"
             android:textColor="@color/gnt_black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -72,7 +72,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/pay_btn"
             style="@style/AppTheme.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

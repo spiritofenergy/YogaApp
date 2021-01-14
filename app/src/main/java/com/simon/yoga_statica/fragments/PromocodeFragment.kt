@@ -3,11 +3,15 @@ package com.simon.yoga_statica.fragments
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -135,6 +139,11 @@ class PromocodeFragment : Fragment() {
                     } else {
                         if (it == false) {
                             useBtn.text = getString(R.string.use_promo)
+
+                            promoTxt.setTextColor(Color.RED)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                promoTxt.setTextColor(Color.BLACK)
+                            }, 4000)
                         } else {
                             useBtn.text = getString(R.string.use_promo)
                             promoTitleLbl.text = getString(R.string.promo_title_after)

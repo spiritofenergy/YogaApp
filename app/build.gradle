@@ -3,6 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+repositories {
+    maven { url 'https://dl.bintray.com/yoomoney/maven' }
+}
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -37,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -65,6 +69,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    //implementation 'ru.yoo.sdk.kassa.payments:yookassa-android-sdk:5.0.3'
+//    implementation "ru.yoo.sdk.auth:auth:1.0.39"
 
 
 }
