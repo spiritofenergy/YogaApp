@@ -1,5 +1,6 @@
 package com.simon.yoga_statica.fragments
 
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -11,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.Promocode
 import com.simon.yoga_statica.viewmodels.PromocodeFragmentViewModel
-import kotlinx.android.synthetic.main.fragment_promocode.*
+
 
 class PromocodeFragment : Fragment() {
 
@@ -32,12 +32,16 @@ class PromocodeFragment : Fragment() {
     private lateinit var useBtn: Button
     private lateinit var saleTxt: TextView
     private lateinit var promoTitleLbl: TextView
+    private lateinit var promoCountTxt: TextView
 
     private lateinit var viewModel: PromocodeFragmentViewModel
     private lateinit var checkPromocode: LiveData<Boolean>
     private lateinit var promocodeLiveData: LiveData<String>
     private lateinit var saleLiveData: LiveData<Int?>
     private lateinit var promoLiveData: LiveData<String?>
+    private lateinit var countLiveData: LiveData<Int>
+
+    private lateinit var loadDialog: Dialog
 
     private var sale: Int = 0
 
@@ -71,10 +75,13 @@ class PromocodeFragment : Fragment() {
 
         activity?.title = getString(R.string.pay_fragment_title)
 
+        loadDialog = Dialog(requireContext())
+        loadDialog.setContentView(R.layout.fragment_load_check)
+
         viewModel = ViewModelProvider(this).get(PromocodeFragmentViewModel::class.java)
 
         checkPromocode = viewModel.promocodeIsExist()
-        checkPromocode.observe(viewLifecycleOwner, {
+        checkPromocode.observe(viewLifecycleOwner, { it ->
             Log.d("isExistPromocode", it.toString())
 
             if (it == false) {
@@ -86,6 +93,11 @@ class PromocodeFragment : Fragment() {
                 })
             }
 
+        })
+
+        countLiveData = viewModel.getCount()
+        countLiveData.observe(viewLifecycleOwner, { count ->
+            promoCountTxt.text = count.toString()
         })
 
         saleLiveData = viewModel.getSale()
@@ -117,6 +129,7 @@ class PromocodeFragment : Fragment() {
         useBtn = rootView.findViewById(R.id.use_btn)
         promoTxt = rootView.findViewById(R.id.promo_txt)
         promoTitleLbl = rootView.findViewById(R.id.promo_title_lbl)
+        promoCountTxt = rootView.findViewById(R.id.promo_count_txt)
 
         copyPromocode.setOnClickListener(onClickCopy)
         promocode.setOnClickListener(onClickCopy)
@@ -134,22 +147,23 @@ class PromocodeFragment : Fragment() {
             if (promoTxt.text.isNotEmpty() && promoTxt.text.toString() != promocode.text.toString()) {
                 val setPromo = viewModel.setPromocode(promoTxt.text.toString())
                 setPromo.observe(viewLifecycleOwner, {
-                    if (it == null) {
-                        useBtn.text = "Проверка..."
-                    } else {
-                        if (it == false) {
-                            useBtn.text = getString(R.string.use_promo)
 
+                    if (it == null) {
+                        loadDialog.show()
+                    } else {
+                        loadDialog.dismiss()
+                        if (it == false) {
                             promoTxt.setTextColor(Color.RED)
                             Handler(Looper.getMainLooper()).postDelayed({
                                 promoTxt.setTextColor(Color.BLACK)
                             }, 4000)
                         } else {
-                            useBtn.text = getString(R.string.use_promo)
                             promoTitleLbl.text = getString(R.string.promo_title_after)
                             promoTxt.isEnabled = false
                             useBtn.isEnabled = false
                         }
+
+                        setPromo.removeObservers(viewLifecycleOwner)
                     }
                 })
             }

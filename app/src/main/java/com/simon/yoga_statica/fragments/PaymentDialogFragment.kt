@@ -1,5 +1,7 @@
 package com.simon.yoga_statica.fragments
 
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.simon.yoga_statica.R
+import ru.yoo.sdk.kassa.payments.*
 //import ru.yoo.sdk.kassa.payments.*
 import java.math.BigDecimal
 import java.util.*
@@ -52,26 +55,39 @@ class PaymentDialogFragment : DialogFragment() {
     }
 
     fun timeToStartCheckout() {
-//        val paymentParameters = PaymentParameters(
-//                Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
-//                getString(R.string.title_item),
-//                "8 онлайн занятий йоги с инструктором",
-//                "live_AAAAAAAAAAAAAAAAAAAA",
-//                "778376",
-//                SavePaymentMethod.OFF
-//        )
-//
-//        val testParameters = TestParameters(
-//            true,
-//            true,
-//            MockConfiguration(
-//                false,
-//                true,
-//                5,
-//                Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB"))))
-//
-//        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters)
-//        startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
+        val paymentParameters = PaymentParameters(
+            Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
+            getString(R.string.title_item),
+            "8 онлайн занятий йоги с инструктором",
+            "test_Nzc4Mzc2u5N-ELPsbelP3rfoWi7uuC3kgl4I16MUZzo",
+            "778376",
+            SavePaymentMethod.OFF,
+            setOf(PaymentMethodType.BANK_CARD, PaymentMethodType.SBERBANK)
+        )
+
+        val testParameters = TestParameters(
+            true,
+            true,
+            MockConfiguration(
+                false,
+                true,
+                5,
+                Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")))
+        )
+
+        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters)
+        startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_TOKENIZE) {
+            when (resultCode) {
+                RESULT_OK -> { this.dismiss() }
+                RESULT_CANCELED -> { }
+            }
+        }
     }
 
 }

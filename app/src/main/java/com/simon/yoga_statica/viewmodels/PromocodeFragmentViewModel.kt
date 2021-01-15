@@ -22,6 +22,7 @@ class PromocodeFragmentViewModel : ViewModel() {
     private val _sale: MutableLiveData<Int?> = MutableLiveData()
     private val _usesPromo: MutableLiveData<String?> = MutableLiveData()
     private val _setPromo: MutableLiveData<Boolean> = MutableLiveData()
+    private val _countUsed: MutableLiveData<Int> = MutableLiveData()
 
     fun promocodeIsExist() : LiveData<Boolean> {
         db.collection("users")
@@ -55,6 +56,7 @@ class PromocodeFragmentViewModel : ViewModel() {
                             .get()
                             .addOnSuccessListener {
                                 _promocode.value = it["promocode"] as String
+                                _countUsed.value = it.get("used_times", Int::class.java) ?: 0
                             }
                     }
                 }
@@ -82,6 +84,11 @@ class PromocodeFragmentViewModel : ViewModel() {
             }
 
         return _sale
+    }
+
+    fun getCount() : LiveData<Int> {
+
+        return _countUsed
     }
 
     fun getUsesPromo() : LiveData<String?> {

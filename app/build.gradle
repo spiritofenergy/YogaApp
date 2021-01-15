@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.simon.yoga_statica"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 6
         versionName "1.1.2.0"
@@ -70,8 +70,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    //implementation 'ru.yoo.sdk.kassa.payments:yookassa-android-sdk:5.0.3'
-//    implementation "ru.yoo.sdk.auth:auth:1.0.39"
+    implementation 'ru.yoo.sdk.kassa.payments:yookassa-android-sdk:5.0.3'
+    implementation "ru.yoo.sdk.auth:auth:1.0.39"
 
 
 }
