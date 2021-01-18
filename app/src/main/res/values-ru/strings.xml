@@ -69,4 +69,5 @@
     <string name="choose_image">Выберите изображения</string>
     <string name="reload_web">Переадресация....</string>
     <string name="open">Открытые</string>
+    <string name="add">Добавить</string>
 </resources>

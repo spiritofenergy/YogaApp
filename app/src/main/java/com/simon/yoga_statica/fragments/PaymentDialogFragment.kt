@@ -4,11 +4,13 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.DialogFragment
 import com.simon.yoga_statica.R
 import ru.yoo.sdk.kassa.payments.*
@@ -75,7 +77,12 @@ class PaymentDialogFragment : DialogFragment() {
                 Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")))
         )
 
-        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters)
+        val uiParameters = UiParameters(
+            false,
+            ColorScheme(getPrimaryColor())
+        )
+
+        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters, uiParameters)
         startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
     }
 
@@ -84,10 +91,31 @@ class PaymentDialogFragment : DialogFragment() {
 
         if (requestCode == REQUEST_CODE_TOKENIZE) {
             when (resultCode) {
-                RESULT_OK -> { this.dismiss() }
+                RESULT_OK -> {
+                    this.dismiss()
+
+                    if (data != null) {
+                        val result: TokenizationResult = Checkout.createTokenizationResult(data)
+                    }
+                }
                 RESULT_CANCELED -> { }
             }
         }
+    }
+
+    fun timeToStart3DS() {
+        val intent: Intent = Checkout.create3dsIntent(
+                requireContext(),
+                "https://3dsurl.com/"
+        );
+        startActivityForResult(intent, 1);
+    }
+
+    private fun getPrimaryColor() : Int {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+
+        return typedValue.data
     }
 
 }

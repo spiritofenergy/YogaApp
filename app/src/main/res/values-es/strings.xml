@@ -69,5 +69,6 @@
     <string name="profi">Professional</string>
     <string name="choose_image">Select images</string>
     <string name="reload_web">Call forwarding....</string>
+    <string name="add">Add to</string>
 
 </resources>

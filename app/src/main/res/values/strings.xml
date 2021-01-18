@@ -7,6 +7,8 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb377535383591585</string>
     <string name="instagram_app_id" translatable="false">364423328163324</string>
     <string name="instagram_secure_id" translatable="false">6c129322518270cadbb2701e279fcc16</string>
+    <string name="yookassa_api_key" translatable="false">live_78X5ia1xp4quZdfLV67jSbyp5TgPk3DEpFdDXjRCCaI</string>
+    <string name="yookassa_sdk_key" translatable="false">live_Nzc2MjgzR2lAM1Gh5j-sBtKgLhfhg-YWqdnf-CWDEM0</string>
     <string name="add">Add to</string>
     <string name="start" translatable="false">Start</string>
     <string name="end" translatable="false">BRAVO!</string>
