@@ -46,7 +46,7 @@ class PromocodeFragment : Fragment() {
     private var sale: Int = 0
 
     private val onClickCopy = View.OnClickListener {
-        val clipboardManager: ClipboardManager = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboardManager: ClipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip: ClipData = ClipData.newPlainText("promocode", promocode.text.toString())
 
         clipboardManager.setPrimaryClip(clip)
