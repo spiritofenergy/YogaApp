@@ -26,6 +26,7 @@ class PaymentDialogFragment : DialogFragment() {
 
     var sale: Int = 0
     private val price: Int = 1600
+    private var totalPrice: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,13 +51,16 @@ class PaymentDialogFragment : DialogFragment() {
 
         if (sale != 0) {
             saleTxt.visibility = View.VISIBLE
-            priceTxt.text = "${price - (price * sale / 100)}.00 ₽"
+
+            totalPrice = price - (price * sale / 100)
+
+            priceTxt.text = "${totalPrice}.00 ₽"
         }
     }
 
     fun timeToStartCheckout() {
         val paymentParameters = PaymentParameters(
-            Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
+            Amount(BigDecimal.valueOf(totalPrice.toDouble()), Currency.getInstance("RUB")),
             getString(R.string.title_item),
             "8 онлайн занятий йоги с инструктором",
             "test_Nzc4Mzc2u5N-ELPsbelP3rfoWi7uuC3kgl4I16MUZzo",
@@ -72,7 +76,7 @@ class PaymentDialogFragment : DialogFragment() {
                 false,
                 true,
                 5,
-                Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")))
+                Amount(BigDecimal.valueOf(totalPrice.toDouble() * 4 / 100), Currency.getInstance("RUB")))
         )
 
         val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters)
