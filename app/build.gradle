@@ -69,9 +69,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
     implementation 'ru.yoo.sdk.kassa.payments:yookassa-android-sdk:5.0.3'
     implementation "ru.yoo.sdk.auth:auth:1.0.39"
-
-
 }
