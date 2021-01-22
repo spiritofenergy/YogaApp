@@ -10,6 +10,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.net.HttpURLConnection
+import java.net.URL
 
 class PromocodeFragmentViewModel : ViewModel() {
 
@@ -23,6 +25,11 @@ class PromocodeFragmentViewModel : ViewModel() {
     private val _usesPromo: MutableLiveData<String?> = MutableLiveData()
     private val _setPromo: MutableLiveData<Boolean> = MutableLiveData()
     private val _countUsed: MutableLiveData<Int> = MutableLiveData()
+    private val _requestHTTP: MutableLiveData<String?> = MutableLiveData()
+
+    fun getRequestSend() : LiveData<String?> {
+        return _requestHTTP
+    }
 
     fun promocodeIsExist() : LiveData<Boolean> {
         db.collection("users")
@@ -111,7 +118,7 @@ class PromocodeFragmentViewModel : ViewModel() {
 
     fun setPromocode(promo: String) : LiveData<Boolean?> {
         _setPromo.value = null
-        var promoId: String = ""
+        var promoId = ""
 
         db.collection("promocodes")
             .whereEqualTo("promocode", promo)
@@ -172,6 +179,23 @@ class PromocodeFragmentViewModel : ViewModel() {
             }
 
         return _setPromo
+    }
+
+
+    fun sendRequest(url: URL) {
+        _requestHTTP.value = null
+        Thread {
+            url.getTextThread()
+        }.start()
+    }
+
+    private fun URL.getTextThread() {
+        openConnection().run {
+            this as HttpURLConnection
+            Log.d("payDataTest", "CREATE23")
+//            Log.d("payDataTest", inputStream.bufferedReader().readText())
+            _requestHTTP.postValue(inputStream.bufferedReader().readText())
+        }
     }
 
 }

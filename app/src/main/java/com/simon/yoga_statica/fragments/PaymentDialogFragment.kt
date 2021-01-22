@@ -2,8 +2,13 @@ package com.simon.yoga_statica.fragments
 
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +17,22 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.PaymentDataRequest
+import com.google.android.gms.wallet.PaymentMethodTokenizationParameters
+import com.google.android.gms.wallet.Payments
 import com.simon.yoga_statica.R
+import com.simon.yoga_statica.classes.Payment
+import com.simon.yoga_statica.viewmodels.PromocodeFragmentViewModel
+import retrofit2.http.HTTP
+import ru.yoo.sdk.auth.YooMoneyAuth
 import ru.yoo.sdk.kassa.payments.*
 //import ru.yoo.sdk.kassa.payments.*
 import java.math.BigDecimal
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 class PaymentDialogFragment : DialogFragment() {
@@ -26,8 +43,13 @@ class PaymentDialogFragment : DialogFragment() {
     private lateinit var priceTxt: TextView
     private lateinit var payBtn: Button
 
+    private lateinit var loadDialog: Dialog
+
+    private lateinit var viewModel: PromocodeFragmentViewModel
+    private lateinit var sendReq: LiveData<String?>
+
     var sale: Int = 0
-    private val price: Int = 1600
+    private val price: Int = 16
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +58,9 @@ class PaymentDialogFragment : DialogFragment() {
     ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_payment, container, false)
 
+        viewModel = ViewModelProvider(this).get(PromocodeFragmentViewModel::class.java)
+        sendReq = viewModel.getRequestSend()
+
         saleTxt = rootView.findViewById(R.id.sale_price)
         priceTxt = rootView.findViewById(R.id.price_txt)
 
@@ -43,6 +68,9 @@ class PaymentDialogFragment : DialogFragment() {
         payBtn.setOnClickListener {
             timeToStartCheckout()
         }
+
+        loadDialog = Dialog(requireContext())
+        loadDialog.setContentView(R.layout.fragment_load_check)
 
         return rootView
     }
@@ -61,20 +89,10 @@ class PaymentDialogFragment : DialogFragment() {
             Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
             getString(R.string.title_item),
             "8 онлайн занятий йоги с инструктором",
-            "test_Nzc4Mzc2u5N-ELPsbelP3rfoWi7uuC3kgl4I16MUZzo",
-            "778376",
+            getString(R.string.yookassa_sdk_key),
+            getString(R.string.yookassa_id_magazine),
             SavePaymentMethod.OFF,
             setOf(PaymentMethodType.BANK_CARD, PaymentMethodType.SBERBANK)
-        )
-
-        val testParameters = TestParameters(
-            true,
-            true,
-            MockConfiguration(
-                false,
-                true,
-                5,
-                Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")))
         )
 
         val uiParameters = UiParameters(
@@ -82,7 +100,7 @@ class PaymentDialogFragment : DialogFragment() {
             ColorScheme(getPrimaryColor())
         )
 
-        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, testParameters, uiParameters)
+        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, uiParameters = uiParameters)
         startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
     }
 
@@ -92,23 +110,56 @@ class PaymentDialogFragment : DialogFragment() {
         if (requestCode == REQUEST_CODE_TOKENIZE) {
             when (resultCode) {
                 RESULT_OK -> {
-                    this.dismiss()
-
                     if (data != null) {
                         val result: TokenizationResult = Checkout.createTokenizationResult(data)
+
+                        Log.d("payData", result.paymentMethodType.name().decapitalize(Locale.ROOT) + " " + result.paymentToken)
+                        val pay = Payment(
+                            this,
+                            result.paymentToken,
+                            result.paymentMethodType.name().decapitalize(Locale.ROOT),
+                            price - (price * sale / 100).toDouble()
+                        )
+
+                        pay.sendRequest()
+                        sendReq.observe(this) {
+                            if (it == null) {
+                                loadDialog.show()
+                            } else {
+                                loadDialog.dismiss()
+                                Log.d("payDataIt", it)
+                                if (it.contains("Error")) {
+                                    this.dismiss()
+                                } else {
+                                    Log.d("payData", "3ds $it")
+                                    timeToStart3DS(it)
+                                }
+
+                                sendReq.removeObservers(viewLifecycleOwner)
+                            }
+                        }
                     }
+                }
+                RESULT_CANCELED -> { }
+            }
+        }
+
+        if (resultCode == 1760) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    this.dismiss()
                 }
                 RESULT_CANCELED -> { }
             }
         }
     }
 
-    fun timeToStart3DS() {
+    private fun timeToStart3DS(url: String) {
         val intent: Intent = Checkout.create3dsIntent(
-                requireContext(),
-                "https://3dsurl.com/"
+            requireContext(),
+            url
         );
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 1760);
     }
 
     private fun getPrimaryColor() : Int {
