@@ -36,7 +36,7 @@ class PaymentDialogFragment : DialogFragment() {
     private lateinit var sendReq: LiveData<String?>
 
     var sale: Int = 0
-    private val price: Int = 16
+    private val price: Int = 1600
 
     override fun onCreateView(
         inflater: LayoutInflater,
