@@ -4,10 +4,7 @@ import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -20,20 +17,11 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.wallet.PaymentData
-import com.google.android.gms.wallet.PaymentDataRequest
-import com.google.android.gms.wallet.PaymentMethodTokenizationParameters
-import com.google.android.gms.wallet.Payments
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.classes.Payment
 import com.simon.yoga_statica.viewmodels.PromocodeFragmentViewModel
-import retrofit2.http.HTTP
-import ru.yoo.sdk.auth.YooMoneyAuth
 import ru.yoo.sdk.kassa.payments.*
-//import ru.yoo.sdk.kassa.payments.*
 import java.math.BigDecimal
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 
 class PaymentDialogFragment : DialogFragment() {
@@ -50,7 +38,7 @@ class PaymentDialogFragment : DialogFragment() {
     private lateinit var sendReq: LiveData<String?>
 
     var sale: Int = 0
-    private val price: Int = 16
+    private val price: Int = 1600
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +73,7 @@ class PaymentDialogFragment : DialogFragment() {
         }
     }
 
-    fun timeToStartCheckout() {
+    private fun timeToStartCheckout() {
         val paymentParameters = PaymentParameters(
             Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
             getString(R.string.title_item),
@@ -95,7 +83,7 @@ class PaymentDialogFragment : DialogFragment() {
             SavePaymentMethod.OFF,
             setOf(PaymentMethodType.BANK_CARD)
         )
-        // PaymentMethodType.SBERBANK
+
         val uiParameters = UiParameters(
             false,
             ColorScheme(getPrimaryColor())

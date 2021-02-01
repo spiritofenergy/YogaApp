@@ -15,8 +15,6 @@ class InfoPromocodeFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val rootView: View = inflater.inflate(R.layout.fragment_info, container, false)
-
-        return rootView
+        return inflater.inflate(R.layout.fragment_info, container, false)
     }
 }

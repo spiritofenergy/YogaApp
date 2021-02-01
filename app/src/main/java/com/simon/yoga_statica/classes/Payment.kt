@@ -14,7 +14,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Payment(private val fragment: DialogFragment, private val token: String, private val type: String, private val price: Double) {
+class Payment(fragment: DialogFragment, private val token: String, private val type: String, private val price: Double) {
 
     private val auth = Firebase.auth
     private var viewModel: PromocodeFragmentViewModel = ViewModelProvider(fragment).get(PromocodeFragmentViewModel::class.java)
