@@ -52,8 +52,8 @@
     <string name="main">Основное</string>
     <string name="breath">Дыхание</string>
     <string name="end_action">Заключение</string>
-    <string name="delete_asana">Открыть</string>
-    <string name="asuna_addition">Ошибка загрузки изображений.</string>
+    <string name="delete_asana">Асана удалена</string>
+    <string name="asuna_addition">Асана добавлена</string>
     <string name="auth_fail">Ошибка аутентификации.</string>
     <string name="favorite_asana">Любимые асуны</string>
     <string name="all_additional">Все асуны добавлены в список выполняемых асун</string>

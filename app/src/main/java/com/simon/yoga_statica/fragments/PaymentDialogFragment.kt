@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
@@ -92,9 +93,9 @@ class PaymentDialogFragment : DialogFragment() {
             getString(R.string.yookassa_sdk_key),
             getString(R.string.yookassa_id_magazine),
             SavePaymentMethod.OFF,
-            setOf(PaymentMethodType.BANK_CARD, PaymentMethodType.SBERBANK)
+            setOf(PaymentMethodType.BANK_CARD)
         )
-
+        // PaymentMethodType.SBERBANK
         val uiParameters = UiParameters(
             false,
             ColorScheme(getPrimaryColor())
@@ -144,12 +145,24 @@ class PaymentDialogFragment : DialogFragment() {
             }
         }
 
-        if (resultCode == 1760) {
+        if (requestCode == 1760) {
             when (resultCode) {
                 RESULT_OK -> {
                     this.dismiss()
+
+                    val alert = AlertDialog.Builder(requireContext())
+                        .setTitle("Платеж прошел успешно")
+                        .setMessage("Вы приобрели курс по йоге. В ближайшее время с вами свяжутся.")
+                        .create()
+                    alert.show()
                 }
-                RESULT_CANCELED -> { }
+                RESULT_CANCELED -> {
+                    val alert = AlertDialog.Builder(requireContext())
+                        .setMessage("Платеж отменен")
+                        .create()
+                    alert.show()
+                    this.dismiss()
+                }
             }
         }
     }

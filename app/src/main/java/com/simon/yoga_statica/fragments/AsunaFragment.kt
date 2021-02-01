@@ -57,7 +57,7 @@ class AsunaFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_asuna, container, false)
 
         auth = Firebase.auth
@@ -80,7 +80,7 @@ class AsunaFragment : Fragment() {
                 if (document != null) {
                     val titleCard = document.data?.get("title").toString()
                     title.text = titleCard
-                    activity?.setTitle(titleCard)
+                    activity?.title = titleCard
                     textDescription.text = """${document.data?.get("description")}"""
                     countComment = (document.data?.get("comments") as Long).toInt()
                     images = document.data?.get("thumbPath").toString().split(" ")

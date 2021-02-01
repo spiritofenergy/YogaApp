@@ -9,14 +9,14 @@ repositories {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.simon.yoga_statica"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 6
-        versionName "1.1.2.0"
+        versionCode 7
+        versionName "1.2.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -36,6 +36,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    android {
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
     }
 }

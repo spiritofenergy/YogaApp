@@ -193,7 +193,6 @@ class PromocodeFragmentViewModel : ViewModel() {
         openConnection().run {
             this as HttpURLConnection
             Log.d("payDataTest", "CREATE23")
-//            Log.d("payDataTest", inputStream.bufferedReader().readText())
             _requestHTTP.postValue(inputStream.bufferedReader().readText())
         }
     }

@@ -58,7 +58,6 @@ class AddActivity : AppCompatActivity() {
     private var shortDesc: String? = null
     private var longDesc: String? = null
     private var count = 0
-    private lateinit var newEdit: EditText
 
     private var images: MutableList<MutableList<String>> = mutableListOf()
     private var elems: MutableList<HashMap<String, String>> = mutableListOf()
@@ -175,7 +174,7 @@ class AddActivity : AppCompatActivity() {
                         dialog: DialogInterface,
                         which: Int
                     ) {
-                        shortDesc = newEdit.text.toString()
+                        shortDesc = view.text.toString()
                         addShortAsuns.text = shortDesc
                         elems[0]["shortDescription"] = shortDesc!!
                         edit = true
@@ -198,7 +197,7 @@ class AddActivity : AppCompatActivity() {
                         dialog: DialogInterface,
                         which: Int
                     ) {
-                        longDesc = newEdit.text.toString()
+                        longDesc = view.text.toString()
                         addLongAsuns.text = longDesc
                         elems[0]["description"] = longDesc!!
                         edit = true

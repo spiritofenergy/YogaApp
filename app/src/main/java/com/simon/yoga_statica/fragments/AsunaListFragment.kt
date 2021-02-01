@@ -206,7 +206,7 @@ class AsunaListFragment : Fragment() {
 
                 (activity as MainActivity).setDisplayBack(true)
 
-                childFragmentManager.beginTransaction()
+                parentFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainer, listFragment)
                     .addToBackStack(null)
                     .commit()
