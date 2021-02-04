@@ -95,10 +95,10 @@ class ActionFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         rootView = inflater.inflate(R.layout.fragment_action, container, false)
 
-        prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
+        prefs = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         if (savedInstanceState != null) {
             with(savedInstanceState) {

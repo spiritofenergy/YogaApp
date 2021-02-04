@@ -15,8 +15,8 @@ android {
         applicationId "com.simon.yoga_statica"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.2.0"
+        versionCode 8
+        versionName "1.2.1"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 

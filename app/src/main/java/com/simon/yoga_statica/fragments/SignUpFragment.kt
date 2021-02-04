@@ -64,7 +64,7 @@ class SignUpFragment : Fragment() {
 
     private fun firebaseNewAuthWithEmail(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(activity!!) { task ->
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d("auth", "createUserWithEmail:success")
                     val user = auth.currentUser
