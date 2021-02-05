@@ -51,14 +51,14 @@ class ActionFragment : Fragment() {
     private lateinit var actionBar: ProgressBar
     private lateinit var actionBarAll: ProgressBar
 
-    lateinit var nameAsuna: TextView
-    lateinit var textAsana: TextView
+    private lateinit var nameAsuna: TextView
+    private lateinit var textAsana: TextView
     private lateinit var partAction: TextView
-    lateinit var imageMain: ImageView
-    lateinit var time: Chronometer
-    lateinit var timeCur: Chronometer
+    private lateinit var imageMain: ImageView
+    private lateinit var time: Chronometer
+    private lateinit var timeCur: Chronometer
 
-    lateinit var startPauseAction: Button
+    private lateinit var startPauseAction: Button
 
     var x: Int = 0
     var position: Int = 0

@@ -22,6 +22,7 @@ class PromocodeFragmentViewModel : ViewModel() {
     private val _promocodeIsExist: MutableLiveData<Boolean> = MutableLiveData()
     private val _promocode: MutableLiveData<String> = MutableLiveData()
     private val _sale: MutableLiveData<Int?> = MutableLiveData()
+    private val _balance: MutableLiveData<Double?> = MutableLiveData()
     private val _usesPromo: MutableLiveData<String?> = MutableLiveData()
     private val _setPromo: MutableLiveData<Boolean> = MutableLiveData()
     private val _countUsed: MutableLiveData<Int> = MutableLiveData()
@@ -91,6 +92,24 @@ class PromocodeFragmentViewModel : ViewModel() {
             }
 
         return _sale
+    }
+
+    fun getBalance() : LiveData<Double?> {
+        db.collection("users")
+            .whereEqualTo("id", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        _balance.value = document.get("balance", Double::class.java)
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("home", "Error getting documents: ", exception)
+            }
+
+        return _balance
     }
 
     fun getCount() : LiveData<Int> {
@@ -195,6 +214,65 @@ class PromocodeFragmentViewModel : ViewModel() {
             Log.d("payDataTest", "CREATE23")
             _requestHTTP.postValue(inputStream.bufferedReader().readText())
         }
+    }
+
+    fun setBalance(curPrice: Int, promo: String) {
+        var promoId = ""
+
+        db.collection("users")
+            .whereEqualTo("id", auth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        val uses = document.get("isUses", Boolean::class.java) ?: false
+                        val sale = document.get("sale", Int::class.java) ?: 0
+
+                        if (sale > 0) {
+                            db.collection("users")
+                                .document(document.id)
+                                .update("sale", 0)
+                                .addOnSuccessListener {
+                                    _sale.value = 0
+                                }
+                        }
+
+                        if (!uses) {
+                            db.collection("users")
+                                .document(document.id)
+                                .update("isUses", true)
+
+                            db.collection("promocodes")
+                                .whereEqualTo("promocode", promo)
+                                .get()
+                                .addOnSuccessListener {
+                                    if (!it.isEmpty) {
+                                        for (doc in it) {
+
+                                            promoId = doc.id
+
+                                            db.collection("users")
+                                                .whereEqualTo("promocode_id", promoId)
+                                                .get()
+                                                .addOnSuccessListener { users ->
+                                                    if (!users.isEmpty) {
+                                                        for (user in users) {
+
+                                                            val balance = user.get("balance", Double::class.java) ?: 0.0
+
+                                                            db.collection("users")
+                                                                .document(user.id)
+                                                                .update("balance", balance + (curPrice / 100 * 30))
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
     }
 
 }

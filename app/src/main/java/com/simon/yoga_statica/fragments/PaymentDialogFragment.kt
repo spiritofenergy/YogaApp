@@ -32,13 +32,26 @@ class PaymentDialogFragment : DialogFragment() {
     private lateinit var priceTxt: TextView
     private lateinit var payBtn: Button
 
+    private lateinit var saleIndividTxt: TextView
+    private lateinit var priceIndividTxt: TextView
+    private lateinit var payIndividBtn: Button
+
+    private lateinit var saleVipTxt: TextView
+    private lateinit var priceVipTxt: TextView
+    private lateinit var payVipBtn: Button
+
     private lateinit var loadDialog: Dialog
 
     private lateinit var viewModel: PromocodeFragmentViewModel
     private lateinit var sendReq: LiveData<String?>
 
+    private var usesPromo: String? = null
     var sale: Int = 0
     private val price: Int = 1600
+    private val priceIndividal: Int = 2000
+    private val priceVip: Int = 5000
+
+    private var curPrice = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +63,35 @@ class PaymentDialogFragment : DialogFragment() {
         viewModel = ViewModelProvider(this).get(PromocodeFragmentViewModel::class.java)
         sendReq = viewModel.getRequestSend()
 
+        val promo = viewModel.getUsesPromo()
+        promo.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                usesPromo = it
+            }
+        }
+
         saleTxt = rootView.findViewById(R.id.sale_price)
         priceTxt = rootView.findViewById(R.id.price_txt)
 
         payBtn = rootView.findViewById(R.id.pay_btn)
         payBtn.setOnClickListener {
-            timeToStartCheckout()
+            timeToStartCheckout(getString(R.string.title_item), price)
+        }
+
+        saleIndividTxt = rootView.findViewById(R.id.sale_price_individ)
+        priceIndividTxt = rootView.findViewById(R.id.price_txt_individ)
+
+        payIndividBtn = rootView.findViewById(R.id.pay_btn_individ)
+        payIndividBtn.setOnClickListener {
+            timeToStartCheckout(getString(R.string.title_item_individ), priceIndividal)
+        }
+
+        saleVipTxt = rootView.findViewById(R.id.sale_price_vip)
+        priceVipTxt = rootView.findViewById(R.id.price_txt_vip)
+
+        payVipBtn = rootView.findViewById(R.id.pay_btn_vip)
+        payVipBtn.setOnClickListener {
+            timeToStartCheckout("${getString(R.string.title_item)} VIP", priceVip)
         }
 
         loadDialog = Dialog(requireContext())
@@ -70,13 +106,22 @@ class PaymentDialogFragment : DialogFragment() {
         if (sale != 0) {
             saleTxt.visibility = View.VISIBLE
             priceTxt.text = "${price - (price * sale / 100)}.00 ₽"
+
+            saleIndividTxt.visibility = View.VISIBLE
+            priceIndividTxt.text = "${priceIndividal - (priceIndividal * sale / 100)}.00 ₽"
+
+            saleVipTxt.visibility = View.VISIBLE
+            priceVipTxt.text = "${priceVip - (priceVip * sale / 100)}.00 ₽"
         }
     }
 
-    private fun timeToStartCheckout() {
+    private fun timeToStartCheckout(title: String, price: Int) {
+
+        curPrice = price - (price * sale / 100)
+
         val paymentParameters = PaymentParameters(
             Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
-            getString(R.string.title_item),
+            title,
             "8 онлайн занятий йоги с инструктором",
             getString(R.string.yookassa_sdk_key),
             getString(R.string.yookassa_id_magazine),
@@ -109,6 +154,10 @@ class PaymentDialogFragment : DialogFragment() {
                             result.paymentMethodType.name().decapitalize(Locale.ROOT),
                             price - (price * sale / 100).toDouble()
                         )
+
+                        if (!usesPromo.isNullOrEmpty()) {
+                            viewModel.setBalance(curPrice, usesPromo!!)
+                        }
 
                         pay.sendRequest()
                         sendReq.observe(this) {
@@ -143,6 +192,10 @@ class PaymentDialogFragment : DialogFragment() {
                         .setMessage("Вы приобрели курс по йоге. В ближайшее время с вами свяжутся.")
                         .create()
                     alert.show()
+
+                    if (!usesPromo.isNullOrEmpty()) {
+                        viewModel.setBalance(curPrice, usesPromo!!)
+                    }
                 }
                 RESULT_CANCELED -> {
                     val alert = AlertDialog.Builder(requireContext())

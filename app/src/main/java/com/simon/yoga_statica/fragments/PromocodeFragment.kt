@@ -31,6 +31,7 @@ class PromocodeFragment : Fragment() {
     private lateinit var promoTxt: EditText
     private lateinit var useBtn: Button
     private lateinit var saleTxt: TextView
+    private lateinit var balanceTxt: TextView
     private lateinit var promoTitleLbl: TextView
     private lateinit var promoCountTxt: TextView
 
@@ -38,6 +39,7 @@ class PromocodeFragment : Fragment() {
     private lateinit var checkPromocode: LiveData<Boolean>
     private lateinit var promocodeLiveData: LiveData<String>
     private lateinit var saleLiveData: LiveData<Int?>
+    private lateinit var balanceLiveData: LiveData<Double?>
     private lateinit var promoLiveData: LiveData<String?>
     private lateinit var countLiveData: LiveData<Int>
 
@@ -100,17 +102,6 @@ class PromocodeFragment : Fragment() {
             promoCountTxt.text = count.toString()
         })
 
-        saleLiveData = viewModel.getSale()
-        saleLiveData.observe(viewLifecycleOwner, {
-            if (it == null) {
-                saleTxt.text = "0 %"
-                sale = 0
-            } else {
-                saleTxt.text = "$it %"
-                sale = it
-            }
-        })
-
         promoLiveData = viewModel.getUsesPromo()
         promoLiveData.observe(viewLifecycleOwner, {
             if (it != null) {
@@ -126,6 +117,7 @@ class PromocodeFragment : Fragment() {
         infoBtn = rootView.findViewById(R.id.info_promocode_btn)
         payBtn = rootView.findViewById(R.id.order_btn)
         saleTxt = rootView.findViewById(R.id.sale_txt)
+        balanceTxt = rootView.findViewById(R.id.balance_txt)
         useBtn = rootView.findViewById(R.id.use_btn)
         promoTxt = rootView.findViewById(R.id.promo_txt)
         promoTitleLbl = rootView.findViewById(R.id.promo_title_lbl)
@@ -170,6 +162,30 @@ class PromocodeFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        saleLiveData = viewModel.getSale()
+        saleLiveData.observe(viewLifecycleOwner, {
+            if (it == null) {
+                saleTxt.text = "0 %"
+                sale = 0
+            } else {
+                saleTxt.text = "$it %"
+                sale = it
+            }
+        })
+
+        balanceLiveData = viewModel.getBalance()
+        balanceLiveData.observe(viewLifecycleOwner, {
+            if (it == null) {
+                balanceTxt.text = "0 ₽"
+            } else {
+                balanceTxt.text = "$it ₽"
+            }
+        })
     }
 
     private fun openInfo() {
