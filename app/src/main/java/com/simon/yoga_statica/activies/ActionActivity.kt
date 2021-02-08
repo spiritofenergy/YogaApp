@@ -100,11 +100,11 @@ class ActionActivity : AppCompatActivity() {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(getString(R.string.end_workout))
                 .setMessage(getString(R.string.confirm_workout_end))
-                .setPositiveButton(getString(R.string.ending)) { dialog, which ->
+                .setPositiveButton(getString(R.string.ending)) { _, _ ->
                     showAdv()
                     super.onBackPressed()
                 }
-                .setNegativeButton(getString(R.string.no)) { dialogInterface: DialogInterface, i: Int ->
+                .setNegativeButton(getString(R.string.no)) { _: DialogInterface, _: Int ->
                     fragment.onStart()
                 }
                 .show()

@@ -361,12 +361,12 @@ class ActionFragment : Fragment() {
     private fun openCongratulations() {
         val fragment = CongratulationFragment()
         fragment.setCount(countAll)
-        val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
-        if (transaction != null)
-            with(transaction) {
-                replace(R.id.frame_action, fragment)
-                commit()
-            }
+        val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+
+        with(transaction) {
+            replace(R.id.frame_action, fragment)
+            commit()
+        }
     }
 
     private fun setUpFadeAnimation(textView: TextView) {
