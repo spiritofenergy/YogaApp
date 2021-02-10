@@ -64,7 +64,7 @@ class AuthFragment : Fragment() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-        mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         callbackManager = CallbackManager.Factory.create()
 
@@ -156,7 +156,7 @@ class AuthFragment : Fragment() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(activity!!) { task ->
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("login", "signInWithCredential:success")
