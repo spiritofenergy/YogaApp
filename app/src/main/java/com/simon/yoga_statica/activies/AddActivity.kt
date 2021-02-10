@@ -1072,7 +1072,10 @@ class AddActivity : AppCompatActivity() {
 
         alert.setOnCancelListener(onCancel)
 
-        alert.show()
+        val alertDialog = alert.create()
+        alertDialog.window?.setLayout(200, 300)
+
+        alertDialog.show()
     }
 
 }
