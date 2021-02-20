@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
             menu?.getItem(2)?.isVisible = true
             menu?.getItem(3)?.isVisible = true
             menu?.getItem(4)?.isVisible = true
+            menu?.getItem(5)?.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -181,6 +182,12 @@ class MainActivity : AppCompatActivity() {
                     openPromocode()
                 }
 
+                true
+            }
+            R.id.ambulance -> {
+                if (getCurFragment() != "medicine") {
+                    openAmbulance()
+                }
                 true
             }
             R.id.signout -> {
@@ -252,6 +259,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun openAmbulance() {
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val listFragment = AmbulanceFragment()
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        if (container.tag == "usual_display") {
+            with (transaction) {
+                replace(R.id.fragmentContainer, listFragment)
+                addToBackStack(null)
+                commit()
+            }
+        } else {
+            findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.GONE
+            with (transaction) {
+                replace(R.id.list_frag, listFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+    }
+
     private fun openMain() {
         val listFragment = AsunaListFragment()
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
@@ -304,6 +332,7 @@ class MainActivity : AppCompatActivity() {
             is ProfileFragment -> "profile"
             is AsunaFragment -> "asana"
             is PromocodeFragment -> "promocode"
+            is AmbulanceFragment -> "medicine"
             else -> ""
         }
     }

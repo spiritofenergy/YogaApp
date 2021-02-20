@@ -8,6 +8,12 @@
         android:title="Профиль"
         app:showAsAction="always" />
     <item
+        android:id="@+id/ambulance"
+        android:icon="@drawable/ic_baseline_medical_services_24"
+        android:title="Мед.карта"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/promocodeOpen"
         android:icon="@drawable/ic_baseline_people_24"
         android:title="Профиль"

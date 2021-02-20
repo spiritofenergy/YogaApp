@@ -15,8 +15,8 @@ android {
         applicationId "com.simon.yoga_statica"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.2.1.12"
+        versionCode 10
+        versionName "1.2.1.14"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -53,6 +53,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
     implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
     implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
     implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
