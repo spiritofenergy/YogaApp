@@ -11,13 +11,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.MainActivity
 
 class AuthEmailFragment : Fragment() {
-    private val db = Firebase.firestore
 
     private val auth = Firebase.auth
 
@@ -54,7 +52,7 @@ class AuthEmailFragment : Fragment() {
 
     private fun firebaseAuthWithEmail(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(activity!!) { task ->
+            .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Log.d("auth", "signInWithEmail:success")
                     val user = auth.currentUser

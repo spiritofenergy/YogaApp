@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import org.json.JSONObject
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class Ambulance {
@@ -28,9 +29,25 @@ class Ambulance {
                 }
                 .addOnFailureListener { exception ->
                     Log.w("home", "Error getting documents: ", exception)
+                    continuation.resumeWithException(exception)
                 }
 
         }
+    }
+
+    private fun addId(user: String, id: String) {
+        db.collection("users")
+            .whereEqualTo("id", user)
+            .get()
+            .addOnSuccessListener {
+                if (!it.isEmpty) {
+                    for (doc in it) {
+                        db.collection("users")
+                            .document(doc.id)
+                            .update("ambulance_id", id)
+                    }
+                }
+            }
     }
 
     suspend fun getData(id: String) : JSONObject {
@@ -48,12 +65,13 @@ class Ambulance {
                 }
                 .addOnFailureListener { exception ->
                     Log.w("home", "Error getting documents: ", exception)
+                    continuation.resumeWithException(exception)
                 }
 
         }
     }
 
-    suspend fun setData(data: String, id: String?) : Boolean {
+    suspend fun setData(data: String, id: String?, user: String? = null) : Boolean {
         return suspendCoroutine { continuation ->
 
             if (id != null) {
@@ -69,7 +87,12 @@ class Ambulance {
                             "data" to data
                         )
                     )
-                    .addOnSuccessListener { continuation.resume(true) }
+                    .addOnSuccessListener {
+                        if (user != null) {
+                            addId(user, it.id)
+                        }
+                        continuation.resume(true)
+                    }
                     .addOnCanceledListener { continuation.resume(false) }
             }
 
