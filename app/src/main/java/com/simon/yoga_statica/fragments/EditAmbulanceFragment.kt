@@ -54,6 +54,25 @@ class EditAmbulanceFragment : Fragment() {
             addNewData()
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            val id = Ambulance().getId(auth.currentUser!!.uid)
+            id?.let {
+                val data = Ambulance().getData(id)
+
+                val weight = data.getString("weight").split(", ").map { it.toInt() }
+                val height = data.getString("height").split(", ").map { it.toInt() }
+                val press = data.getString("press").split(", ").map { it.toInt() }
+                val sugar = data.getString("sugar").split(", ").map { it.toInt() }
+
+                withContext(Dispatchers.Main) {
+                    weightTxt.hint = weight.last().toString()
+                    heightTxt.hint = height.last().toString()
+                    pressTxt.hint = press.last().toString()
+                    sugarTxt.hint = sugar.last().toString()
+                }
+            }
+        }
+
         return root
     }
 
