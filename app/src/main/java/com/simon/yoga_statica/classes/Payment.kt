@@ -2,6 +2,7 @@ package com.simon.yoga_statica.classes
 
 import android.util.Log
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.Auth
 import com.google.firebase.auth.ktx.auth
@@ -14,7 +15,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-class Payment(fragment: DialogFragment, private val token: String, private val type: String, private val price: Double) {
+class Payment(fragment: Fragment, private val token: String, private val type: String, private val price: Double) {
 
     private val auth = Firebase.auth
     private var viewModel: PromocodeFragmentViewModel = ViewModelProvider(fragment).get(PromocodeFragmentViewModel::class.java)
