@@ -20,8 +20,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/addAsunsInDB"
-        android:icon="@drawable/ic_baseline_add_24"
-        android:title="Добавить"
+        android:title="Доб."
         android:visible="false"
         app:showAsAction="always" />
     <item

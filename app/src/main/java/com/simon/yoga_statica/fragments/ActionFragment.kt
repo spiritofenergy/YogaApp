@@ -57,6 +57,8 @@ class ActionFragment : Fragment() {
     private lateinit var imageMain: ImageView
     private lateinit var time: Chronometer
     private lateinit var timeCur: Chronometer
+    private var audioRes: Int = 0
+    private var mediaPlayer: MediaPlayer? = null
 
     private lateinit var startPauseAction: Button
 
@@ -252,6 +254,8 @@ class ActionFragment : Fragment() {
                 isStart = true
                 startPauseAction.tag = "active"
                 startPauseAction.text = activity?.resources?.getString(R.string.stop_action)
+
+                startAudio()
             } else {
                 timeCur.stop()
                 curSec = (SystemClock.elapsedRealtime() - timeCur.base).toInt() / -1000
@@ -260,6 +264,8 @@ class ActionFragment : Fragment() {
                 isStart = false
 
                 startPauseAction.text = activity?.resources?.getString(R.string.start_action)
+
+                mediaPlayer?.pause()
             }
         }
 
@@ -297,10 +303,14 @@ class ActionFragment : Fragment() {
     }
 
     private fun addAsuna(asuna: String) {
+        mediaPlayer?.stop()
+        mediaPlayer = null
+
         val documentRef: DocumentReference = if (asuna.contains("open")) {
             db.collection("openAsunaRU").document(asuna)
         } else {
             if (asuna.contains("dyh")) {
+                audioRes = R.raw.dyh_nos_vdoh_vydoh
                 db.collection("dyh").document(asuna)
             } else {
                 db.collection("asunaRU").document(asuna)
@@ -338,6 +348,7 @@ class ActionFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        mediaPlayer?.pause()
         time.stop()
         timeCur.stop()
         if (isStart)
@@ -394,5 +405,16 @@ class ActionFragment : Fragment() {
             progress = 100 - progress
         }
         actionBar.progress = progress
+    }
+
+    private fun startAudio() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(context, audioRes)
+        }
+        mediaPlayer?.start()
+
+        mediaPlayer?.setOnCompletionListener {
+            mediaPlayer?.start()
+        }
     }
 }
