@@ -31,14 +31,11 @@ import java.util.*
 
 class PromocodeFragment : Fragment() {
 
-    private val REQUEST_CODE_TOKENIZE = 1234
-
     private lateinit var promocode: TextView
 
     private lateinit var copyPromocode: ImageButton
     private lateinit var infoBtn: ImageButton
     private lateinit var payBtn: Button
-    private lateinit var seminarBtn: Button
     private lateinit var promoTxt: EditText
     private lateinit var useBtn: Button
     private lateinit var saleTxt: TextView
@@ -136,7 +133,6 @@ class PromocodeFragment : Fragment() {
         promoTxt = rootView.findViewById(R.id.promo_txt)
         promoTitleLbl = rootView.findViewById(R.id.promo_title_lbl)
         promoCountTxt = rootView.findViewById(R.id.promo_count_txt)
-        seminarBtn = rootView.findViewById(R.id.order_btn_seminar)
 
         copyPromocode.setOnClickListener(onClickCopy)
         promocode.setOnClickListener(onClickCopy)
@@ -176,10 +172,6 @@ class PromocodeFragment : Fragment() {
             }
         }
 
-        seminarBtn.setOnClickListener {
-            timeToStartCheckout("Семинар \"Дофамин\"")
-        }
-
         return rootView
     }
 
@@ -211,98 +203,5 @@ class PromocodeFragment : Fragment() {
         val dialog = InfoPromocodeFragment()
 
         dialog.show(childFragmentManager, "info")
-    }
-
-    private fun timeToStartCheckout(title: String) {
-
-        val paymentParameters = PaymentParameters(
-            Amount(BigDecimal.valueOf(750), Currency.getInstance("RUB")),
-            title,
-            "Посещение семинара \"Дофамин\"",
-            getString(R.string.yookassa_sdk_key),
-            getString(R.string.yookassa_id_magazine),
-            SavePaymentMethod.OFF,
-            setOf(PaymentMethodType.BANK_CARD)
-        )
-
-        val uiParameters = UiParameters(
-            false,
-            ColorScheme(getPrimaryColor())
-        )
-
-        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, uiParameters = uiParameters)
-        startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE_TOKENIZE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    if (data != null) {
-                        val result: TokenizationResult = Checkout.createTokenizationResult(data)
-
-                        Log.d("payData", result.paymentMethodType.name().decapitalize(Locale.ROOT) + " " + result.paymentToken)
-                        val pay = Payment(
-                            this,
-                            result.paymentToken,
-                            result.paymentMethodType.name().decapitalize(Locale.ROOT),
-                            750.toDouble()
-                        )
-
-                        pay.sendRequest()
-                        sendReq.observe(this) {
-                            if (it == null) {
-                                loadDialog.show()
-                            } else {
-                                loadDialog.dismiss()
-                                Log.d("payDataIt", it)
-                                if (!it.contains("Error")) {
-                                    Log.d("payData", "3ds $it")
-                                    timeToStart3DS(it)
-                                }
-
-                                sendReq.removeObservers(viewLifecycleOwner)
-                            }
-                        }
-                    }
-                }
-                Activity.RESULT_CANCELED -> { }
-            }
-        }
-
-        if (requestCode == 1760) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    val alert = AlertDialog.Builder(requireContext())
-                        .setTitle("Платеж прошел успешно")
-                        .setMessage("Вы успешно оплатили семинар.")
-                        .create()
-                    alert.show()
-                }
-                Activity.RESULT_CANCELED -> {
-                    val alert = AlertDialog.Builder(requireContext())
-                        .setMessage("Платеж отменен")
-                        .create()
-                    alert.show()
-                }
-            }
-        }
-    }
-
-    private fun timeToStart3DS(url: String) {
-        val intent: Intent = Checkout.create3dsIntent(
-            requireContext(),
-            url
-        );
-        startActivityForResult(intent, 1760);
-    }
-
-    private fun getPrimaryColor() : Int {
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-
-        return typedValue.data
     }
 }

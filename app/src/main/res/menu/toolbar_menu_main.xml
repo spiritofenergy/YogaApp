@@ -19,12 +19,6 @@
         android:title="Профиль"
         app:showAsAction="always" />
     <item
-        android:id="@+id/favoriteBut"
-        android:icon="@drawable/ic_baseline_favorite_border_black_24"
-        android:title="Favorite"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/addAsunsInDB"
         android:icon="@drawable/ic_baseline_add_24"
         android:title="Добавить"

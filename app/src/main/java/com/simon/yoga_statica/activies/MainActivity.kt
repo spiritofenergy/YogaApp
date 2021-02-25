@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity() {
             menu?.getItem(2)?.isVisible = true
             menu?.getItem(3)?.isVisible = true
             menu?.getItem(4)?.isVisible = true
-            menu?.getItem(5)?.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -126,29 +125,6 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
-                true
-            }
-            R.id.favoriteBut -> {
-                if (getCurFragment() != "favorite") {
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    val listFragment = FavoriteListFragment()
-                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                    if (container.tag == "usual_display") {
-                        with(transaction) {
-                            replace(R.id.fragmentContainer, listFragment)
-                            addToBackStack(null)
-                            commit()
-                        }
-                    } else {
-                        findViewById<FrameLayout>(R.id.fragmentContainer).visibility = View.VISIBLE
-                        with(transaction) {
-                            replace(R.id.list_frag, listFragment)
-                            addToBackStack(null)
-                            commit()
-                        }
-                    }
-                }
-
                 true
             }
             R.id.addAsunsInDB -> {

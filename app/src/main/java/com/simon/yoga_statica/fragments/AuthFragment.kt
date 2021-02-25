@@ -1,16 +1,22 @@
 package com.simon.yoga_statica.fragments
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.facebook.CallbackManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -29,24 +35,30 @@ import com.google.firebase.ktx.Firebase
 import com.simon.yoga_statica.R
 import com.simon.yoga_statica.activies.MainActivity
 import com.simon.yoga_statica.adapters.AuthAdapter
+import com.simon.yoga_statica.classes.Payment
+import com.simon.yoga_statica.viewmodels.PromocodeFragmentViewModel
+import ru.yoo.sdk.kassa.payments.*
+import java.math.BigDecimal
+import java.util.*
 
 class AuthFragment : Fragment() {
+
+    private val REQUEST_CODE_TOKENIZE = 1234
+
     private val db = Firebase.firestore
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
-
-
+    private lateinit var seminarBtn: Button
 
     private val auth = Firebase.auth
 
     private lateinit var signInGoogle: Button
-    private lateinit var instagramAuth: Button
-    private lateinit var signUpOpen: Button
-    private lateinit var openWithoutAuth: Button
 
-    private lateinit var tabLayout: TabLayout
-    private lateinit var tabsItems: ViewPager2
+    private lateinit var loadDialog: Dialog
+
+    private lateinit var viewModel: PromocodeFragmentViewModel
+    private lateinit var sendReq: LiveData<String?>
 
     private lateinit var prefs: SharedPreferences
     private val APP_PREFERENCES_AUTH = "authWithin"
@@ -58,6 +70,14 @@ class AuthFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
 
+        loadDialog = Dialog(requireContext())
+        loadDialog.setContentView(R.layout.fragment_load_check)
+
+        viewModel = ViewModelProvider(this).get(PromocodeFragmentViewModel::class.java)
+        sendReq = viewModel.getRequestSend()
+
+        seminarBtn = rootView.findViewById(R.id.order_btn_seminar)
+
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -68,56 +88,14 @@ class AuthFragment : Fragment() {
 
         callbackManager = CallbackManager.Factory.create()
 
-        tabLayout = rootView.findViewById(R.id.tabs)
-        tabsItems = rootView.findViewById(R.id.tabs_items)
-        tabsItems.adapter = AuthAdapter(this, tabLayout.tabCount)
-
-        TabLayoutMediator(tabLayout, tabsItems) { tab, position ->
-            when (position) {
-                0 -> {
-                    tab.text = "E-Mail"
-                }
-                1 -> {
-                    tab.text = "Телефон"
-                }
-            }
-        }.attach()
-
         signInGoogle = rootView.findViewById(R.id.google_signIn_auth)
-        instagramAuth = rootView.findViewById(R.id.instagramAuth)
         signInGoogle.setOnClickListener {
             val signInIntent: Intent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, 123)
         }
 
-        signUpOpen = rootView.findViewById(R.id.signUpOpen)
-        signUpOpen.setOnClickListener {
-            val listFragment = SignUpFragment()
-            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
-            if (transaction != null)
-                with (transaction) {
-                    replace(R.id.splashFragment, listFragment)
-                    commit()
-                }
-        }
-
-        openWithoutAuth = rootView.findViewById(R.id.openWithoutAuth)
-        openWithoutAuth.setOnClickListener {
-            prefs
-                .edit()
-                .putBoolean(APP_PREFERENCES_AUTH, true)
-                .apply()
-            openMain()
-        }
-        instagramAuth.setOnClickListener {
-            val listFragment = WebViewInstFragment()
-            val transaction: FragmentTransaction? = fragmentManager?.beginTransaction()
-            if (transaction != null)
-                with (transaction) {
-                    replace(R.id.splashFragment, listFragment)
-                    addToBackStack(null)
-                    commit()
-                }
+        seminarBtn.setOnClickListener {
+            timeToStartCheckout("Семинар \"Погоня за дофамином\"")
         }
 
         return rootView
@@ -129,6 +107,59 @@ class AuthFragment : Fragment() {
         if (requestCode == 123) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
+        }
+
+        if (requestCode == REQUEST_CODE_TOKENIZE) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    if (data != null) {
+                        val result: TokenizationResult = Checkout.createTokenizationResult(data)
+
+                        Log.d("payData", result.paymentMethodType.name().decapitalize(Locale.ROOT) + " " + result.paymentToken)
+                        val pay = Payment(
+                            this,
+                            result.paymentToken,
+                            result.paymentMethodType.name().decapitalize(Locale.ROOT),
+                            750.toDouble()
+                        )
+
+                        pay.sendRequest()
+                        sendReq.observe(this) {
+                            if (it == null) {
+                                loadDialog.show()
+                            } else {
+                                loadDialog.dismiss()
+                                Log.d("payDataIt", it)
+                                if (!it.contains("Error")) {
+                                    Log.d("payData", "3ds $it")
+                                    timeToStart3DS(it)
+                                }
+
+                                sendReq.removeObservers(viewLifecycleOwner)
+                            }
+                        }
+                    }
+                }
+                Activity.RESULT_CANCELED -> { }
+            }
+        }
+
+        if (requestCode == 1760) {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    val alert = AlertDialog.Builder(requireContext())
+                        .setTitle("Платеж прошел успешно")
+                        .setMessage("Вы успешно оплатили семинар.")
+                        .create()
+                    alert.show()
+                }
+                Activity.RESULT_CANCELED -> {
+                    val alert = AlertDialog.Builder(requireContext())
+                        .setMessage("Платеж отменен")
+                        .create()
+                    alert.show()
+                }
+            }
         }
     }
 
@@ -205,5 +236,41 @@ class AuthFragment : Fragment() {
         )
         startActivity(intent)
         activity?.finish()
+    }
+
+    private fun timeToStartCheckout(title: String) {
+
+        val paymentParameters = PaymentParameters(
+            Amount(BigDecimal.valueOf(750), Currency.getInstance("RUB")),
+            title,
+            "Посещение семинара \"Погоня за дофамином\"",
+            getString(R.string.yookassa_sdk_key),
+            getString(R.string.yookassa_id_magazine),
+            SavePaymentMethod.OFF,
+            setOf(PaymentMethodType.BANK_CARD)
+        )
+
+        val uiParameters = UiParameters(
+            false,
+            ColorScheme(getPrimaryColor())
+        )
+
+        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, uiParameters = uiParameters)
+        startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
+    }
+
+    private fun timeToStart3DS(url: String) {
+        val intent: Intent = Checkout.create3dsIntent(
+            requireContext(),
+            url
+        );
+        startActivityForResult(intent, 1760);
+    }
+
+    private fun getPrimaryColor() : Int {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
+
+        return typedValue.data
     }
 }

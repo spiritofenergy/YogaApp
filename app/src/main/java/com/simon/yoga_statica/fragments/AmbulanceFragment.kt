@@ -72,10 +72,10 @@ class AmbulanceFragment : Fragment() {
             id?.let {
                 val data = Ambulance().getData(id)
 
-                val weight = data.getString("weight").split(", ").map { it.toInt() }
-                val height = data.getString("height").split(", ").map { it.toInt() }
-                val press = data.getString("press").split(", ").map { it.toInt() }
-                val sugar = data.getString("sugar").split(", ").map { it.toInt() }
+                val weight = data.getString("weight").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val height = data.getString("height").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val press = data.getString("press").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val sugar = data.getString("sugar").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
 
                 var dataWeight = arrayOf<DataPoint>()
                 for ((i, w) in weight.withIndex()) {
@@ -107,10 +107,10 @@ class AmbulanceFragment : Fragment() {
                     pressGraph.addSeries(pressSeries)
                     sugarGraph.addSeries(sugarSeries)
 
-                    weightTxt.text = weight.last().toString()
-                    heightTxt.text = height.last().toString()
-                    pressTxt.text = press.last().toString()
-                    sugarTxt.text = sugar.last().toString()
+                    weightTxt.text = if (!weight.isNullOrEmpty()) weight.last().toString() else "Данные отсутствуют"
+                    heightTxt.text = if (!height.isNullOrEmpty()) height.last().toString() else "Данные отсутствуют"
+                    pressTxt.text = if (!press.isNullOrEmpty()) press.last().toString() else "Данные отсутствуют"
+                    sugarTxt.text = if (!sugar.isNullOrEmpty()) sugar.last().toString() else "Данные отсутствуют"
                 }
             }
 

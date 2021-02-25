@@ -59,16 +59,16 @@ class EditAmbulanceFragment : Fragment() {
             id?.let {
                 val data = Ambulance().getData(id)
 
-                val weight = data.getString("weight").split(", ").map { it.toInt() }
-                val height = data.getString("height").split(", ").map { it.toInt() }
-                val press = data.getString("press").split(", ").map { it.toInt() }
-                val sugar = data.getString("sugar").split(", ").map { it.toInt() }
+                val weight = data.getString("weight").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val height = data.getString("height").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val press = data.getString("press").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
+                val sugar = data.getString("sugar").split(", ").filter { it.isNotEmpty() }.map { it.toInt() }
 
                 withContext(Dispatchers.Main) {
-                    weightTxt.hint = weight.last().toString()
-                    heightTxt.hint = height.last().toString()
-                    pressTxt.hint = press.last().toString()
-                    sugarTxt.hint = sugar.last().toString()
+                    weightTxt.hint = if (!weight.isNullOrEmpty()) weight.last().toString() else "0"
+                    heightTxt.hint = if (!height.isNullOrEmpty()) height.last().toString() else "0"
+                    pressTxt.hint = if (!press.isNullOrEmpty()) press.last().toString() else "0"
+                    sugarTxt.hint = if (!sugar.isNullOrEmpty()) sugar.last().toString() else "0"
                 }
             }
         }
