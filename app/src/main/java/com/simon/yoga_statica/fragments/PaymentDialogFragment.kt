@@ -122,7 +122,7 @@ class PaymentDialogFragment : DialogFragment() {
         val paymentParameters = PaymentParameters(
             Amount(BigDecimal.valueOf(price - (price * sale / 100).toDouble()), Currency.getInstance("RUB")),
             title,
-            "8 онлайн занятий йоги с инструктором",
+            getString(R.string.payment_desc),
             getString(R.string.yookassa_sdk_key),
             getString(R.string.yookassa_id_magazine),
             SavePaymentMethod.OFF,
@@ -188,8 +188,8 @@ class PaymentDialogFragment : DialogFragment() {
                     this.dismiss()
 
                     val alert = AlertDialog.Builder(requireContext())
-                        .setTitle("Платеж прошел успешно")
-                        .setMessage("Вы приобрели курс по йоге. В ближайшее время с вами свяжутся.")
+                        .setTitle(getString(R.string.success_pay))
+                        .setMessage(getString(R.string.message_payment_course))
                         .create()
                     alert.show()
 
@@ -199,7 +199,7 @@ class PaymentDialogFragment : DialogFragment() {
                 }
                 RESULT_CANCELED -> {
                     val alert = AlertDialog.Builder(requireContext())
-                        .setMessage("Платеж отменен")
+                        .setMessage(getString(R.string.payment_error))
                         .create()
                     alert.show()
                     this.dismiss()

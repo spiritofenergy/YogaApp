@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:text="Проверка..."
+            android:text="@string/check_load"
             android:textColor="@color/gnt_black"
             android:textSize="20sp" />
     </LinearLayout>

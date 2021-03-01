@@ -44,7 +44,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="..."
+                    android:text="@string/points"
                     android:textColor="@color/gnt_black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Количество приглашенных друзей"
+                android:text="@string/count_invite"
                 android:textColor="@color/gnt_black"
                 android:textSize="16sp" />
 
@@ -147,7 +147,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:gravity="center_horizontal"
-                    android:hint="ПРОМОКОД"
+                    android:hint="@string/promo_caps"
                     android:inputType="textPersonName"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -180,7 +180,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Ваша скидка"
+                android:text="@string/your_sale"
                 android:textColor="@color/gnt_black"
                 android:textSize="16sp" />
 
@@ -188,7 +188,7 @@
                 android:id="@+id/sale_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 %"
+                android:text="@string/percent"
                 android:textColor="@color/gnt_black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -211,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
-                android:text="Ваш баланс"
+                android:text="@string/your_balance"
                 android:textColor="@color/gnt_black"
                 android:textSize="16sp" />
 
@@ -219,7 +219,7 @@
                 android:id="@+id/balance_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 ₽"
+                android:text="@string/rubles"
                 android:textColor="@color/gnt_black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -238,7 +238,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="0dp"
-            android:text="Записаться на занятие" />
+            android:text="@string/enlist_action" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

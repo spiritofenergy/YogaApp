@@ -148,14 +148,14 @@ class AuthFragment : Fragment() {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     val alert = AlertDialog.Builder(requireContext())
-                        .setTitle("Платеж прошел успешно")
-                        .setMessage("Вы успешно оплатили семинар.")
+                        .setTitle(getString(R.string.success_pay))
+                        .setMessage(getString(R.string.message_payment_2))
                         .create()
                     alert.show()
                 }
                 Activity.RESULT_CANCELED -> {
                     val alert = AlertDialog.Builder(requireContext())
-                        .setMessage("Платеж отменен")
+                        .setMessage(getString(R.string.payment_error))
                         .create()
                     alert.show()
                 }

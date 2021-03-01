@@ -107,10 +107,14 @@ class AmbulanceFragment : Fragment() {
                     pressGraph.addSeries(pressSeries)
                     sugarGraph.addSeries(sugarSeries)
 
-                    weightTxt.text = if (!weight.isNullOrEmpty()) weight.last().toString() else "Данные отсутствуют"
-                    heightTxt.text = if (!height.isNullOrEmpty()) height.last().toString() else "Данные отсутствуют"
-                    pressTxt.text = if (!press.isNullOrEmpty()) press.last().toString() else "Данные отсутствуют"
-                    sugarTxt.text = if (!sugar.isNullOrEmpty()) sugar.last().toString() else "Данные отсутствуют"
+                    weightTxt.text = if (!weight.isNullOrEmpty()) weight.last().toString() else getString(
+                                            R.string.error_data)
+                    heightTxt.text = if (!height.isNullOrEmpty()) height.last().toString() else getString(
+                        R.string.error_data)
+                    pressTxt.text = if (!press.isNullOrEmpty()) press.last().toString() else getString(
+                        R.string.error_data)
+                    sugarTxt.text = if (!sugar.isNullOrEmpty()) sugar.last().toString() else getString(
+                        R.string.error_data)
                 }
             }
 

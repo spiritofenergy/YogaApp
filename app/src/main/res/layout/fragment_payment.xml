@@ -33,7 +33,7 @@
                 android:id="@+id/price_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1600.00 ₽/мес"
+                android:text="@string/price_1"
                 android:textColor="@color/gnt_black"
                 android:textSize="18sp" />
 
@@ -46,7 +46,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/throwline"
-                android:text="1600.00 ₽"
+                android:text="@string/price_low_1"
                 android:textColor="@color/gnt_black"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -65,19 +65,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:text="Стоимость занятия: 200.00 ₽" />
+            android:text="@string/price_one_1" />
 
         <TextView
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Количество занятий: 8" />
+            android:text="@string/count_lesson" />
 
         <TextView
             android:id="@+id/textView17"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Начало занятий: 6:00, 21:00" />
+            android:text="@string/start_lesson" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,7 +90,7 @@
             style="@style/AppTheme.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Купить" />
+            android:text="@string/buy_btn" />
     </LinearLayout>
 
     <View
@@ -127,7 +127,7 @@
                 android:id="@+id/price_txt_individ"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2000.00 ₽"
+                android:text="@string/price_2"
                 android:textColor="@color/gnt_black"
                 android:textSize="18sp" />
 
@@ -140,7 +140,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/throwline"
-                android:text="2000.00 ₽"
+                android:text="@string/price_2"
                 android:textColor="@color/gnt_black"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -158,13 +158,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:text="Длительность занятия: 1,5 часа" />
+            android:text="@string/length_lesson_2" />
 
         <TextView
             android:id="@+id/textView22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Начало занятий: Согласовывается" />
+            android:text="@string/start_lesson_2" />
     </LinearLayout>
 
     <LinearLayout
@@ -177,7 +177,7 @@
             style="@style/AppTheme.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Купить" />
+            android:text="@string/buy_btn" />
     </LinearLayout>
 
     <View
@@ -224,7 +224,7 @@
                 android:id="@+id/price_txt_vip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5000.00 ₽"
+                android:text="@string/price_3"
                 android:textColor="@color/gnt_black"
                 android:textSize="18sp" />
 
@@ -237,7 +237,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/throwline"
-                android:text="5000.00 ₽"
+                android:text="@string/price_3"
                 android:textColor="@color/gnt_black"
                 android:visibility="gone"
                 tools:visibility="visible" />
@@ -255,19 +255,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:text="Стоимость занятия: 625.00 ₽" />
+            android:text="@string/price_lesson_2" />
 
         <TextView
             android:id="@+id/textView19"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Количество занятий: 8" />
+            android:text="@string/count_lesson_3" />
 
         <TextView
             android:id="@+id/textView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Начало занятий: 8:00, 21:00" />
+            android:text="@string/start_lesson_3" />
     </LinearLayout>
 
     <LinearLayout
@@ -280,6 +280,6 @@
             style="@style/AppTheme.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Купить" />
+            android:text="@string/buy_btn" />
     </LinearLayout>
 </LinearLayout>
