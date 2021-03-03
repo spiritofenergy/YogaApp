@@ -49,7 +49,6 @@ class AuthFragment : Fragment() {
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
-    private lateinit var seminarBtn: Button
 
     private val auth = Firebase.auth
 
@@ -76,8 +75,6 @@ class AuthFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(PromocodeFragmentViewModel::class.java)
         sendReq = viewModel.getRequestSend()
 
-        seminarBtn = rootView.findViewById(R.id.order_btn_seminar)
-
         prefs = activity?.getSharedPreferences("settings", Context.MODE_PRIVATE)!!
 
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -94,10 +91,6 @@ class AuthFragment : Fragment() {
             startActivityForResult(signInIntent, 123)
         }
 
-        seminarBtn.setOnClickListener {
-            timeToStartCheckout("Семинар \"Погоня за дофамином\"")
-        }
-
         return rootView
     }
 
@@ -107,59 +100,6 @@ class AuthFragment : Fragment() {
         if (requestCode == 123) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
-        }
-
-        if (requestCode == REQUEST_CODE_TOKENIZE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    if (data != null) {
-                        val result: TokenizationResult = Checkout.createTokenizationResult(data)
-
-                        Log.d("payData", result.paymentMethodType.name().decapitalize(Locale.ROOT) + " " + result.paymentToken)
-                        val pay = Payment(
-                            this,
-                            result.paymentToken,
-                            result.paymentMethodType.name().decapitalize(Locale.ROOT),
-                            750.toDouble()
-                        )
-
-                        pay.sendRequest()
-                        sendReq.observe(this) {
-                            if (it == null) {
-                                loadDialog.show()
-                            } else {
-                                loadDialog.dismiss()
-                                Log.d("payDataIt", it)
-                                if (!it.contains("Error")) {
-                                    Log.d("payData", "3ds $it")
-                                    timeToStart3DS(it)
-                                }
-
-                                sendReq.removeObservers(viewLifecycleOwner)
-                            }
-                        }
-                    }
-                }
-                Activity.RESULT_CANCELED -> { }
-            }
-        }
-
-        if (requestCode == 1760) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    val alert = AlertDialog.Builder(requireContext())
-                        .setTitle(getString(R.string.success_pay))
-                        .setMessage(getString(R.string.message_payment_2))
-                        .create()
-                    alert.show()
-                }
-                Activity.RESULT_CANCELED -> {
-                    val alert = AlertDialog.Builder(requireContext())
-                        .setMessage(getString(R.string.payment_error))
-                        .create()
-                    alert.show()
-                }
-            }
         }
     }
 
@@ -236,41 +176,5 @@ class AuthFragment : Fragment() {
         )
         startActivity(intent)
         activity?.finish()
-    }
-
-    private fun timeToStartCheckout(title: String) {
-
-        val paymentParameters = PaymentParameters(
-            Amount(BigDecimal.valueOf(750), Currency.getInstance("RUB")),
-            title,
-            "Посещение семинара \"Погоня за дофамином\"",
-            getString(R.string.yookassa_sdk_key),
-            getString(R.string.yookassa_id_magazine),
-            SavePaymentMethod.OFF,
-            setOf(PaymentMethodType.BANK_CARD)
-        )
-
-        val uiParameters = UiParameters(
-            false,
-            ColorScheme(getPrimaryColor())
-        )
-
-        val intent: Intent = Checkout.createTokenizeIntent(requireContext(), paymentParameters, uiParameters = uiParameters)
-        startActivityForResult(intent, REQUEST_CODE_TOKENIZE)
-    }
-
-    private fun timeToStart3DS(url: String) {
-        val intent: Intent = Checkout.create3dsIntent(
-            requireContext(),
-            url
-        );
-        startActivityForResult(intent, 1760);
-    }
-
-    private fun getPrimaryColor() : Int {
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-
-        return typedValue.data
     }
 }

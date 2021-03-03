@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.AdListener
@@ -285,14 +286,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showAdv() {
-//        if (inter.isLoaded) {
-//            inter.show()
-//        } else {
-//            Toast.makeText(
-//                baseContext, "Failed.",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
+        if (inter.isLoaded) {
+            inter.show()
+        } else {
+            Toast.makeText(
+                baseContext, "Failed.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun getCurFragment(): String {
